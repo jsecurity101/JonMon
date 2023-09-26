@@ -21,22 +21,11 @@
 #pragma comment(lib, "dbghelp.lib")
 
 DWORD lsassPID = 0;
-
-//
-// Used to process ETW event properties. Plan to remove these and move to TDH functions in the future.
-//
-template<typename Type>
-inline auto GetData(byte*& data) {
-    auto value{ reinterpret_cast<Type*>(data) };
-    data += sizeof(*value);
-    return value;
-}
-
-inline auto GetWideString(byte*& data) {
-    auto wideString{ reinterpret_cast<WCHAR*>(data) };
-    data += (wcslen(wideString) + 1) * sizeof(WCHAR);
-    return wideString;
-}
+/*
+* -----------------------------
+* ETW Initialization Functions
+* -----------------------------
+*/
 
 int StopETWTrace() {
     TRACEHANDLE traceHandle = 0;
@@ -197,7 +186,21 @@ int TraceEvent() {
         0,
         &enableTraceParameters
     )) != ERROR_SUCCESS) {
-        OutputDebugString(L"[!] Error EnableTraceEx - Threat Intel\n");
+        ChangePPL();
+        if ((result = EnableTraceEx2(
+            hTrace,
+            &ThreatIntel,
+            EVENT_CONTROL_CODE_ENABLE_PROVIDER,
+            TRACE_LEVEL_INFORMATION,
+            0,
+            0,
+            0,
+            &enableTraceParameters
+        )) != ERROR_SUCCESS)
+        {
+            OutputDebugString(L"[!] Error EnableTraceEx - Threat Intel\n");
+        }
+
     }
 
     //WMI Events
@@ -434,44 +437,125 @@ NTSTATUS WriteThreatIntelEvents(
     std::wstring ImagePath_str;
     std::wstring targetImagePath_str;
     wchar_t* CallStack = nullptr;
-    static UINT32 prevCallingProcessId = 0;
-    static UINT32 prevTargetProcessId = 0;
+    PTRACE_EVENT_INFO pInfo = NULL;
+    FILETIME st;
+    GetSystemTimeAsFileTime(&st);
     switch (eventHeader->EventDescriptor.Id) {
     case 1:
     {
-       auto data{ reinterpret_cast<byte*>(EventRecord->UserData) };
-       auto CallingProcessId{ GetData<UINT32>(data) };
-       auto CallingProcessCreationTime{ GetData<FILETIME>(data) };
-       auto CallingProcessStartKey{ GetData<UINT64>(data) };
-       auto CallingProcessSignatureLevel{ GetData<UINT8>(data) };
-       auto CallingProcessSectionSignatureLevel{ GetData<UINT8>(data) };
-       auto CallingProcessProtection{ GetData<UINT8>(data) };
-       auto CallingThreadId{ GetData<UINT32>(data) };
-       auto CallingThreadCreationTime{ GetData<FILETIME>(data) };
-       auto TargetProcessId{ GetData<UINT32>(data) };
-       auto TargetProcessCreateTime{ GetData<FILETIME>(data) };
-       auto TargetProcessStartKey{ GetData<UINT64>(data) };
-       auto TargetProcessSignatureLevel{ GetData<UINT8>(data) };
-       auto TargetProcessSectionSignatureLevel{ GetData<UINT8>(data) };
-       auto TargetProcessProtection{ GetData<UINT8>(data) };
-       auto OriginalProcessId{ GetData<UINT32>(data) };
-       auto OriginalProcessCreateTime{ GetData<FILETIME>(data) };
-       auto OriginalProcessStartKey{ GetData<UINT64>(data) };
-       auto OriginalProcessSignatureLevel{ GetData<UINT8>(data) };
-       auto OriginalProcessProtection{ GetData<UINT8>(data) };
-       auto BaseAddress{ GetData<UINT64>(data) };
 
-        if (*CallingProcessId == *TargetProcessId) {
+        DWORD bufferSize = 0;
+        UINT32 CallingThreadId, CallingProcessId, TargetProcessId, OriginalProcessId;
+        UINT64 CallingProcessStartKey, TargetProcessStartKey, OriginalProcessStartKey;
+        UINT64 BaseAddress;
+        DWORD status = ERROR_SUCCESS;
+        status = TdhGetEventInformation(EventRecord, 0, NULL, pInfo, &bufferSize);
+        if (ERROR_INSUFFICIENT_BUFFER == status) {
+            pInfo = (PTRACE_EVENT_INFO)malloc(bufferSize);
+            if (pInfo == NULL) {
+                // Handle allocation failure
+                OutputDebugString(L"[!] Error allocating memory for event info\n");
+                goto Exit;
+            }
+
+            // Get the event info
+            status = TdhGetEventInformation(EventRecord, 0, NULL, pInfo, &bufferSize);
+        }
+
+        if (ERROR_SUCCESS != status) {
+            // Handle error (could not obtain event info)
+            free(pInfo);
+            OutputDebugString(L"[!] Error getting event info\n");
+            goto Exit;
+        }
+        for (ULONG i = 0; i < pInfo->TopLevelPropertyCount; i++) {
+            PROPERTY_DATA_DESCRIPTOR dataDescriptor;
+            DWORD propertySize = 0;
+            WCHAR* propertyName = (WCHAR*)((BYTE*)pInfo + pInfo->EventPropertyInfoArray[i].NameOffset);
+
+            dataDescriptor.PropertyName = (ULONGLONG)propertyName;
+            dataDescriptor.ArrayIndex = ULONG_MAX;
+
+            // Determine the size of the property
+            status = TdhGetPropertySize(EventRecord, 0, NULL, 1, &dataDescriptor, &propertySize);
+            if (status != ERROR_SUCCESS) {
+                // Handle error
+                wprintf(L"Error getting size for property %ls\n", propertyName);
+                continue;
+            }
+
+            BYTE* propertyData = (BYTE*)malloc(propertySize);
+            if (!propertyData) {
+                // Handle allocation failure
+                wprintf(L"Error allocating memory for property %ls\n", propertyName);
+                continue;
+            }
+
+            // Get the property data
+            status = TdhGetProperty(EventRecord, 0, NULL, 1, &dataDescriptor, propertySize, propertyData);
+            if (status != ERROR_SUCCESS) {
+                // Handle error
+                wprintf(L"Error getting data for property %ls\n", propertyName);
+                free(propertyData);
+                continue;
+            }
+            switch (i) {
+            case 0:
+            {
+                CallingProcessId = *(UINT32*)propertyData;
+                break;
+            }
+            case 2:
+            {
+                CallingProcessStartKey = *(UINT64*)propertyData;
+                break;
+            }
+            case 6:
+            {
+                CallingThreadId = *(UINT32*)propertyData;
+                break;
+            }
+            case 8:
+            {
+                TargetProcessId = *(UINT32*)propertyData;
+                break;
+            }
+            case 10:
+            {
+                TargetProcessStartKey = *(UINT64*)propertyData;
+                break;
+            }
+            case 14:
+            {
+                OriginalProcessId = *(UINT32*)propertyData;
+                break;
+            }
+            case 19:
+            {
+                BaseAddress = *(UINT64*)propertyData;
+                break;
+            }
+            default:
+            {
+                break;
+            }
+            }
+            free(propertyData);
+
+        }
+        if (CallingProcessId == TargetProcessId) {
             goto Exit;
         }
 
-        if (GetImagePath(*CallingProcessId, &sourceImagePath) != ERROR_SUCCESS) {
+
+
+        if (GetImagePath(CallingProcessId, &sourceImagePath) != ERROR_SUCCESS) {
             ImagePath_str = L"Unknown";
         }
         else {
             ImagePath_str = sourceImagePath;
         }
-        if (GetImagePath(*TargetProcessId, &targetImagePath) != ERROR_SUCCESS) {
+        if (GetImagePath(TargetProcessId, &targetImagePath) != ERROR_SUCCESS) {
             targetImagePath_str = L"Unknown";
         }
         else {
@@ -479,19 +563,456 @@ NTSTATUS WriteThreatIntelEvents(
         }
 
         CallStack = GetCallStack(EventRecord, extendedData, hProcess);
-        
-        FILETIME st;
-        GetSystemTimeAsFileTime(&st);
 
         EVENT_DATA_DESCRIPTOR EventData[11];
         EventDataDescCreate(&EventData[0], &st, sizeof(st));
-        EventDataDescCreate(&EventData[1], CallingThreadId, 4);
-        EventDataDescCreate(&EventData[2], CallingProcessId, 4);
-        EventDataDescCreate(&EventData[3], TargetProcessId, 4);
-        EventDataDescCreate(&EventData[4], CallingProcessStartKey, 8);
-        EventDataDescCreate(&EventData[5], TargetProcessStartKey, 8);
-        EventDataDescCreate(&EventData[6], OriginalProcessId, 4);
-        EventDataDescCreate(&EventData[7], BaseAddress, sizeof(BaseAddress));
+        EventDataDescCreate(&EventData[1], &CallingThreadId, 4);
+        EventDataDescCreate(&EventData[2], &CallingProcessId, 4);
+        EventDataDescCreate(&EventData[3], &TargetProcessId, 4);
+        EventDataDescCreate(&EventData[4], &CallingProcessStartKey, 8);
+        EventDataDescCreate(&EventData[5], &TargetProcessStartKey, 8);
+        EventDataDescCreate(&EventData[6], &OriginalProcessId, 4);
+        EventDataDescCreate(&EventData[7], &BaseAddress, sizeof(BaseAddress));
+        EventDataDescCreate(&EventData[8], ImagePath_str.c_str(), (wcslen(ImagePath_str.c_str()) + 1) * sizeof(WCHAR));
+        EventDataDescCreate(&EventData[9], targetImagePath_str.c_str(), (wcslen(targetImagePath_str.c_str()) + 1) * sizeof(WCHAR));
+        EventDataDescCreate(&EventData[10], CallStack, (wcslen(CallStack) + 1) * sizeof(WCHAR));
+
+
+
+        status = WriteETWEvents(EventData, TIRemoteAllocateVirtualMemory, 11);
+        goto Exit;
+    }
+    case 6:
+    {
+        FILETIME st;
+        DWORD bufferSize = 0;
+        UINT32 CallingThreadId, CallingProcessId, TargetProcessId, OriginalProcessId;
+        UINT64 CallingProcessStartKey, TargetProcessStartKey, OriginalProcessStartKey;
+        INT64 BaseAddress;
+        DWORD status = ERROR_SUCCESS;
+        status = TdhGetEventInformation(EventRecord, 0, NULL, pInfo, &bufferSize);
+        if (ERROR_INSUFFICIENT_BUFFER == status) {
+            pInfo = (PTRACE_EVENT_INFO)malloc(bufferSize);
+            if (pInfo == NULL) {
+                // Handle allocation failure
+                goto Exit;
+            }
+
+            // Get the event info
+            status = TdhGetEventInformation(EventRecord, 0, NULL, pInfo, &bufferSize);
+        }
+
+        if (ERROR_SUCCESS != status) {
+            // Handle error (could not obtain event info)
+            free(pInfo);
+            goto Exit;
+        }
+        for (ULONG i = 0; i < pInfo->TopLevelPropertyCount; i++) {
+            PROPERTY_DATA_DESCRIPTOR dataDescriptor;
+            DWORD propertySize = 0;
+            WCHAR* propertyName = (WCHAR*)((BYTE*)pInfo + pInfo->EventPropertyInfoArray[i].NameOffset);
+
+            dataDescriptor.PropertyName = (ULONGLONG)propertyName;
+            dataDescriptor.ArrayIndex = ULONG_MAX;
+
+            // Determine the size of the property
+            status = TdhGetPropertySize(EventRecord, 0, NULL, 1, &dataDescriptor, &propertySize);
+            if (status != ERROR_SUCCESS) {
+                // Handle error
+                wprintf(L"Error getting size for property %ls\n", propertyName);
+                continue;
+            }
+
+            BYTE* propertyData = (BYTE*)malloc(propertySize);
+            if (!propertyData) {
+                // Handle allocation failure
+                wprintf(L"Error allocating memory for property %ls\n", propertyName);
+                continue;
+            }
+
+            // Get the property data
+            status = TdhGetProperty(EventRecord, 0, NULL, 1, &dataDescriptor, propertySize, propertyData);
+            if (status != ERROR_SUCCESS) {
+                // Handle error
+                wprintf(L"Error getting data for property %ls\n", propertyName);
+                free(propertyData);
+                continue;
+            }
+            switch (i) {
+            case 0:
+            {
+                CallingProcessId = *(UINT32*)propertyData;
+                break;
+            }
+            case 2:
+            {
+                CallingProcessStartKey = *(UINT64*)propertyData;
+                break;
+            }
+            case 6:
+            {
+                CallingThreadId = *(UINT32*)propertyData;
+                break;
+            }
+            case 8:
+            {
+                TargetProcessId = *(UINT32*)propertyData;
+                break;
+            }
+            case 10:
+            {
+                TargetProcessStartKey = *(UINT64*)propertyData;
+                break;
+            }
+            case 14:
+            {
+                OriginalProcessId = *(UINT32*)propertyData;
+                break;
+            }
+            case 19:
+            {
+                BaseAddress = *(INT64*)propertyData;
+                break;
+            }
+            default:
+            {
+                break;
+            }
+            }
+            free(propertyData);
+
+        }
+
+        if (CallingProcessId == TargetProcessId) {
+            goto Exit;
+        }
+
+
+
+        if (GetImagePath(CallingProcessId, &sourceImagePath) != ERROR_SUCCESS) {
+            ImagePath_str = L"Unknown";
+        }
+        else {
+            ImagePath_str = sourceImagePath;
+        }
+        if (GetImagePath(TargetProcessId, &targetImagePath) != ERROR_SUCCESS) {
+            targetImagePath_str = L"Unknown";
+        }
+        else {
+            targetImagePath_str = targetImagePath;
+        }
+
+        CallStack = GetCallStack(EventRecord, extendedData, hProcess);
+
+        EVENT_DATA_DESCRIPTOR EventData[11];
+        EventDataDescCreate(&EventData[0], &st, sizeof(st));
+        EventDataDescCreate(&EventData[1], &CallingThreadId, 4);
+        EventDataDescCreate(&EventData[2], &CallingProcessId, 4);
+        EventDataDescCreate(&EventData[3], &TargetProcessId, 4);
+        EventDataDescCreate(&EventData[4], &CallingProcessStartKey, 8);
+        EventDataDescCreate(&EventData[5], &TargetProcessStartKey, 8);
+        EventDataDescCreate(&EventData[6], &OriginalProcessId, 4);
+        EventDataDescCreate(&EventData[7], &BaseAddress, sizeof(BaseAddress));
+        EventDataDescCreate(&EventData[8], ImagePath_str.c_str(), (wcslen(ImagePath_str.c_str()) + 1) * sizeof(WCHAR));
+        EventDataDescCreate(&EventData[9], targetImagePath_str.c_str(), (wcslen(targetImagePath_str.c_str()) + 1) * sizeof(WCHAR));
+        EventDataDescCreate(&EventData[10], CallStack, (wcslen(CallStack) + 1) * sizeof(WCHAR));
+
+
+
+        status = WriteETWEvents(EventData, TIRemoteAllocateVirtualMemory, 11);
+        goto Exit;
+    }
+    case 21:
+    {
+        PTRACE_EVENT_INFO pInfo = NULL;
+        DWORD bufferSize = 0;
+        UINT32 CallingThreadId, CallingProcessId, TargetProcessId, OriginalProcessId;
+        UINT64 CallingProcessStartKey, TargetProcessStartKey, OriginalProcessStartKey;
+        INT64 BaseAddress;
+        DWORD status = ERROR_SUCCESS;
+        status = TdhGetEventInformation(EventRecord, 0, NULL, pInfo, &bufferSize);
+        if (ERROR_INSUFFICIENT_BUFFER == status) {
+            pInfo = (PTRACE_EVENT_INFO)malloc(bufferSize);
+            if (pInfo == NULL) {
+                // Handle allocation failure
+                goto Exit;
+            }
+
+            // Get the event info
+            status = TdhGetEventInformation(EventRecord, 0, NULL, pInfo, &bufferSize);
+        }
+
+        if (ERROR_SUCCESS != status) {
+            // Handle error (could not obtain event info)
+            free(pInfo);
+            goto Exit;
+        }
+        for (ULONG i = 0; i < pInfo->TopLevelPropertyCount; i++) {
+            PROPERTY_DATA_DESCRIPTOR dataDescriptor;
+            DWORD propertySize = 0;
+            WCHAR* propertyName = (WCHAR*)((BYTE*)pInfo + pInfo->EventPropertyInfoArray[i].NameOffset);
+
+            dataDescriptor.PropertyName = (ULONGLONG)propertyName;
+            dataDescriptor.ArrayIndex = ULONG_MAX;
+
+            // Determine the size of the property
+            status = TdhGetPropertySize(EventRecord, 0, NULL, 1, &dataDescriptor, &propertySize);
+            if (status != ERROR_SUCCESS) {
+                // Handle error
+                wprintf(L"Error getting size for property %ls\n", propertyName);
+                continue;
+            }
+
+            BYTE* propertyData = (BYTE*)malloc(propertySize);
+            if (!propertyData) {
+                // Handle allocation failure
+                wprintf(L"Error allocating memory for property %ls\n", propertyName);
+                continue;
+            }
+
+            // Get the property data
+            status = TdhGetProperty(EventRecord, 0, NULL, 1, &dataDescriptor, propertySize, propertyData);
+            if (status != ERROR_SUCCESS) {
+                // Handle error
+                wprintf(L"Error getting data for property %ls\n", propertyName);
+                free(propertyData);
+                continue;
+            }
+            switch (i) {
+            case 0:
+            {
+                CallingProcessId = *(UINT32*)propertyData;
+                break;
+            }
+            case 2:
+            {
+                CallingProcessStartKey = *(UINT64*)propertyData;
+                break;
+            }
+            case 6:
+            {
+                CallingThreadId = *(UINT32*)propertyData;
+                break;
+            }
+            case 8:
+            {
+                TargetProcessId = *(UINT32*)propertyData;
+                break;
+            }
+            case 10:
+            {
+                TargetProcessStartKey = *(UINT64*)propertyData;
+                break;
+            }
+            case 14:
+            {
+                OriginalProcessId = *(UINT32*)propertyData;
+                break;
+            }
+            case 19:
+            {
+                BaseAddress = *(INT64*)propertyData;
+                break;
+            }
+            default:
+            {
+                break;
+            }
+            }
+            free(propertyData);
+
+        }
+        /*auto data{ reinterpret_cast<byte*>(EventRecord->UserData) };
+        auto CallingProcessId{ GetData<UINT32>(data) };
+        auto CallingProcessCreationTime{ GetData<FILETIME>(data) };
+        auto CallingProcessStartKey{ GetData<UINT64>(data) };
+        auto CallingProcessSignatureLevel{ GetData<UINT8>(data) };
+        auto CallingProcessSectionSignatureLevel{ GetData<UINT8>(data) };
+        auto CallingProcessProtection{ GetData<UINT8>(data) };
+        auto CallingThreadId{ GetData<UINT32>(data) };
+        auto CallingThreadCreationTime{ GetData<FILETIME>(data) };
+        auto TargetProcessId{ GetData<UINT32>(data) };
+        auto TargetProcessCreateTime{ GetData<FILETIME>(data) };
+        auto TargetProcessStartKey{ GetData<UINT64>(data) };
+        auto TargetProcessSignatureLevel{ GetData<UINT8>(data) };
+        auto TargetProcessSectionSignatureLevel{ GetData<UINT8>(data) };
+        auto TargetProcessProtection{ GetData<UINT8>(data) };
+        auto OriginalProcessId{ GetData<UINT32>(data) };
+        auto OriginalProcessCreateTime{ GetData<FILETIME>(data) };
+        auto OriginalProcessStartKey{ GetData<UINT64>(data) };
+        auto OriginalProcessSignatureLevel{ GetData<UINT8>(data) };
+        auto OriginalProcessProtection{ GetData<UINT8>(data) };
+        auto BaseAddress{ GetData<UINT64>(data) };*/
+
+        if (CallingProcessId == TargetProcessId) {
+            goto Exit;
+        }
+
+
+
+        if (GetImagePath(CallingProcessId, &sourceImagePath) != ERROR_SUCCESS) {
+            ImagePath_str = L"Unknown";
+        }
+        else {
+            ImagePath_str = sourceImagePath;
+        }
+        if (GetImagePath(TargetProcessId, &targetImagePath) != ERROR_SUCCESS) {
+            targetImagePath_str = L"Unknown";
+        }
+        else {
+            targetImagePath_str = targetImagePath;
+        }
+
+        CallStack = GetCallStack(EventRecord, extendedData, hProcess);
+
+        EVENT_DATA_DESCRIPTOR EventData[11];
+        EventDataDescCreate(&EventData[0], &st, sizeof(st));
+        EventDataDescCreate(&EventData[1], &CallingThreadId, 4);
+        EventDataDescCreate(&EventData[2], &CallingProcessId, 4);
+        EventDataDescCreate(&EventData[3], &TargetProcessId, 4);
+        EventDataDescCreate(&EventData[4], &CallingProcessStartKey, 8);
+        EventDataDescCreate(&EventData[5], &TargetProcessStartKey, 8);
+        EventDataDescCreate(&EventData[6], &OriginalProcessId, 4);
+        EventDataDescCreate(&EventData[7], &BaseAddress, sizeof(BaseAddress));
+        EventDataDescCreate(&EventData[8], ImagePath_str.c_str(), (wcslen(ImagePath_str.c_str()) + 1) * sizeof(WCHAR));
+        EventDataDescCreate(&EventData[9], targetImagePath_str.c_str(), (wcslen(targetImagePath_str.c_str()) + 1) * sizeof(WCHAR));
+        EventDataDescCreate(&EventData[10], CallStack, (wcslen(CallStack) + 1) * sizeof(WCHAR));
+
+
+
+        status = WriteETWEvents(EventData, TIRemoteAllocateVirtualMemory, 11);
+        goto Exit;
+    }
+    case 26:
+    {
+        PTRACE_EVENT_INFO pInfo = NULL;
+        DWORD bufferSize = 0;
+        UINT32 CallingThreadId, CallingProcessId, TargetProcessId, OriginalProcessId;
+        UINT64 CallingProcessStartKey, TargetProcessStartKey, OriginalProcessStartKey;
+        INT64 BaseAddress;
+        DWORD status = ERROR_SUCCESS;
+        status = TdhGetEventInformation(EventRecord, 0, NULL, pInfo, &bufferSize);
+        if (ERROR_INSUFFICIENT_BUFFER == status) {
+            pInfo = (PTRACE_EVENT_INFO)malloc(bufferSize);
+            if (pInfo == NULL) {
+                // Handle allocation failure
+                goto Exit;
+            }
+
+            // Get the event info
+            status = TdhGetEventInformation(EventRecord, 0, NULL, pInfo, &bufferSize);
+        }
+
+        if (ERROR_SUCCESS != status) {
+            // Handle error (could not obtain event info)
+            free(pInfo);
+            goto Exit;
+        }
+        for (ULONG i = 0; i < pInfo->TopLevelPropertyCount; i++) {
+            PROPERTY_DATA_DESCRIPTOR dataDescriptor;
+            DWORD propertySize = 0;
+            WCHAR* propertyName = (WCHAR*)((BYTE*)pInfo + pInfo->EventPropertyInfoArray[i].NameOffset);
+
+            dataDescriptor.PropertyName = (ULONGLONG)propertyName;
+            dataDescriptor.ArrayIndex = ULONG_MAX;
+
+            // Determine the size of the property
+            status = TdhGetPropertySize(EventRecord, 0, NULL, 1, &dataDescriptor, &propertySize);
+            if (status != ERROR_SUCCESS) {
+                // Handle error
+                wprintf(L"Error getting size for property %ls\n", propertyName);
+                continue;
+            }
+
+            BYTE* propertyData = (BYTE*)malloc(propertySize);
+            if (!propertyData) {
+                // Handle allocation failure
+                wprintf(L"Error allocating memory for property %ls\n", propertyName);
+                continue;
+            }
+
+            // Get the property data
+            status = TdhGetProperty(EventRecord, 0, NULL, 1, &dataDescriptor, propertySize, propertyData);
+            if (status != ERROR_SUCCESS) {
+                // Handle error
+                wprintf(L"Error getting data for property %ls\n", propertyName);
+                free(propertyData);
+                continue;
+            }
+            switch (i) {
+            case 0:
+            {
+                CallingProcessId = *(UINT32*)propertyData;
+                break;
+            }
+            case 2:
+            {
+                CallingProcessStartKey = *(UINT64*)propertyData;
+                break;
+            }
+            case 6:
+            {
+                CallingThreadId = *(UINT32*)propertyData;
+                break;
+            }
+            case 8:
+            {
+                TargetProcessId = *(UINT32*)propertyData;
+                break;
+            }
+            case 10:
+            {
+                TargetProcessStartKey = *(UINT64*)propertyData;
+                break;
+            }
+            case 14:
+            {
+                OriginalProcessId = *(UINT32*)propertyData;
+                break;
+            }
+            case 19:
+            {
+                BaseAddress = *(INT64*)propertyData;
+                break;
+            }
+            default:
+            {
+                break;
+            }
+            }
+            free(propertyData);
+
+        }
+        if (CallingProcessId == TargetProcessId) {
+            goto Exit;
+        }
+
+
+
+        if (GetImagePath(CallingProcessId, &sourceImagePath) != ERROR_SUCCESS) {
+            ImagePath_str = L"Unknown";
+        }
+        else {
+            ImagePath_str = sourceImagePath;
+        }
+        if (GetImagePath(TargetProcessId, &targetImagePath) != ERROR_SUCCESS) {
+            targetImagePath_str = L"Unknown";
+        }
+        else {
+            targetImagePath_str = targetImagePath;
+        }
+
+        CallStack = GetCallStack(EventRecord, extendedData, hProcess);
+
+        EVENT_DATA_DESCRIPTOR EventData[11];
+        EventDataDescCreate(&EventData[0], &st, sizeof(st));
+        EventDataDescCreate(&EventData[1], &CallingThreadId, 4);
+        EventDataDescCreate(&EventData[2], &CallingProcessId, 4);
+        EventDataDescCreate(&EventData[3], &TargetProcessId, 4);
+        EventDataDescCreate(&EventData[4], &CallingProcessStartKey, 8);
+        EventDataDescCreate(&EventData[5], &TargetProcessStartKey, 8);
+        EventDataDescCreate(&EventData[6], &OriginalProcessId, 4);
+        EventDataDescCreate(&EventData[7], &BaseAddress, sizeof(BaseAddress));
         EventDataDescCreate(&EventData[8], ImagePath_str.c_str(), (wcslen(ImagePath_str.c_str()) + 1) * sizeof(WCHAR));
         EventDataDescCreate(&EventData[9], targetImagePath_str.c_str(), (wcslen(targetImagePath_str.c_str()) + 1) * sizeof(WCHAR));
         EventDataDescCreate(&EventData[10], CallStack, (wcslen(CallStack) + 1) * sizeof(WCHAR));
@@ -503,21 +1024,12 @@ NTSTATUS WriteThreatIntelEvents(
     }
     case 4:
     {
-
-        FILETIME st;
-        GetSystemTimeAsFileTime(&st);
-
         PTRACE_EVENT_INFO pInfo = NULL;
         DWORD bufferSize = 0;
 
         UINT32 CallingThreadId, CallingProcessId, TargetProcessId, OriginalProcessId, TargetThreadId;
         UINT64 CallingProcessStartKey, TargetProcessStartKey, ApcRoutine, ApcArgument1;
         DWORD status = ERROR_SUCCESS;
-
-        //
-        // Testing out TDH APIs
-        //
-
         status = TdhGetEventInformation(EventRecord, 0, NULL, pInfo, &bufferSize);
         if (ERROR_INSUFFICIENT_BUFFER == status) {
             pInfo = (PTRACE_EVENT_INFO)malloc(bufferSize);
@@ -656,96 +1168,105 @@ NTSTATUS WriteThreatIntelEvents(
         status = WriteETWEvents(EventData, TIQueueUserAPCEvent, 13);
         goto Exit;
     }
-    case 6:
-    {
-        auto data{ reinterpret_cast<byte*>(EventRecord->UserData) };
-        auto CallingProcessId{ GetData<UINT32>(data) };
-        auto CallingProcessCreationTime{ GetData<FILETIME>(data) };
-        auto CallingProcessStartKey{ GetData<UINT64>(data) };
-        auto CallingProcessSignatureLevel{ GetData<UINT8>(data) };
-        auto CallingProcessSectionSignatureLevel{ GetData<UINT8>(data) };
-        auto CallingProcessProtection{ GetData<UINT8>(data) };
-        auto CallingThreadId{ GetData<UINT32>(data) };
-        auto CallingThreadCreationTime{ GetData<FILETIME>(data) };
-        auto TargetProcessId{ GetData<UINT32>(data) };
-        auto TargetProcessCreateTime{ GetData<FILETIME>(data) };
-        auto TargetProcessStartKey{ GetData<UINT64>(data) };
-        auto TargetProcessSignatureLevel{ GetData<UINT8>(data) };
-        auto TargetProcessSectionSignatureLevel{ GetData<UINT8>(data) };
-        auto TargetProcessProtection{ GetData<UINT8>(data) };
-        auto OriginalProcessId{ GetData<UINT32>(data) };
-        auto OriginalProcessCreateTime{ GetData<FILETIME>(data) };
-        auto OriginalProcessStartKey{ GetData<UINT64>(data) };
-        auto OriginalProcessSignatureLevel{ GetData<UINT8>(data) };
-        auto OriginalProcessProtection{ GetData<UINT8>(data) };
-        auto BaseAddress{ GetData<UINT64>(data) };
-
-        if (*CallingProcessId == *TargetProcessId) {
-            goto Exit;
-        }
-
-        if (GetImagePath(*CallingProcessId, &sourceImagePath) != ERROR_SUCCESS) {
-            ImagePath_str = L"Unknown";
-        }
-        else {
-            ImagePath_str = sourceImagePath;
-        }
-        if (GetImagePath(*TargetProcessId, &targetImagePath) != ERROR_SUCCESS) {
-            targetImagePath_str = L"Unknown";
-        }
-        else {
-            targetImagePath_str = targetImagePath;
-        }
-
-        CallStack = GetCallStack(EventRecord, extendedData, hProcess);
-
-        FILETIME st;
-        GetSystemTimeAsFileTime(&st);
-
-
-        EVENT_DATA_DESCRIPTOR EventData[11];
-        EventDataDescCreate(&EventData[0], &st, sizeof(st));
-        EventDataDescCreate(&EventData[1], CallingThreadId, 4);
-        EventDataDescCreate(&EventData[2], CallingProcessId, 4);
-        EventDataDescCreate(&EventData[3], TargetProcessId, 4);
-        EventDataDescCreate(&EventData[4], CallingProcessStartKey, 8);
-        EventDataDescCreate(&EventData[5], TargetProcessStartKey, 8);
-        EventDataDescCreate(&EventData[6], OriginalProcessId, 4);
-        EventDataDescCreate(&EventData[7], BaseAddress, sizeof(BaseAddress));
-        EventDataDescCreate(&EventData[8], ImagePath_str.c_str(), (wcslen(ImagePath_str.c_str()) + 1) * sizeof(WCHAR));
-        EventDataDescCreate(&EventData[9], targetImagePath_str.c_str(), (wcslen(targetImagePath_str.c_str()) + 1) * sizeof(WCHAR));
-        EventDataDescCreate(&EventData[10], CallStack, (wcslen(CallStack) + 1) * sizeof(WCHAR));
-
-
-
-        status = WriteETWEvents(EventData, TIRemoteAllocateVirtualMemory, 11);
-		goto Exit;
-	}
     case 13:
     {
-        auto data{ reinterpret_cast<byte*>(EventRecord->UserData) };
-        auto OperationStatus{ GetData<UINT32>(data) };
-        auto CallingProcessId{ GetData<UINT32>(data) };
-        auto CallingProcessCreationTime{ GetData<FILETIME>(data) };
-        auto CallingProcessStartKey{ GetData<UINT64>(data) };
-        auto CallingProcessSignatureLevel{ GetData<UINT8>(data) };
-        auto CallingProcessSectionSignatureLevel{ GetData<UINT8>(data) };
-        auto CallingProcessProtection{ GetData<UINT8>(data) };
-        auto CallingThreadId{ GetData<UINT32>(data) };
-        auto CallingThreadCreationTime{ GetData<FILETIME>(data) };
-        auto TargetProcessId{ GetData<UINT32>(data) };
-        auto TargetProcessCreationTime{ GetData<FILETIME>(data) };
-        auto TargetProcessStartKey{ GetData<UINT64>(data) };
+        UINT32 CallingProcessId, TargetProcessId, CallingThreadId;
+        UINT64 CallingProcessStartKey, TargetProcessStartKey;
 
-        FILETIME st;
-        GetSystemTimeAsFileTime(&st);
+        PTRACE_EVENT_INFO pInfo = NULL;
+        DWORD bufferSize = 0;
+        DWORD status = ERROR_SUCCESS;
+        status = TdhGetEventInformation(EventRecord, 0, NULL, pInfo, &bufferSize);
+        if (ERROR_INSUFFICIENT_BUFFER == status) {
+            pInfo = (PTRACE_EVENT_INFO)malloc(bufferSize);
+            if (pInfo == NULL) {
+                // Handle allocation failure
+                OutputDebugString(L"[!] Error allocating memory for event info\n");
+                goto Exit;
+            }
+
+            // Get the event info
+            status = TdhGetEventInformation(EventRecord, 0, NULL, pInfo, &bufferSize);
+        }
+
+        if (ERROR_SUCCESS != status) {
+            // Handle error (could not obtain event info)
+            free(pInfo);
+            OutputDebugString(L"[!] Error getting event info\n");
+            goto Exit;
+        }
+        for (ULONG i = 0; i < pInfo->TopLevelPropertyCount; i++) {
+            PROPERTY_DATA_DESCRIPTOR dataDescriptor;
+            DWORD propertySize = 0;
+            WCHAR* propertyName = (WCHAR*)((BYTE*)pInfo + pInfo->EventPropertyInfoArray[i].NameOffset);
+
+            dataDescriptor.PropertyName = (ULONGLONG)propertyName;
+            dataDescriptor.ArrayIndex = ULONG_MAX;
+
+            // Determine the size of the property
+            status = TdhGetPropertySize(EventRecord, 0, NULL, 1, &dataDescriptor, &propertySize);
+            if (status != ERROR_SUCCESS) {
+                // Handle error
+                wprintf(L"Error getting size for property %ls\n", propertyName);
+                continue;
+            }
+
+            BYTE* propertyData = (BYTE*)malloc(propertySize);
+            if (!propertyData) {
+                // Handle allocation failure
+                wprintf(L"Error allocating memory for property %ls\n", propertyName);
+                continue;
+            }
+
+            // Get the property data
+            status = TdhGetProperty(EventRecord, 0, NULL, 1, &dataDescriptor, propertySize, propertyData);
+            if (status != ERROR_SUCCESS) {
+                // Handle error
+                wprintf(L"Error getting data for property %ls\n", propertyName);
+                free(propertyData);
+                continue;
+            }
+            switch (i) {
+            case 1:
+            {
+                CallingProcessId = *(UINT32*)propertyData;
+                break;
+            }
+            case 3:
+            {
+                CallingProcessStartKey = *(UINT64*)propertyData;
+                break;
+            }
+            case 7:
+            {
+                CallingThreadId = *(UINT32*)propertyData;
+                break;
+            }
+            case 9:
+            {
+                TargetProcessId = *(UINT32*)propertyData;
+                break;
+            }
+            case 11:
+            {
+                TargetProcessStartKey = *(UINT64*)propertyData;
+                break;
+            }
+            default:
+            {
+                break;
+            }
+            }
+            free(propertyData);
+
+        }
 
         CallStack = GetCallStack(EventRecord, extendedData, hProcess);
 
         //
         //Getting ImagePath
         //
-        if (GetImagePath(*CallingProcessId, &sourceImagePath) != ERROR_SUCCESS) {
+        if (GetImagePath(CallingProcessId, &sourceImagePath) != ERROR_SUCCESS) {
             ImagePath_str = L"Unknown";
         }
         else {
@@ -759,144 +1280,26 @@ NTSTATUS WriteThreatIntelEvents(
 
         EVENT_DATA_DESCRIPTOR EventData[9];
         EventDataDescCreate(&EventData[0], &st, sizeof(st));
-        EventDataDescCreate(&EventData[1], CallingProcessId, 4);
-        EventDataDescCreate(&EventData[2], CallingThreadId, 4);
+        EventDataDescCreate(&EventData[1], &CallingProcessId, 4);
+        EventDataDescCreate(&EventData[2], &CallingThreadId, 4);
         EventDataDescCreate(&EventData[3], ImagePath_str.c_str(), (wcslen(ImagePath_str.c_str()) + 1) * sizeof(WCHAR));
-        EventDataDescCreate(&EventData[4], TargetProcessId, 4);
+        EventDataDescCreate(&EventData[4], &TargetProcessId, 4);
         EventDataDescCreate(&EventData[5], lsassPath.c_str(), (wcslen(lsassPath.c_str()) + 1) * sizeof(WCHAR));
-        EventDataDescCreate(&EventData[6], CallingProcessStartKey, sizeof(CallingProcessStartKey));
-        EventDataDescCreate(&EventData[7], TargetProcessStartKey, sizeof(TargetProcessStartKey));
+        EventDataDescCreate(&EventData[6], &CallingProcessStartKey, sizeof(CallingProcessStartKey));
+        EventDataDescCreate(&EventData[7], &TargetProcessStartKey, sizeof(TargetProcessStartKey));
         EventDataDescCreate(&EventData[8], CallStack, (wcslen(CallStack) + 1) * sizeof(WCHAR));
 
-        NTSTATUS status = WriteETWEvents(EventData, TIReadProcessMemory, 9);
-
+        status = WriteETWEvents(EventData, TIReadProcessMemory, 9);
         goto Exit;
     }
-    case 14:
+    case 12:
     {
-        auto data{ reinterpret_cast<byte*>(EventRecord->UserData) };
-        auto OperationStatus{ GetData<UINT32>(data) };
-        auto CallingProcessId{ GetData<UINT32>(data) };
-        auto CallingProcessCreationTime{ GetData<FILETIME>(data) };
-        auto CallingProcessStartKey{ GetData<UINT64>(data) };
-        auto CallingProcessSignatureLevel{ GetData<UINT8>(data) };
-        auto CallingProcessSectionSignatureLevel{ GetData<UINT8>(data) };
-        auto CallingProcessProtection{ GetData<UINT8>(data) };
-        auto CallingThreadId{ GetData<UINT32>(data) };
-        auto CallingThreadCreationTime{ GetData<FILETIME>(data) };
-        auto TargetProcessId{ GetData<UINT32>(data) };
-        auto TargetProcessCreationTime{ GetData<FILETIME>(data) };
-        auto TargetProcessStartKey{ GetData<UINT64>(data) };
+        UINT32 CallingProcessId, TargetProcessId, CallingThreadId;
+        UINT64 CallingProcessStartKey, TargetProcessStartKey;
 
-        FILETIME st;
-        GetSystemTimeAsFileTime(&st);
-
-        CallStack = GetCallStack(EventRecord, extendedData, hProcess);
-
-        if (GetImagePath(*CallingProcessId, &sourceImagePath) != ERROR_SUCCESS) {
-            ImagePath_str = L"Unknown";
-        }
-        else {
-            ImagePath_str = sourceImagePath;
-        }
-
-        if (GetImagePath(*TargetProcessId, &targetImagePath) != ERROR_SUCCESS) {
-            targetImagePath_str = L"Unknown";
-        }
-        else {
-            targetImagePath_str = targetImagePath;
-        }
-
-        EVENT_DATA_DESCRIPTOR EventData[9];
-        EventDataDescCreate(&EventData[0], &st, sizeof(st));
-        EventDataDescCreate(&EventData[1], CallingProcessId, 4);
-        EventDataDescCreate(&EventData[2], CallingThreadId, 4);
-        EventDataDescCreate(&EventData[3], ImagePath_str.c_str(), (wcslen(ImagePath_str.c_str()) + 1) * sizeof(WCHAR));
-        EventDataDescCreate(&EventData[4], TargetProcessId, 4);
-        EventDataDescCreate(&EventData[5], targetImagePath_str.c_str(), (wcslen(targetImagePath_str.c_str()) + 1) * sizeof(WCHAR));
-        EventDataDescCreate(&EventData[6], CallingProcessStartKey, sizeof(CallingProcessStartKey));
-        EventDataDescCreate(&EventData[7], TargetProcessStartKey, sizeof(TargetProcessStartKey));
-        EventDataDescCreate(&EventData[8], CallStack, (wcslen(CallStack) + 1) * sizeof(WCHAR));
-        NTSTATUS status = WriteETWEvents(EventData, TIWriteProcessMemory, 9);
-        goto Exit;
-    }
-    case 21:
-    {
-        auto data{ reinterpret_cast<byte*>(EventRecord->UserData) };
-        auto CallingProcessId{ GetData<UINT32>(data) };
-        auto CallingProcessCreationTime{ GetData<FILETIME>(data) };
-        auto CallingProcessStartKey{ GetData<UINT64>(data) };
-        auto CallingProcessSignatureLevel{ GetData<UINT8>(data) };
-        auto CallingProcessSectionSignatureLevel{ GetData<UINT8>(data) };
-        auto CallingProcessProtection{ GetData<UINT8>(data) };
-        auto CallingThreadId{ GetData<UINT32>(data) };
-        auto CallingThreadCreationTime{ GetData<FILETIME>(data) };
-        auto TargetProcessId{ GetData<UINT32>(data) };
-        auto TargetProcessCreateTime{ GetData<FILETIME>(data) };
-        auto TargetProcessStartKey{ GetData<UINT64>(data) };
-        auto TargetProcessSignatureLevel{ GetData<UINT8>(data) };
-        auto TargetProcessSectionSignatureLevel{ GetData<UINT8>(data) };
-        auto TargetProcessProtection{ GetData<UINT8>(data) };
-        auto OriginalProcessId{ GetData<UINT32>(data) };
-        auto OriginalProcessCreateTime{ GetData<FILETIME>(data) };
-        auto OriginalProcessStartKey{ GetData<UINT64>(data) };
-        auto OriginalProcessSignatureLevel{ GetData<UINT8>(data) };
-        auto OriginalProcessProtection{ GetData<UINT8>(data) };
-        auto BaseAddress{ GetData<UINT64>(data) };
-
-        if (*CallingProcessId == *TargetProcessId) {
-            goto Exit;
-        }
-
-        if (GetImagePath(*CallingProcessId, &sourceImagePath) != ERROR_SUCCESS) {
-            ImagePath_str = L"Unknown";
-        }
-        else {
-            ImagePath_str = sourceImagePath;
-        }
-        if (GetImagePath(*TargetProcessId, &targetImagePath) != ERROR_SUCCESS) {
-            targetImagePath_str = L"Unknown";
-        }
-        else {
-            targetImagePath_str = targetImagePath;
-        }
-
-        CallStack = GetCallStack(EventRecord, extendedData, hProcess);
-        FILETIME st;
-        GetSystemTimeAsFileTime(&st);
-        EVENT_DATA_DESCRIPTOR EventData[11];
-        EventDataDescCreate(&EventData[0], &st, sizeof(st));
-        EventDataDescCreate(&EventData[1], CallingThreadId, 4);
-        EventDataDescCreate(&EventData[2], CallingProcessId, 4);
-        EventDataDescCreate(&EventData[3], TargetProcessId, 4);
-        EventDataDescCreate(&EventData[4], CallingProcessStartKey, 8);
-        EventDataDescCreate(&EventData[5], TargetProcessStartKey, 8);
-        EventDataDescCreate(&EventData[6], OriginalProcessId, 4);
-        EventDataDescCreate(&EventData[7], BaseAddress, sizeof(BaseAddress));
-        EventDataDescCreate(&EventData[8], ImagePath_str.c_str(), (wcslen(ImagePath_str.c_str()) + 1) * sizeof(WCHAR));
-        EventDataDescCreate(&EventData[9], targetImagePath_str.c_str(), (wcslen(targetImagePath_str.c_str()) + 1) * sizeof(WCHAR));
-        EventDataDescCreate(&EventData[10], CallStack, (wcslen(CallStack) + 1) * sizeof(WCHAR));
-
-
-
-        status = WriteETWEvents(EventData, TIRemoteAllocateVirtualMemory, 11);
-        goto Exit;
-    }
-    case 24:
-    {
-        FILETIME st;
-        GetSystemTimeAsFileTime(&st);
-       
         PTRACE_EVENT_INFO pInfo = NULL;
         DWORD bufferSize = 0;
-
-        UINT32 CallingThreadId, CallingProcessId, TargetProcessId, OriginalProcessId, TargetThreadId;
-        UINT64 CallingProcessStartKey, TargetProcessStartKey, ApcRoutine, ApcArgument1;
         DWORD status = ERROR_SUCCESS;
-
-        //
-       // Testing out TDH APIs
-       //
         status = TdhGetEventInformation(EventRecord, 0, NULL, pInfo, &bufferSize);
         if (ERROR_INSUFFICIENT_BUFFER == status) {
             pInfo = (PTRACE_EVENT_INFO)malloc(bufferSize);
@@ -948,48 +1351,29 @@ NTSTATUS WriteThreatIntelEvents(
                 continue;
             }
             switch (i) {
-            case 0:
+            case 1:
             {
                 CallingProcessId = *(UINT32*)propertyData;
                 break;
             }
-            case 2:
+            case 3:
             {
                 CallingProcessStartKey = *(UINT64*)propertyData;
                 break;
             }
-            case 6:
+            case 7:
             {
                 CallingThreadId = *(UINT32*)propertyData;
                 break;
             }
-            case 8:
+            case 9:
             {
                 TargetProcessId = *(UINT32*)propertyData;
                 break;
             }
-            case 10:
+            case 11:
             {
                 TargetProcessStartKey = *(UINT64*)propertyData;
-                break;
-            }
-            case 14:
-            {
-                TargetThreadId = *(UINT32*)propertyData;
-            }
-            case 16:
-            {
-                OriginalProcessId = *(UINT32*)propertyData;
-                break;
-            }
-            case 21:
-            {
-                ApcRoutine = *(UINT64*)propertyData;
-                break;
-            }
-            case 22:
-            {
-                ApcArgument1 = *(UINT64*)propertyData;
                 break;
             }
             default:
@@ -1000,6 +1384,11 @@ NTSTATUS WriteThreatIntelEvents(
             free(propertyData);
 
         }
+        if (CallingProcessId == TargetProcessId) {
+            goto Exit;
+        }
+
+        CallStack = GetCallStack(EventRecord, extendedData, hProcess);
 
         if (GetImagePath(CallingProcessId, &sourceImagePath) != ERROR_SUCCESS) {
             ImagePath_str = L"Unknown";
@@ -1007,6 +1396,7 @@ NTSTATUS WriteThreatIntelEvents(
         else {
             ImagePath_str = sourceImagePath;
         }
+
         if (GetImagePath(TargetProcessId, &targetImagePath) != ERROR_SUCCESS) {
             targetImagePath_str = L"Unknown";
         }
@@ -1014,87 +1404,142 @@ NTSTATUS WriteThreatIntelEvents(
             targetImagePath_str = targetImagePath;
         }
 
-        CallStack = GetCallStack(EventRecord, extendedData, hProcess);
-
-        EVENT_DATA_DESCRIPTOR EventData[13];
+        EVENT_DATA_DESCRIPTOR EventData[9];
         EventDataDescCreate(&EventData[0], &st, sizeof(st));
-        EventDataDescCreate(&EventData[1], &CallingThreadId, 4);
-        EventDataDescCreate(&EventData[2], &CallingProcessId, 4);
-        EventDataDescCreate(&EventData[3], &TargetProcessId, 4);
-        EventDataDescCreate(&EventData[4], &TargetThreadId, 4);
-        EventDataDescCreate(&EventData[5], &CallingProcessStartKey, 8);
-        EventDataDescCreate(&EventData[6], &TargetProcessStartKey, 8);
-        EventDataDescCreate(&EventData[7], &OriginalProcessId, 4);
-        EventDataDescCreate(&EventData[8], &ApcRoutine, sizeof(ApcRoutine));
-        EventDataDescCreate(&EventData[9], &ApcArgument1, sizeof(ApcArgument1));
-        EventDataDescCreate(&EventData[10], ImagePath_str.c_str(), (wcslen(ImagePath_str.c_str()) + 1) * sizeof(WCHAR));
-        EventDataDescCreate(&EventData[11], targetImagePath_str.c_str(), (wcslen(targetImagePath_str.c_str()) + 1) * sizeof(WCHAR));
-        EventDataDescCreate(&EventData[12], CallStack, (wcslen(CallStack) + 1) * sizeof(WCHAR));
-
-
-        status = WriteETWEvents(EventData, TIQueueUserAPCEvent, 13);
+        EventDataDescCreate(&EventData[1], &CallingProcessId, 4);
+        EventDataDescCreate(&EventData[2], &CallingThreadId, 4);
+        EventDataDescCreate(&EventData[3], ImagePath_str.c_str(), (wcslen(ImagePath_str.c_str()) + 1) * sizeof(WCHAR));
+        EventDataDescCreate(&EventData[4], &TargetProcessId, 4);
+        EventDataDescCreate(&EventData[5], targetImagePath_str.c_str(), (wcslen(targetImagePath_str.c_str()) + 1) * sizeof(WCHAR));
+        EventDataDescCreate(&EventData[6], &CallingProcessStartKey, sizeof(CallingProcessStartKey));
+        EventDataDescCreate(&EventData[7], &TargetProcessStartKey, sizeof(TargetProcessStartKey));
+        EventDataDescCreate(&EventData[8], CallStack, (wcslen(CallStack) + 1) * sizeof(WCHAR));
+        status = WriteETWEvents(EventData, TIWriteProcessMemory, 9);
         goto Exit;
     }
-    case 26:
+    case 14:
     {
-        auto data{ reinterpret_cast<byte*>(EventRecord->UserData) };
-        auto CallingProcessId{ GetData<UINT32>(data) };
-        auto CallingProcessCreationTime{ GetData<FILETIME>(data) };
-        auto CallingProcessStartKey{ GetData<UINT64>(data) };
-        auto CallingProcessSignatureLevel{ GetData<UINT8>(data) };
-        auto CallingProcessSectionSignatureLevel{ GetData<UINT8>(data) };
-        auto CallingProcessProtection{ GetData<UINT8>(data) };
-        auto CallingThreadId{ GetData<UINT32>(data) };
-        auto CallingThreadCreationTime{ GetData<FILETIME>(data) };
-        auto TargetProcessId{ GetData<UINT32>(data) };
-        auto TargetProcessCreateTime{ GetData<FILETIME>(data) };
-        auto TargetProcessStartKey{ GetData<UINT64>(data) };
-        auto TargetProcessSignatureLevel{ GetData<UINT8>(data) };
-        auto TargetProcessSectionSignatureLevel{ GetData<UINT8>(data) };
-        auto TargetProcessProtection{ GetData<UINT8>(data) };
-        auto OriginalProcessId{ GetData<UINT32>(data) };
-        auto OriginalProcessCreateTime{ GetData<FILETIME>(data) };
-        auto OriginalProcessStartKey{ GetData<UINT64>(data) };
-        auto OriginalProcessSignatureLevel{ GetData<UINT8>(data) };
-        auto OriginalProcessProtection{ GetData<UINT8>(data) };
-        auto BaseAddress{ GetData<UINT64>(data) };
+        UINT32 CallingProcessId, TargetProcessId, CallingThreadId;
+        UINT64 CallingProcessStartKey, TargetProcessStartKey;
 
-        if (*CallingProcessId == *TargetProcessId) {
+        PTRACE_EVENT_INFO pInfo = NULL;
+        DWORD bufferSize = 0;
+        DWORD status = ERROR_SUCCESS;
+        status = TdhGetEventInformation(EventRecord, 0, NULL, pInfo, &bufferSize);
+        if (ERROR_INSUFFICIENT_BUFFER == status) {
+            pInfo = (PTRACE_EVENT_INFO)malloc(bufferSize);
+            if (pInfo == NULL) {
+                // Handle allocation failure
+                OutputDebugString(L"[!] Error allocating memory for event info\n");
+                goto Exit;
+            }
+
+            // Get the event info
+            status = TdhGetEventInformation(EventRecord, 0, NULL, pInfo, &bufferSize);
+        }
+
+        if (ERROR_SUCCESS != status) {
+            // Handle error (could not obtain event info)
+            free(pInfo);
+            OutputDebugString(L"[!] Error getting event info\n");
+            goto Exit;
+        }
+        for (ULONG i = 0; i < pInfo->TopLevelPropertyCount; i++) {
+            PROPERTY_DATA_DESCRIPTOR dataDescriptor;
+            DWORD propertySize = 0;
+            WCHAR* propertyName = (WCHAR*)((BYTE*)pInfo + pInfo->EventPropertyInfoArray[i].NameOffset);
+
+            dataDescriptor.PropertyName = (ULONGLONG)propertyName;
+            dataDescriptor.ArrayIndex = ULONG_MAX;
+
+            // Determine the size of the property
+            status = TdhGetPropertySize(EventRecord, 0, NULL, 1, &dataDescriptor, &propertySize);
+            if (status != ERROR_SUCCESS) {
+                // Handle error
+                wprintf(L"Error getting size for property %ls\n", propertyName);
+                continue;
+            }
+
+            BYTE* propertyData = (BYTE*)malloc(propertySize);
+            if (!propertyData) {
+                // Handle allocation failure
+                wprintf(L"Error allocating memory for property %ls\n", propertyName);
+                continue;
+            }
+
+            // Get the property data
+            status = TdhGetProperty(EventRecord, 0, NULL, 1, &dataDescriptor, propertySize, propertyData);
+            if (status != ERROR_SUCCESS) {
+                // Handle error
+                wprintf(L"Error getting data for property %ls\n", propertyName);
+                free(propertyData);
+                continue;
+            }
+            switch (i) {
+            case 1:
+            {
+                CallingProcessId = *(UINT32*)propertyData;
+                break;
+            }
+            case 3:
+            {
+                CallingProcessStartKey = *(UINT64*)propertyData;
+                break;
+            }
+            case 7:
+            {
+                CallingThreadId = *(UINT32*)propertyData;
+                break;
+            }
+            case 9:
+            {
+                TargetProcessId = *(UINT32*)propertyData;
+                break;
+            }
+            case 11:
+            {
+                TargetProcessStartKey = *(UINT64*)propertyData;
+                break;
+            }
+            default:
+            {
+                break;
+            }
+            }
+            free(propertyData);
+
+        }
+        if (CallingProcessId == TargetProcessId) {
             goto Exit;
         }
 
-        if (GetImagePath(*CallingProcessId, &sourceImagePath) != ERROR_SUCCESS) {
+        CallStack = GetCallStack(EventRecord, extendedData, hProcess);
+
+        if (GetImagePath(CallingProcessId, &sourceImagePath) != ERROR_SUCCESS) {
             ImagePath_str = L"Unknown";
         }
         else {
             ImagePath_str = sourceImagePath;
         }
-        if (GetImagePath(*TargetProcessId, &targetImagePath) != ERROR_SUCCESS) {
+
+        if (GetImagePath(TargetProcessId, &targetImagePath) != ERROR_SUCCESS) {
             targetImagePath_str = L"Unknown";
         }
         else {
             targetImagePath_str = targetImagePath;
         }
 
-        CallStack = GetCallStack(EventRecord, extendedData, hProcess);
-        FILETIME st;
-        GetSystemTimeAsFileTime(&st);
-        EVENT_DATA_DESCRIPTOR EventData[11];
+        EVENT_DATA_DESCRIPTOR EventData[9];
         EventDataDescCreate(&EventData[0], &st, sizeof(st));
-        EventDataDescCreate(&EventData[1], CallingThreadId, 4);
-        EventDataDescCreate(&EventData[2], CallingProcessId, 4);
-        EventDataDescCreate(&EventData[3], TargetProcessId, 4);
-        EventDataDescCreate(&EventData[4], CallingProcessStartKey, 8);
-        EventDataDescCreate(&EventData[5], TargetProcessStartKey, 8);
-        EventDataDescCreate(&EventData[6], OriginalProcessId, 4);
-        EventDataDescCreate(&EventData[7], BaseAddress, sizeof(BaseAddress));
-        EventDataDescCreate(&EventData[8], ImagePath_str.c_str(), (wcslen(ImagePath_str.c_str()) + 1) * sizeof(WCHAR));
-        EventDataDescCreate(&EventData[9], targetImagePath_str.c_str(), (wcslen(targetImagePath_str.c_str()) + 1) * sizeof(WCHAR));
-        EventDataDescCreate(&EventData[10], CallStack, (wcslen(CallStack) + 1) * sizeof(WCHAR));
-
-
-
-        status = WriteETWEvents(EventData, TIRemoteAllocateVirtualMemory, 11);
+        EventDataDescCreate(&EventData[1], &CallingProcessId, 4);
+        EventDataDescCreate(&EventData[2], &CallingThreadId, 4);
+        EventDataDescCreate(&EventData[3], ImagePath_str.c_str(), (wcslen(ImagePath_str.c_str()) + 1) * sizeof(WCHAR));
+        EventDataDescCreate(&EventData[4], &TargetProcessId, 4);
+        EventDataDescCreate(&EventData[5], targetImagePath_str.c_str(), (wcslen(targetImagePath_str.c_str()) + 1) * sizeof(WCHAR));
+        EventDataDescCreate(&EventData[6], &CallingProcessStartKey, sizeof(CallingProcessStartKey));
+        EventDataDescCreate(&EventData[7], &TargetProcessStartKey, sizeof(TargetProcessStartKey));
+        EventDataDescCreate(&EventData[8], CallStack, (wcslen(CallStack) + 1) * sizeof(WCHAR));
+        status = WriteETWEvents(EventData, TIWriteProcessMemory, 9);
         goto Exit;
     }
     default:
@@ -1131,62 +1576,137 @@ BOOL WriteNetworkEvents(
     std::wstring username_str;
     std::wstring sourcePort_str;
     std::wstring destPort_str;
-    BOOL status = FALSE;
+
     REGHANDLE RegistrationHandle = NULL;
+    UINT32 processId, daddr, saddr;
+    UINT16 dport, sport;
+    FILETIME st;
+    GetSystemTimeAsFileTime(&st);
+    PTRACE_EVENT_INFO pInfo = NULL;
+    DWORD bufferSize = 0;
+    DWORD status = ERROR_SUCCESS;
 
-    auto data{ reinterpret_cast<byte*>(EventRecord->UserData) };
-    auto PID{ GetData<UINT32>(data) };
-    auto size{ GetData<UINT32>(data) };
-    auto daddr{ GetData<UINT32>(data) };
-    auto saddr{ GetData<UINT32>(data) };
-    auto dport{ GetData<UINT16>(data) };
-    auto sport{ GetData<UINT16>(data) };
+    status = TdhGetEventInformation(EventRecord, 0, NULL, pInfo, &bufferSize);
+    if (ERROR_INSUFFICIENT_BUFFER == status) {
+        pInfo = (PTRACE_EVENT_INFO)malloc(bufferSize);
+        if (pInfo == NULL) {
+            // Handle allocation failure
+            OutputDebugString(L"[!] Error allocating memory for event info\n");
+            goto Exit;
+        }
 
-    if (*PID == 4) {
+        // Get the event info
+        status = TdhGetEventInformation(EventRecord, 0, NULL, pInfo, &bufferSize);
+    }
+
+    if (ERROR_SUCCESS != status) {
+        // Handle error (could not obtain event info)
+        free(pInfo);
+        OutputDebugString(L"[!] Error getting event info\n");
+        goto Exit;
+    }
+    for (ULONG i = 0; i < pInfo->TopLevelPropertyCount; i++) {
+        PROPERTY_DATA_DESCRIPTOR dataDescriptor;
+        DWORD propertySize = 0;
+        WCHAR* propertyName = (WCHAR*)((BYTE*)pInfo + pInfo->EventPropertyInfoArray[i].NameOffset);
+
+        dataDescriptor.PropertyName = (ULONGLONG)propertyName;
+        dataDescriptor.ArrayIndex = ULONG_MAX;
+
+        // Determine the size of the property
+        status = TdhGetPropertySize(EventRecord, 0, NULL, 1, &dataDescriptor, &propertySize);
+        if (status != ERROR_SUCCESS) {
+            // Handle error
+            wprintf(L"Error getting size for property %ls\n", propertyName);
+            continue;
+        }
+
+        BYTE* propertyData = (BYTE*)malloc(propertySize);
+        if (!propertyData) {
+            // Handle allocation failure
+            wprintf(L"Error allocating memory for property %ls\n", propertyName);
+            continue;
+        }
+
+        // Get the property data
+        status = TdhGetProperty(EventRecord, 0, NULL, 1, &dataDescriptor, propertySize, propertyData);
+        if (status != ERROR_SUCCESS) {
+            // Handle error
+            wprintf(L"Error getting data for property %ls\n", propertyName);
+            free(propertyData);
+            continue;
+        }
+        switch (i) {
+        case 0:
+        {
+            processId = *(UINT32*)propertyData;
+            break;
+        }
+        case 2:
+        {
+            daddr = *(UINT32*)propertyData;
+            break;
+        }
+        case 3:
+        {
+            saddr = *(UINT32*)propertyData;
+            break;
+        }
+        case 4:
+        {
+            dport = *(UINT16*)propertyData;
+            break;
+        }
+        case 5:
+        {
+            sport = *(UINT16*)propertyData;
+            break;
+        }
+        default:
+        {
+            break;
+        }
+        }
+        free(propertyData);
+
+    }
+    if (processId == 4) {
         goto Exit;
     }
 
     if (Initiated == L"True") {
 
-        destaddr.s_addr = *daddr;
-        srceaddr.s_addr = *saddr;
-        sourcePort == *sport;
-        destPort == *dport;
-        sourcePort_str = std::to_wstring(*sport);
-        destPort_str = std::to_wstring(*dport);
+        destaddr.s_addr = daddr;
+        srceaddr.s_addr = saddr;
+        sourcePort == sport;
+        destPort == dport;
+        sourcePort_str = std::to_wstring(sport);
+        destPort_str = std::to_wstring(dport);
     }
-    if (Initiated == L"False") {
-        destaddr.s_addr = *saddr;
-        srceaddr.s_addr = *daddr;
-        sourcePort = *dport;
-        destPort = *sport;
-        sourcePort_str = std::to_wstring(*dport);
-        destPort_str = std::to_wstring(*sport);
+    else {
+        destaddr.s_addr = saddr;
+        srceaddr.s_addr = daddr;
+        sourcePort = dport;
+        destPort = sport;
+        sourcePort_str = std::to_wstring(dport);
+        destPort_str = std::to_wstring(sport);
     }
 
-    //
-    // convert port to widestring
-    //
-
-
-    //
-    // add null terminator to wide string
-    //
     sourcePort_str += L'\0';
     destPort_str += L'\0';
 
-    if (&destaddr == NULL) {
+    if (destaddr.s_addr == NULL) {
         wide_deststring_ip[0] = '\0';
     }
     else {
-        InetNtop(AF_INET, &destaddr, wide_deststring_ip, INET_ADDRSTRLEN);
+        InetNtop(AF_INET, &destaddr.s_addr, wide_deststring_ip, INET_ADDRSTRLEN);
     }
 
-    if (&srceaddr == NULL) {
+    if (srceaddr.s_addr == NULL) {
         wide_sourcestring_ip[0] = '\0';
     }
     else {
-        InetNtop(AF_INET, &srceaddr, wide_sourcestring_ip, INET_ADDRSTRLEN);
+        InetNtop(AF_INET, &srceaddr.s_addr, wide_sourcestring_ip, INET_ADDRSTRLEN);
     }
     //
     // removing ip addr 127.0.0.1 
@@ -1198,7 +1718,7 @@ BOOL WriteNetworkEvents(
     //
     //Getting UserName
     //
-    if (GetTokenUser(*PID, &username) != 0) {
+    if (GetTokenUser(processId, &username) != 0) {
         username_str = L"Unknown";
     }
     else {
@@ -1208,19 +1728,18 @@ BOOL WriteNetworkEvents(
     //
     //Getting ImagePath
     //
-    if (GetImagePath(*PID, &pImagePath) != ERROR_SUCCESS) {
+    if (GetImagePath(processId, &pImagePath) != ERROR_SUCCESS) {
         ImagePath_str = L"Unknown";
     }
     else {
         ImagePath_str = pImagePath;
     }
 
-    FILETIME st;
-    GetSystemTimeAsFileTime(&st);
 
+    //Writing ETW Events
     EVENT_DATA_DESCRIPTOR EventData[9];
     EventDataDescCreate(&EventData[0], &st, sizeof(st));
-    EventDataDescCreate(&EventData[1], PID, 4);
+    EventDataDescCreate(&EventData[1], &processId, 4);
     EventDataDescCreate(&EventData[2], &wide_sourcestring_ip, (wcslen(wide_sourcestring_ip) + 1) * sizeof(WCHAR));
     EventDataDescCreate(&EventData[3], &wide_deststring_ip, (wcslen(wide_deststring_ip) + 1) * sizeof(WCHAR));
     EventDataDescCreate(&EventData[4], &sourcePort, sizeof(UINT16));
@@ -1229,7 +1748,33 @@ BOOL WriteNetworkEvents(
     EventDataDescCreate(&EventData[7], username_str.c_str(), (wcslen(username_str.c_str()) + 1) * sizeof(WCHAR));
     EventDataDescCreate(&EventData[8], ImagePath_str.c_str(), (wcslen(ImagePath_str.c_str()) + 1) * sizeof(WCHAR));
 
-    status = WriteETWEvents(EventData, NetworkConnectionAccepted, 9);
+    //Might be able to set this as a global handle/call later. 
+
+    status = EventRegister(
+        &JonMonGuid,
+        NULL,
+        NULL,
+        &RegistrationHandle
+    );
+    if (ERROR_SUCCESS != status)
+    {
+        wprintf(L"EventRegister failed with %lu\n", status);
+        return FALSE;
+    }
+    status = EventWrite(
+        RegistrationHandle,
+        &NetworkConnectionAccepted,
+        9,
+        EventData
+    );
+    if (status != ERROR_SUCCESS)
+    {
+        wprintf(L"EventWrite failed with 0x%x", status);
+        EventUnregister(RegistrationHandle);
+        return FALSE;
+    }
+
+    EventUnregister(RegistrationHandle);
 
 
 Exit:
@@ -1246,29 +1791,107 @@ BOOL WriteAMSIEvents(
     _In_ PEVENT_RECORD EventRecord,
     _In_ PEVENT_HEADER EventHeader
 ) {
-    auto data{ reinterpret_cast<byte*>(EventRecord->UserData) };
-    auto Session{ GetData<ULONG64>(data) };
-    auto ScanStatus = GetData<UINT8>(data);
-    auto ScanResult = GetData<UINT32>(data);
-    auto AppName{ GetWideString(data) };
-    auto ContentName = GetData<wchar_t*>(data);
-    auto ContentSize = GetData<UINT32>(data);
-    auto OriginalSize = GetData<UINT32>(data);
-    auto Content = GetData<BYTE>(data);
-
     FILETIME st;
     GetSystemTimeAsFileTime(&st);
+    WCHAR* AppName = NULL;
+    UINT32 ScanResult, ContentSize;
+    PTRACE_EVENT_INFO pInfo = NULL;
+    DWORD bufferSize = 0;
+    DWORD status = ERROR_SUCCESS;
 
+    status = TdhGetEventInformation(EventRecord, 0, NULL, pInfo, &bufferSize);
+    if (ERROR_INSUFFICIENT_BUFFER == status) {
+        pInfo = (PTRACE_EVENT_INFO)malloc(bufferSize);
+        if (pInfo == NULL) {
+            // Handle allocation failure
+            OutputDebugString(L"[!] Error allocating memory for event info\n");
+            return FALSE;
+        }
+
+        // Get the event info
+        status = TdhGetEventInformation(EventRecord, 0, NULL, pInfo, &bufferSize);
+    }
+
+    if (ERROR_SUCCESS != status) {
+        // Handle error (could not obtain event info)
+        free(pInfo);
+        OutputDebugString(L"[!] Error getting event info\n");
+        return FALSE;
+    }
+    for (ULONG i = 0; i < pInfo->TopLevelPropertyCount; i++) {
+        PROPERTY_DATA_DESCRIPTOR dataDescriptor;
+        DWORD propertySize = 0;
+        WCHAR* propertyName = (WCHAR*)((BYTE*)pInfo + pInfo->EventPropertyInfoArray[i].NameOffset);
+
+        dataDescriptor.PropertyName = (ULONGLONG)propertyName;
+        dataDescriptor.ArrayIndex = ULONG_MAX;
+
+        // Determine the size of the property
+        status = TdhGetPropertySize(EventRecord, 0, NULL, 1, &dataDescriptor, &propertySize);
+        if (status != ERROR_SUCCESS) {
+            // Handle error
+            wprintf(L"Error getting size for property %ls\n", propertyName);
+            continue;
+        }
+
+        BYTE* propertyData = (BYTE*)malloc(propertySize);
+        if (!propertyData) {
+            // Handle allocation failure
+            wprintf(L"Error allocating memory for property %ls\n", propertyName);
+            continue;
+        }
+
+        // Get the property data
+        status = TdhGetProperty(EventRecord, 0, NULL, 1, &dataDescriptor, propertySize, propertyData);
+        if (status != ERROR_SUCCESS) {
+            // Handle error
+            wprintf(L"Error getting data for property %ls\n", propertyName);
+            free(propertyData);
+            continue;
+        }
+        switch (i) {
+        case 2:
+        {
+            ScanResult = *(UINT32*)propertyData;
+            break;
+        }
+        case 3:
+        {
+            AppName = (WCHAR*)malloc(static_cast<size_t>(propertySize + sizeof(WCHAR)));
+            if (!AppName) {
+                OutputDebugString(L"[!] Error allocating memory for AppName\n");
+                continue;
+            }
+            wcscpy_s(AppName, (propertySize + sizeof(WCHAR)) / sizeof(WCHAR), (WCHAR*)propertyData);
+            break;
+        }
+        case 5:
+        {
+            ContentSize = *(UINT32*)propertyData;
+            break;
+        }
+        default:
+        {
+            break;
+        }
+        }
+        free(propertyData);
+
+    }
+
+    //
     //Writing Event to ETW
+    //
     EVENT_DATA_DESCRIPTOR EventData[5];
     EventDataDescCreate(&EventData[0], &st, sizeof(st));
     EventDataDescCreate(&EventData[1], &EventHeader->ProcessId, 4);
     EventDataDescCreate(&EventData[2], AppName, (wcslen(AppName) + 1) * sizeof(WCHAR));
-    EventDataDescCreate(&EventData[3], ScanResult, 4);
-    EventDataDescCreate(&EventData[4], ContentSize, 4);
+    EventDataDescCreate(&EventData[3], &ScanResult, 4);
+    EventDataDescCreate(&EventData[4], &ContentSize, 4);
 
-    NTSTATUS status = WriteETWEvents(EventData, AMSIEvents, 5);
-
+    status = WriteETWEvents(EventData, AMSIEvents, 5);
+    free(AppName);
+    free(pInfo);
     return TRUE;
 }
 
@@ -1276,19 +1899,96 @@ BOOL WriteDotNetEvents(
     _In_ PEVENT_RECORD EventRecord,
     _In_ PEVENT_HEADER EventHeader
 ) {
-    auto data{ reinterpret_cast<byte*>(EventRecord->UserData) };
-    auto AssemblyID{ GetData<UINT64>(data) };
-    auto AppDomainID{ GetData<UINT64>(data) };
-    auto BindingID{ GetData<UINT64>(data) };
-    auto AssemblyFlags{ GetData<UINT32>(data) };
-    auto FullyQualifiedAssemblyName{ GetWideString(data) };
-    auto ClrInstanceID{ GetData<UINT16>(data) };
+    FILETIME st;
+    GetSystemTimeAsFileTime(&st);
 
     wchar_t* username = nullptr;
     wchar_t* pImagePath = nullptr;
     std::wstring ImagePath_str;
     std::wstring username_str;
+    std::vector<std::wstring> tokens;
+    std::wstring token;
+    UINT16 ClrInstanceID;
+    WCHAR* FullyQualifiedAssemblyName = NULL;
     REGHANDLE RegistrationHandle = NULL;
+    PTRACE_EVENT_INFO pInfo = NULL;
+    DWORD bufferSize = 0;
+    DWORD status = ERROR_SUCCESS;
+
+    status = TdhGetEventInformation(EventRecord, 0, NULL, pInfo, &bufferSize);
+    if (ERROR_INSUFFICIENT_BUFFER == status) {
+        pInfo = (PTRACE_EVENT_INFO)malloc(bufferSize);
+        if (pInfo == NULL) {
+            // Handle allocation failure
+            OutputDebugString(L"[!] Error allocating memory for event info\n");
+            return FALSE;
+        }
+
+        // Get the event info
+        status = TdhGetEventInformation(EventRecord, 0, NULL, pInfo, &bufferSize);
+    }
+
+    if (ERROR_SUCCESS != status) {
+        // Handle error (could not obtain event info)
+        free(pInfo);
+        OutputDebugString(L"[!] Error getting event info\n");
+        return FALSE;
+    }
+    for (ULONG i = 0; i < pInfo->TopLevelPropertyCount; i++) {
+        PROPERTY_DATA_DESCRIPTOR dataDescriptor;
+        DWORD propertySize = 0;
+        WCHAR* propertyName = (WCHAR*)((BYTE*)pInfo + pInfo->EventPropertyInfoArray[i].NameOffset);
+
+        dataDescriptor.PropertyName = (ULONGLONG)propertyName;
+        dataDescriptor.ArrayIndex = ULONG_MAX;
+
+        // Determine the size of the property
+        status = TdhGetPropertySize(EventRecord, 0, NULL, 1, &dataDescriptor, &propertySize);
+        if (status != ERROR_SUCCESS) {
+            // Handle error
+            wprintf(L"Error getting size for property %ls\n", propertyName);
+            continue;
+        }
+
+        BYTE* propertyData = (BYTE*)malloc(propertySize);
+        if (!propertyData) {
+            // Handle allocation failure
+            wprintf(L"Error allocating memory for property %ls\n", propertyName);
+            continue;
+        }
+
+        // Get the property data
+        status = TdhGetProperty(EventRecord, 0, NULL, 1, &dataDescriptor, propertySize, propertyData);
+        if (status != ERROR_SUCCESS) {
+            // Handle error
+            wprintf(L"Error getting data for property %ls\n", propertyName);
+            free(propertyData);
+            continue;
+        }
+        switch (i) {
+        case 4:
+        {
+            FullyQualifiedAssemblyName = (WCHAR*)malloc(static_cast<size_t>(propertySize + sizeof(WCHAR)));
+            if (!FullyQualifiedAssemblyName) {
+                OutputDebugString(L"[!] Error allocating memory for FullyQualifiedAssemblyName\n");
+                continue;
+            }
+            wcscpy_s(FullyQualifiedAssemblyName, (propertySize + sizeof(WCHAR)) / sizeof(WCHAR), (WCHAR*)propertyData);
+            break;
+        }
+        case 5:
+        {
+            ClrInstanceID = *(UINT16*)propertyData;
+            break;
+        }
+        default:
+        {
+            break;
+        }
+        }
+        free(propertyData);
+
+    }
 
     if (EventHeader->ProcessId == 4)
     {
@@ -1296,8 +1996,7 @@ BOOL WriteDotNetEvents(
     }
 
     std::wistringstream wiss(FullyQualifiedAssemblyName);
-    std::vector<std::wstring> tokens;
-    std::wstring token;
+
     while (std::getline(wiss, token, L',')) {
         tokens.push_back(token);
     }
@@ -1318,10 +2017,6 @@ BOOL WriteDotNetEvents(
         ImagePath_str = pImagePath;
     }
 
-    FILETIME st;
-    GetSystemTimeAsFileTime(&st);
-
-
     //Writing Event to ETW
     EVENT_DATA_DESCRIPTOR EventData[6];
     EventDataDescCreate(&EventData[0], &st, sizeof(st));
@@ -1329,11 +2024,17 @@ BOOL WriteDotNetEvents(
     EventDataDescCreate(&EventData[2], tokens[0].c_str(), (wcslen(tokens[0].c_str()) + 1) * sizeof(WCHAR));
     EventDataDescCreate(&EventData[3], username_str.c_str(), (wcslen(username_str.c_str()) + 1) * sizeof(WCHAR));
     EventDataDescCreate(&EventData[4], ImagePath_str.c_str(), (wcslen(ImagePath_str.c_str()) + 1) * sizeof(WCHAR));
-    EventDataDescCreate(&EventData[5], ClrInstanceID, sizeof(ClrInstanceID));
+    EventDataDescCreate(&EventData[5], &ClrInstanceID, sizeof(ClrInstanceID));
 
-    NTSTATUS status = WriteETWEvents(EventData, DotNetLoad, 6);
-    
+    status = WriteETWEvents(EventData, DotNetLoad, 6);
 Exit:
+    if (pInfo != NULL)
+    {
+        free(pInfo);
+    }
+    if (FullyQualifiedAssemblyName != nullptr) {
+        free(FullyQualifiedAssemblyName);
+    }
     if (pImagePath != nullptr) {
         delete[] pImagePath;
     }
@@ -1347,14 +2048,95 @@ BOOL WriteTaskSchedEvents(
     _In_ PEVENT_RECORD EventRecord,
     _In_ PEVENT_HEADER EventHeader
 ) {
+    FILETIME st;
+    GetSystemTimeAsFileTime(&st);
     switch (EventHeader->EventDescriptor.Id) {
     case 106: {
-        auto data{ reinterpret_cast<byte*>(EventRecord->UserData) };
-        auto TaskName{ GetWideString(data) };
-        auto UserContext{ GetWideString(data) };
+        WCHAR* TaskName = NULL;
+        WCHAR* UserContext = NULL;
 
-        FILETIME st;
-        GetSystemTimeAsFileTime(&st);
+        PTRACE_EVENT_INFO pInfo = NULL;
+        DWORD bufferSize = 0;
+        DWORD status = ERROR_SUCCESS;
+        status = TdhGetEventInformation(EventRecord, 0, NULL, pInfo, &bufferSize);
+        if (ERROR_INSUFFICIENT_BUFFER == status) {
+            pInfo = (PTRACE_EVENT_INFO)malloc(bufferSize);
+            if (pInfo == NULL) {
+                // Handle allocation failure
+                OutputDebugString(L"[!] Error allocating memory for event info\n");
+                return FALSE;
+            }
+
+            // Get the event info
+            status = TdhGetEventInformation(EventRecord, 0, NULL, pInfo, &bufferSize);
+        }
+
+        if (ERROR_SUCCESS != status) {
+            // Handle error (could not obtain event info)
+            free(pInfo);
+            OutputDebugString(L"[!] Error getting event info\n");
+            return FALSE;
+        }
+        for (ULONG i = 0; i < pInfo->TopLevelPropertyCount; i++) {
+            PROPERTY_DATA_DESCRIPTOR dataDescriptor;
+            DWORD propertySize = 0;
+            WCHAR* propertyName = (WCHAR*)((BYTE*)pInfo + pInfo->EventPropertyInfoArray[i].NameOffset);
+
+            dataDescriptor.PropertyName = (ULONGLONG)propertyName;
+            dataDescriptor.ArrayIndex = ULONG_MAX;
+
+            // Determine the size of the property
+            status = TdhGetPropertySize(EventRecord, 0, NULL, 1, &dataDescriptor, &propertySize);
+            if (status != ERROR_SUCCESS) {
+                // Handle error
+                wprintf(L"Error getting size for property %ls\n", propertyName);
+                continue;
+            }
+
+            BYTE* propertyData = (BYTE*)malloc(propertySize);
+            if (!propertyData) {
+                // Handle allocation failure
+                wprintf(L"Error allocating memory for property %ls\n", propertyName);
+                continue;
+            }
+
+            // Get the property data
+            status = TdhGetProperty(EventRecord, 0, NULL, 1, &dataDescriptor, propertySize, propertyData);
+            if (status != ERROR_SUCCESS) {
+                // Handle error
+                wprintf(L"Error getting data for property %ls\n", propertyName);
+                free(propertyData);
+                continue;
+            }
+            switch (i) {
+            case 0:
+            {
+                TaskName = (WCHAR*)malloc(static_cast<size_t>(propertySize + sizeof(WCHAR)));
+                if (!TaskName) {
+                    OutputDebugString(L"[!] Error allocating memory for AppName\n");
+                    continue;
+                }
+                wcscpy_s(TaskName, (propertySize + sizeof(WCHAR)) / sizeof(WCHAR), (WCHAR*)propertyData);
+                break;
+            }
+            case 1:
+            {
+                UserContext = (WCHAR*)malloc(static_cast<size_t>(propertySize + sizeof(WCHAR)));
+                if (!UserContext) {
+                    OutputDebugString(L"[!] Error allocating memory for AppName\n");
+                    continue;
+                }
+                wcscpy_s(UserContext, (propertySize + sizeof(WCHAR)) / sizeof(WCHAR), (WCHAR*)propertyData);
+                break;
+            }
+            default:
+            {
+                break;
+            }
+            }
+            free(propertyData);
+
+        }
 
         EVENT_DATA_DESCRIPTOR EventData[4];
         EventDataDescCreate(&EventData[0], &st, sizeof(st));
@@ -1362,24 +2144,113 @@ BOOL WriteTaskSchedEvents(
         EventDataDescCreate(&EventData[2], UserContext, (wcslen(UserContext) + 1) * sizeof(WCHAR));
         EventDataDescCreate(&EventData[3], &EventHeader->ProcessId, 4);
 
-        NTSTATUS status = WriteETWEvents(EventData, SchedTaskCreation, 4);
-
+        status = WriteETWEvents(EventData, SchedTaskStarted, 4);
+        free(TaskName);
+        free(UserContext);
         break;
     }
     case 129: {
-        auto data{ reinterpret_cast<byte*>(EventRecord->UserData) };
-        auto TaskName{ GetWideString(data) };
-        auto Path{ GetWideString(data) };
-        auto ProcessId = GetData<UINT32>(data);
-        FILETIME st;
-        GetSystemTimeAsFileTime(&st);
+        WCHAR* TaskName = NULL;
+        WCHAR* Path = NULL;
+        UINT32 ProcessId;
+
+        PTRACE_EVENT_INFO pInfo = NULL;
+        DWORD bufferSize = 0;
+        DWORD status = ERROR_SUCCESS;
+        status = TdhGetEventInformation(EventRecord, 0, NULL, pInfo, &bufferSize);
+        if (ERROR_INSUFFICIENT_BUFFER == status) {
+            pInfo = (PTRACE_EVENT_INFO)malloc(bufferSize);
+            if (pInfo == NULL) {
+                // Handle allocation failure
+                OutputDebugString(L"[!] Error allocating memory for event info\n");
+                return FALSE;
+            }
+
+            // Get the event info
+            status = TdhGetEventInformation(EventRecord, 0, NULL, pInfo, &bufferSize);
+        }
+
+        if (ERROR_SUCCESS != status) {
+            // Handle error (could not obtain event info)
+            free(pInfo);
+            OutputDebugString(L"[!] Error getting event info\n");
+            return FALSE;
+        }
+        for (ULONG i = 0; i < pInfo->TopLevelPropertyCount; i++) {
+            PROPERTY_DATA_DESCRIPTOR dataDescriptor;
+            DWORD propertySize = 0;
+            WCHAR* propertyName = (WCHAR*)((BYTE*)pInfo + pInfo->EventPropertyInfoArray[i].NameOffset);
+
+            dataDescriptor.PropertyName = (ULONGLONG)propertyName;
+            dataDescriptor.ArrayIndex = ULONG_MAX;
+
+            // Determine the size of the property
+            status = TdhGetPropertySize(EventRecord, 0, NULL, 1, &dataDescriptor, &propertySize);
+            if (status != ERROR_SUCCESS) {
+                // Handle error
+                wprintf(L"Error getting size for property %ls\n", propertyName);
+                continue;
+            }
+
+            BYTE* propertyData = (BYTE*)malloc(propertySize);
+            if (!propertyData) {
+                // Handle allocation failure
+                wprintf(L"Error allocating memory for property %ls\n", propertyName);
+                continue;
+            }
+
+            // Get the property data
+            status = TdhGetProperty(EventRecord, 0, NULL, 1, &dataDescriptor, propertySize, propertyData);
+            if (status != ERROR_SUCCESS) {
+                // Handle error
+                wprintf(L"Error getting data for property %ls\n", propertyName);
+                free(propertyData);
+                continue;
+            }
+            switch (i) {
+            case 0:
+            {
+                TaskName = (WCHAR*)malloc(static_cast<size_t>(propertySize + sizeof(WCHAR)));
+                if (!TaskName) {
+                    OutputDebugString(L"[!] Error allocating memory for AppName\n");
+                    continue;
+                }
+                wcscpy_s(TaskName, (propertySize + sizeof(WCHAR)) / sizeof(WCHAR), (WCHAR*)propertyData);
+                break;
+            }
+            case 1:
+            {
+                Path = (WCHAR*)malloc(static_cast<size_t>(propertySize + sizeof(WCHAR)));
+                if (!Path) {
+                    OutputDebugString(L"[!] Error allocating memory for AppName\n");
+                    continue;
+                }
+                wcscpy_s(Path, (propertySize + sizeof(WCHAR)) / sizeof(WCHAR), (WCHAR*)propertyData);
+                break;
+            }
+            case 3:
+            {
+                ProcessId = *(UINT32*)propertyData;
+                break;
+            }
+            default:
+            {
+                break;
+            }
+            }
+            free(propertyData);
+
+        }
+
         EVENT_DATA_DESCRIPTOR EventData[4];
         EventDataDescCreate(&EventData[0], &st, sizeof(st));
         EventDataDescCreate(&EventData[1], TaskName, (wcslen(TaskName) + 1) * sizeof(WCHAR));
         EventDataDescCreate(&EventData[2], Path, (wcslen(Path) + 1) * sizeof(WCHAR));
-        EventDataDescCreate(&EventData[3], ProcessId, 4);
+        EventDataDescCreate(&EventData[3], &ProcessId, 4);
 
-        NTSTATUS status = WriteETWEvents(EventData, SchedTaskStarted, 4);
+        status = WriteETWEvents(EventData, SchedTaskStarted, 4);
+        free(TaskName);
+        free(Path);
         break;
     }
     default: {
@@ -1396,14 +2267,116 @@ BOOL WriteWMIEvents(
     switch (EventHeader->EventDescriptor.Id) {
     case 5861:
     {
-        auto data{ reinterpret_cast<byte*>(EventRecord->UserData) };
-        auto Namespace{ GetWideString(data) };
-        auto ESS{ GetWideString(data) };
-        auto Consumer{ GetWideString(data) };
-        auto PossibleCause{ GetWideString(data) };
-
         FILETIME st;
         GetSystemTimeAsFileTime(&st);
+
+        WCHAR* Namespace = NULL;
+        WCHAR* ESS = NULL;
+        WCHAR* Consumer = NULL;
+        WCHAR* PossibleCause = NULL;
+
+        PTRACE_EVENT_INFO pInfo = NULL;
+        DWORD bufferSize = 0;
+        DWORD status = ERROR_SUCCESS;
+        status = TdhGetEventInformation(EventRecord, 0, NULL, pInfo, &bufferSize);
+        if (ERROR_INSUFFICIENT_BUFFER == status) {
+            pInfo = (PTRACE_EVENT_INFO)malloc(bufferSize);
+            if (pInfo == NULL) {
+                // Handle allocation failure
+                OutputDebugString(L"[!] Error allocating memory for event info\n");
+                return FALSE;
+            }
+
+            // Get the event info
+            status = TdhGetEventInformation(EventRecord, 0, NULL, pInfo, &bufferSize);
+        }
+
+        if (ERROR_SUCCESS != status) {
+            // Handle error (could not obtain event info)
+            free(pInfo);
+            OutputDebugString(L"[!] Error getting event info\n");
+            return FALSE;
+        }
+        for (ULONG i = 0; i < pInfo->TopLevelPropertyCount; i++) {
+            PROPERTY_DATA_DESCRIPTOR dataDescriptor;
+            DWORD propertySize = 0;
+            WCHAR* propertyName = (WCHAR*)((BYTE*)pInfo + pInfo->EventPropertyInfoArray[i].NameOffset);
+
+            dataDescriptor.PropertyName = (ULONGLONG)propertyName;
+            dataDescriptor.ArrayIndex = ULONG_MAX;
+
+            // Determine the size of the property
+            status = TdhGetPropertySize(EventRecord, 0, NULL, 1, &dataDescriptor, &propertySize);
+            if (status != ERROR_SUCCESS) {
+                // Handle error
+                wprintf(L"Error getting size for property %ls\n", propertyName);
+                continue;
+            }
+
+            BYTE* propertyData = (BYTE*)malloc(propertySize);
+            if (!propertyData) {
+                // Handle allocation failure
+                wprintf(L"Error allocating memory for property %ls\n", propertyName);
+                continue;
+            }
+
+            // Get the property data
+            status = TdhGetProperty(EventRecord, 0, NULL, 1, &dataDescriptor, propertySize, propertyData);
+            if (status != ERROR_SUCCESS) {
+                // Handle error
+                wprintf(L"Error getting data for property %ls\n", propertyName);
+                free(propertyData);
+                continue;
+            }
+            switch (i) {
+            case 0:
+            {
+                Namespace = (WCHAR*)malloc(static_cast<size_t>(propertySize + sizeof(WCHAR)));
+                if (!Namespace) {
+                    OutputDebugString(L"[!] Error allocating memory for AppName\n");
+                    continue;
+                }
+                wcscpy_s(Namespace, (propertySize + sizeof(WCHAR)) / sizeof(WCHAR), (WCHAR*)propertyData);
+                break;
+            }
+            case 1:
+            {
+                ESS = (WCHAR*)malloc(static_cast<size_t>(propertySize + sizeof(WCHAR)));
+                if (!ESS) {
+                    OutputDebugString(L"[!] Error allocating memory for AppName\n");
+                    continue;
+                }
+                wcscpy_s(ESS, (propertySize + sizeof(WCHAR)) / sizeof(WCHAR), (WCHAR*)propertyData);
+                break;
+            }
+            case 2:
+            {
+                Consumer = (WCHAR*)malloc(static_cast<size_t>(propertySize + sizeof(WCHAR)));
+                if (!Consumer) {
+                    OutputDebugString(L"[!] Error allocating memory for AppName\n");
+                    continue;
+                }
+                wcscpy_s(Consumer, (propertySize + sizeof(WCHAR)) / sizeof(WCHAR), (WCHAR*)propertyData);
+                break;
+            }
+            case 3:
+            {
+                PossibleCause = (WCHAR*)malloc(static_cast<size_t>(propertySize + sizeof(WCHAR)));
+                if (!PossibleCause) {
+                    OutputDebugString(L"[!] Error allocating memory for AppName\n");
+                    continue;
+                }
+                wcscpy_s(PossibleCause, (propertySize + sizeof(WCHAR)) / sizeof(WCHAR), (WCHAR*)propertyData);
+                break;
+            }
+            default:
+            {
+                break;
+            }
+            }
+            free(propertyData);
+
+        }
 
         EVENT_DATA_DESCRIPTOR EventData[5];
         EventDataDescCreate(&EventData[0], &st, sizeof(st));
@@ -1412,8 +2385,11 @@ BOOL WriteWMIEvents(
         EventDataDescCreate(&EventData[3], Consumer, (wcslen(Consumer) + 1) * sizeof(WCHAR));
         EventDataDescCreate(&EventData[4], PossibleCause, (wcslen(PossibleCause) + 1) * sizeof(WCHAR));
 
-        NTSTATUS status = WriteETWEvents(EventData, WMIFilterToConsumerBinding, 5);
-        break;
+        status = WriteETWEvents(EventData, WMIFilterToConsumerBinding, 5);
+        free(Namespace);
+        free(ESS);
+        free(Consumer);
+        free(PossibleCause);
     }
     }
 
@@ -1484,17 +2460,111 @@ BOOL WriteRPCEvent(
     std::wstring ImagePath_str;
     PEVENT_HEADER_EXTENDED_DATA_ITEM extendedData = EventRecord->ExtendedData;
     HANDLE hProcess = GetCurrentProcess();
+    FILETIME st;
+    GetSystemTimeAsFileTime(&st);
 
-    auto data{ reinterpret_cast<byte*>(EventRecord->UserData) };
-    auto interfaceUUID{ GetData<GUID>(data) };
-    auto procNum{ GetData<UINT32>(data) };
-    auto protocol{ GetData<UINT32>(data) };
-    auto networkAddress{ GetWideString(data) };
-    auto endpoint{ GetWideString(data) };
-    auto options{ GetWideString(data) };
-    auto authenticationLevel{ GetData<UINT32>(data) };
-    auto authenticationService{ GetData<UINT32>(data) };
-    auto impersonationLevel{ GetData<UINT32>(data) };
+    GUID interfaceUUID;
+    UINT32 procNum;
+    UINT32 protocol;
+    WCHAR* networkAddress = NULL;
+    WCHAR* endpoint = NULL;
+
+    PTRACE_EVENT_INFO pInfo = NULL;
+    DWORD bufferSize = 0;
+    DWORD status = ERROR_SUCCESS;
+    status = TdhGetEventInformation(EventRecord, 0, NULL, pInfo, &bufferSize);
+    if (ERROR_INSUFFICIENT_BUFFER == status) {
+        pInfo = (PTRACE_EVENT_INFO)malloc(bufferSize);
+        if (pInfo == NULL) {
+            // Handle allocation failure
+            OutputDebugString(L"[!] Error allocating memory for event info\n");
+            return FALSE;
+        }
+
+        // Get the event info
+        status = TdhGetEventInformation(EventRecord, 0, NULL, pInfo, &bufferSize);
+    }
+
+    if (ERROR_SUCCESS != status) {
+        // Handle error (could not obtain event info)
+        free(pInfo);
+        OutputDebugString(L"[!] Error getting event info\n");
+        return FALSE;
+    }
+    for (ULONG i = 0; i < pInfo->TopLevelPropertyCount; i++) {
+        PROPERTY_DATA_DESCRIPTOR dataDescriptor;
+        DWORD propertySize = 0;
+        WCHAR* propertyName = (WCHAR*)((BYTE*)pInfo + pInfo->EventPropertyInfoArray[i].NameOffset);
+
+        dataDescriptor.PropertyName = (ULONGLONG)propertyName;
+        dataDescriptor.ArrayIndex = ULONG_MAX;
+
+        // Determine the size of the property
+        status = TdhGetPropertySize(EventRecord, 0, NULL, 1, &dataDescriptor, &propertySize);
+        if (status != ERROR_SUCCESS) {
+            // Handle error
+            wprintf(L"Error getting size for property %ls\n", propertyName);
+            continue;
+        }
+
+        BYTE* propertyData = (BYTE*)malloc(propertySize);
+        if (!propertyData) {
+            // Handle allocation failure
+            wprintf(L"Error allocating memory for property %ls\n", propertyName);
+            continue;
+        }
+
+        // Get the property data
+        status = TdhGetProperty(EventRecord, 0, NULL, 1, &dataDescriptor, propertySize, propertyData);
+        if (status != ERROR_SUCCESS) {
+            // Handle error
+            wprintf(L"Error getting data for property %ls\n", propertyName);
+            free(propertyData);
+            continue;
+        }
+        switch (i) {
+        case 0:
+        {
+            interfaceUUID = *(GUID*)propertyData;
+            break;
+        }
+        case 1:
+        {
+            procNum = *(UINT32*)propertyData;
+            break;
+        }
+        case 2:
+        {
+            protocol = *(UINT32*)propertyData;
+        }
+        case 3:
+        {
+            networkAddress = (WCHAR*)malloc(static_cast<size_t>(propertySize + sizeof(WCHAR)));
+            if (!networkAddress) {
+                OutputDebugString(L"[!] Error allocating memory for AppName\n");
+                continue;
+            }
+            wcscpy_s(networkAddress, (propertySize + sizeof(WCHAR)) / sizeof(WCHAR), (WCHAR*)propertyData);
+            break;
+        }
+        case 4:
+        {
+            endpoint = (WCHAR*)malloc(static_cast<size_t>(propertySize + sizeof(WCHAR)));
+            if (!endpoint) {
+                OutputDebugString(L"[!] Error allocating memory for AppName\n");
+                continue;
+            }
+            wcscpy_s(endpoint, (propertySize + sizeof(WCHAR)) / sizeof(WCHAR), (WCHAR*)propertyData);
+            break;
+        }
+        default:
+        {
+            break;
+        }
+        }
+        free(propertyData);
+
+    }
 
     //Getting UserName
     if (GetTokenUser(EventHeader->ProcessId, &username) != 0) {
@@ -1512,15 +2582,14 @@ BOOL WriteRPCEvent(
         ImagePath_str = pImagePath;
     }
 
-    FILETIME st;
-    GetSystemTimeAsFileTime(&st);
+
 
     //Writing Event to ETW
     EVENT_DATA_DESCRIPTOR EventData[12];
     EventDataDescCreate(&EventData[0], &st, sizeof(st));
     EventDataDescCreate(&EventData[1], szInterfaceUUID, (wcslen(szInterfaceUUID) + 1) * sizeof(WCHAR));
-    EventDataDescCreate(&EventData[2], procNum, 4);
-    EventDataDescCreate(&EventData[3], protocol, 4);
+    EventDataDescCreate(&EventData[2], &procNum, 4);
+    EventDataDescCreate(&EventData[3], &protocol, 4);
     EventDataDescCreate(&EventData[4], &EventHeader->ProcessId, 4);
     EventDataDescCreate(&EventData[5], networkAddress, (wcslen(networkAddress) + 1) * sizeof(WCHAR));
     EventDataDescCreate(&EventData[6], endpoint, (wcslen(endpoint) + 1) * sizeof(WCHAR));
@@ -1530,9 +2599,10 @@ BOOL WriteRPCEvent(
     EventDataDescCreate(&EventData[10], ImagePath_str.c_str(), (wcslen(ImagePath_str.c_str()) + 1) * sizeof(WCHAR));
     EventDataDescCreate(&EventData[11], CallStack, (wcslen(CallStack) + 1) * sizeof(WCHAR));
 
-    NTSTATUS status = WriteETWEvents(EventData, RPCEvent, 12);
-    
-    return TRUE;
+
+    status = WriteETWEvents(EventData, RPCEvent, 12);
+    free(networkAddress);
+    free(endpoint);
 }
 
 BOOL RpcEvent(
@@ -1542,17 +2612,89 @@ BOOL RpcEvent(
 ) {
     PEVENT_HEADER_EXTENDED_DATA_ITEM extendedData = EventRecord->ExtendedData;
     HANDLE hProcess = GetCurrentProcess();
-    auto data{ reinterpret_cast<byte*>(EventRecord->UserData) };
-    auto interfaceUUID{ GetData<GUID>(data) };
-    auto procNum{ GetData<UINT32>(data) };
+    GUID interfaceUUID;
+    UINT32 procNum;
+
+    PTRACE_EVENT_INFO pInfo = NULL;
+    DWORD bufferSize = 0;
+    DWORD status = ERROR_SUCCESS;
+    status = TdhGetEventInformation(EventRecord, 0, NULL, pInfo, &bufferSize);
+    if (ERROR_INSUFFICIENT_BUFFER == status) {
+        pInfo = (PTRACE_EVENT_INFO)malloc(bufferSize);
+        if (pInfo == NULL) {
+            // Handle allocation failure
+            OutputDebugString(L"[!] Error allocating memory for event info\n");
+            return FALSE;
+        }
+
+        // Get the event info
+        status = TdhGetEventInformation(EventRecord, 0, NULL, pInfo, &bufferSize);
+    }
+
+    if (ERROR_SUCCESS != status) {
+        // Handle error (could not obtain event info)
+        free(pInfo);
+        OutputDebugString(L"[!] Error getting event info\n");
+        return FALSE;
+    }
+    for (ULONG i = 0; i < pInfo->TopLevelPropertyCount; i++) {
+        PROPERTY_DATA_DESCRIPTOR dataDescriptor;
+        DWORD propertySize = 0;
+        WCHAR* propertyName = (WCHAR*)((BYTE*)pInfo + pInfo->EventPropertyInfoArray[i].NameOffset);
+
+        dataDescriptor.PropertyName = (ULONGLONG)propertyName;
+        dataDescriptor.ArrayIndex = ULONG_MAX;
+
+        // Determine the size of the property
+        status = TdhGetPropertySize(EventRecord, 0, NULL, 1, &dataDescriptor, &propertySize);
+        if (status != ERROR_SUCCESS) {
+            // Handle error
+            wprintf(L"Error getting size for property %ls\n", propertyName);
+            continue;
+        }
+
+        BYTE* propertyData = (BYTE*)malloc(propertySize);
+        if (!propertyData) {
+            // Handle allocation failure
+            wprintf(L"Error allocating memory for property %ls\n", propertyName);
+            continue;
+        }
+
+        // Get the property data
+        status = TdhGetProperty(EventRecord, 0, NULL, 1, &dataDescriptor, propertySize, propertyData);
+        if (status != ERROR_SUCCESS) {
+            // Handle error
+            wprintf(L"Error getting data for property %ls\n", propertyName);
+            free(propertyData);
+            continue;
+        }
+        switch (i) {
+        case 0:
+        {
+            interfaceUUID = *(GUID*)propertyData;
+            break;
+        }
+        case 1:
+        {
+            procNum = *(UINT32*)propertyData;
+            break;
+        }
+        {
+            break;
+        }
+        }
+        free(propertyData);
+
+    }
+
     wchar_t szInterfaceUUID[64] = { 0 };
-    StringFromGUID2(*interfaceUUID, szInterfaceUUID, 64);
+    StringFromGUID2(interfaceUUID, szInterfaceUUID, 64);
 
 
     //MS-SCMR {367ABB81-9844-35F1-AD32-98F038001003}
     if (wcscmp(szInterfaceUUID, L"{367ABB81-9844-35F1-AD32-98F038001003}") == 0) {
         const wchar_t* InterfaceString = L"MS-SCMR";
-        switch (*procNum)
+        switch (procNum)
         {
         case 12:
         {
@@ -1572,7 +2714,7 @@ BOOL RpcEvent(
     //MS-DRSR {E3514235-4B06-11D1-AB04-00C04FC2DCD2}
     if (wcscmp(szInterfaceUUID, L"{E3514235-4B06-11D1-AB04-00C04FC2DCD2}") == 0) {
         const wchar_t* InterfaceString = L"MS-DRSR";
-        switch (*procNum) {
+        switch (procNum) {
         case 3:
         {
             const wchar_t* MethodString = L"GetNCChanges";
@@ -1590,7 +2732,7 @@ BOOL RpcEvent(
     //MS-RRP {338CD001-2244-31F1-AAAA-900038001003}
     if (wcscmp(szInterfaceUUID, L"{338CD001-2244-31F1-AAAA-900038001003}") == 0) {
         const wchar_t* InterfaceString = L"MS-RRP";
-        switch (*procNum) {
+        switch (procNum) {
         case 6:
         {
             const wchar_t* MethodString = L"BaseRegCreateKey";
@@ -1618,7 +2760,7 @@ BOOL RpcEvent(
     //MS-SRVS {4B324FC8-1670-01D3-1278-5A47BF6EE188}
     if (wcscmp(szInterfaceUUID, L"{4B324FC8-1670-01D3-1278-5A47BF6EE188}") == 0) {
         const wchar_t* InterfaceString = L"MS-SRVS";
-        switch (*procNum) {
+        switch (procNum) {
         case 12:
         {
             const wchar_t* MethodString = L"NetrSessionEnum";
@@ -1637,7 +2779,7 @@ BOOL RpcEvent(
     //MS-RPRN {12345678-1234-ABCD-EF00-0123456789AB}
     if (wcscmp(szInterfaceUUID, L"{12345678-1234-ABCD-EF00-0123456789AB}") == 0) {
         const wchar_t* InterfaceString = L"MS-RPRN";
-        switch (*procNum) {
+        switch (procNum) {
         case 89:
         {
             const wchar_t* MethodString = L"RpcAddPrinterDriverEx";
@@ -1657,7 +2799,7 @@ BOOL RpcEvent(
     //MS-PAR 76F03F96-CDFD-44FC-A22C-64950A001209
     if (wcscmp(szInterfaceUUID, L"{76F03F96-CDFD-44FC-A22C-64950A001209}") == 0) {
         const wchar_t* InterfaceString = L"MS-PAR";
-        switch (*procNum) {
+        switch (procNum) {
         case 39:
         {
             const wchar_t* MethodString = L"RpcAsyncAddPrinterDriver";
@@ -1676,7 +2818,7 @@ BOOL RpcEvent(
     // MS-EFSR {D9A0A0C0-150F-11D1-8C7A-00C04FC297EB} || {C681D488-D850-11D0-8C52-00C04FD90F7E}"
     if ((wcscmp(szInterfaceUUID, L"{C681D488-D850-11D0-8C52-00C04FD90F7E}") == 0) || (wcscmp(szInterfaceUUID, L"{DF1941C5-FE89-4E79-BF10-463657ACF44D}") == 0)) {
         const wchar_t* InterfaceString = L"MS-EFSR";
-        switch (*procNum) {
+        switch (procNum) {
         case 0:
         {
             const wchar_t* MethodString = L"EfsRpcOpenFileRaw";
@@ -1718,20 +2860,107 @@ BOOL DPAPIEvents(
     switch (EventHeader->EventDescriptor.Id) {
     case 16385:
     {
-        auto data{ reinterpret_cast<byte*>(EventRecord->UserData) };
-        auto OperationType{ GetWideString(data) };
-        auto DataDescription{ GetWideString(data) };
-        auto MasterKeyGUID = GetData<GUID>(data);
-        auto Flags = GetData<UINT32>(data);
-        auto ProtectionFlags = GetData<UINT32>(data);
-        auto ReturnValue = GetData<UINT32>(data);
-        auto CallerProcessStartKey = GetData<UINT64>(data);
-        auto CallerProcessID = GetData<UINT32>(data);
-        auto CallerProcessCreationTime = GetData<UINT64>(data);
-        auto PlainTextDataSize = GetData<UINT32>(data);
-
         FILETIME st;
         GetSystemTimeAsFileTime(&st);
+
+        WCHAR* OperationType = NULL;
+        WCHAR* DataDescription = NULL;
+        UINT32 CallerProcessID, Flags, ProtectionFlags;
+
+        PTRACE_EVENT_INFO pInfo = NULL;
+        DWORD bufferSize = 0;
+        DWORD status = ERROR_SUCCESS;
+        status = TdhGetEventInformation(EventRecord, 0, NULL, pInfo, &bufferSize);
+        if (ERROR_INSUFFICIENT_BUFFER == status) {
+            pInfo = (PTRACE_EVENT_INFO)malloc(bufferSize);
+            if (pInfo == NULL) {
+                // Handle allocation failure
+                OutputDebugString(L"[!] Error allocating memory for event info\n");
+                return FALSE;
+            }
+
+            // Get the event info
+            status = TdhGetEventInformation(EventRecord, 0, NULL, pInfo, &bufferSize);
+        }
+
+        if (ERROR_SUCCESS != status) {
+            // Handle error (could not obtain event info)
+            free(pInfo);
+            OutputDebugString(L"[!] Error getting event info\n");
+            return FALSE;
+        }
+        for (ULONG i = 0; i < pInfo->TopLevelPropertyCount; i++) {
+            PROPERTY_DATA_DESCRIPTOR dataDescriptor;
+            DWORD propertySize = 0;
+            WCHAR* propertyName = (WCHAR*)((BYTE*)pInfo + pInfo->EventPropertyInfoArray[i].NameOffset);
+
+            dataDescriptor.PropertyName = (ULONGLONG)propertyName;
+            dataDescriptor.ArrayIndex = ULONG_MAX;
+
+            // Determine the size of the property
+            status = TdhGetPropertySize(EventRecord, 0, NULL, 1, &dataDescriptor, &propertySize);
+            if (status != ERROR_SUCCESS) {
+                // Handle error
+                wprintf(L"Error getting size for property %ls\n", propertyName);
+                continue;
+            }
+
+            BYTE* propertyData = (BYTE*)malloc(propertySize);
+            if (!propertyData) {
+                // Handle allocation failure
+                wprintf(L"Error allocating memory for property %ls\n", propertyName);
+                continue;
+            }
+
+            // Get the property data
+            status = TdhGetProperty(EventRecord, 0, NULL, 1, &dataDescriptor, propertySize, propertyData);
+            if (status != ERROR_SUCCESS) {
+                // Handle error
+                wprintf(L"Error getting data for property %ls\n", propertyName);
+                free(propertyData);
+                continue;
+            }
+            switch (i) {
+            case 0:
+            {
+                OperationType = (WCHAR*)malloc(static_cast<size_t>(propertySize + sizeof(WCHAR)));
+                if (!OperationType) {
+                    OutputDebugString(L"[!] Error allocating memory for AppName\n");
+                    continue;
+                }
+                wcscpy_s(OperationType, (propertySize + sizeof(WCHAR)) / sizeof(WCHAR), (WCHAR*)propertyData);
+                break;
+            }
+            case 1:
+            {
+                DataDescription = (WCHAR*)malloc(static_cast<size_t>(propertySize + sizeof(WCHAR)));
+                if (!DataDescription) {
+                    OutputDebugString(L"[!] Error allocating memory for AppName\n");
+                    continue;
+                }
+                wcscpy_s(DataDescription, (propertySize + sizeof(WCHAR)) / sizeof(WCHAR), (WCHAR*)propertyData);
+                break;
+            }
+            case 3:
+            {
+                Flags = *(UINT32*)propertyData;
+            }
+            case 4:
+            {
+                ProtectionFlags = *(UINT32*)propertyData;
+            }
+            case 7:
+            {
+                CallerProcessID = *(UINT32*)propertyData;
+            }
+            default:
+            {
+                break;
+            }
+            }
+            free(propertyData);
+
+        }
 
         //
         //Seeing if OperationType == SPCryptUnprotect
@@ -1742,11 +2971,13 @@ BOOL DPAPIEvents(
             EventDataDescCreate(&EventData[0], &st, sizeof(st));
             EventDataDescCreate(&EventData[1], OperationType, (wcslen(OperationType) + 1) * sizeof(WCHAR));
             EventDataDescCreate(&EventData[2], DataDescription, (wcslen(DataDescription) + 1) * sizeof(WCHAR));
-            EventDataDescCreate(&EventData[3], CallerProcessID, 4);
-            EventDataDescCreate(&EventData[4], Flags, 4);
-            EventDataDescCreate(&EventData[5], ProtectionFlags, 4);
+            EventDataDescCreate(&EventData[3], &CallerProcessID, 4);
+            EventDataDescCreate(&EventData[4], &Flags, 4);
+            EventDataDescCreate(&EventData[5], &ProtectionFlags, 4);
 
             NTSTATUS status = WriteETWEvents(EventData, DPAPIEvent, 6);
+            free(OperationType);
+            free(DataDescription);
             break;
         }
         break;
