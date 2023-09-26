@@ -1,0 +1,68 @@
+[Version]
+Signature = "$WINDOWS NT$"
+Class = "ActivityMonitor" ;Check devguid.h
+ClassGuid = {b86dff51-a31e-4bac-b3cf-e8cfe75c9fc2}
+Provider = %ManufacturerName%
+DriverVer = 3/1/2023,1.0.0.0
+CatalogFile = JonMon.cat
+;https://learn.microsoft.com/en-us/windows-hardware/drivers/install/inf-classinstall32-section
+
+;This template is supported for OS version 17763 (Windows 10 version 1809) and after.
+;For Windows OS prior to Windows 10 1809 set DefaultDestDir = 12
+[DestinationDirs]
+DefaultDestDir = 12
+JonMon.DriverFiles = 12
+;https://learn.microsoft.com/en-us/windows-hardware/drivers/install/inf-destinationdirs-section
+
+[DefaultInstall]
+OptionDesc          = %ServiceDescription%
+CopyFiles           = JonMon.DriverFiles
+
+[DefaultInstall.Services]
+AddService          = %ServiceName%,,JonMon.Service
+
+[DefaultUninstall]
+DelFiles 		  = JonMon.DriverFiles
+
+[DefaultUninstall.Services]
+DelService          = %ServiceName%
+
+[JonMon.Service]
+DisplayName         = %ServiceDescription%
+Description			= %ServiceDescription%
+ServiceType         = 1
+StartType           = 3
+ErrorControl        = 1
+ServiceBinary       = %12%\JonMon.sys
+AddReg              = JonMon.AddRegsitry
+
+[JonMon.AddRegsitry]
+HKR,,"DebugFlags",0x00010001 ,0x0
+HKR,,"SupportedFeatures",0x00010001,0x3
+HKR,"Instances","DefaultInstance",0x00000000,%DefaultInstance%
+HKR,"Instances\"%Instance1.Name%,"Altitude",0x00000000,%Instance1.Altitude%
+HKR,"Instances\"%Instance1.Name%,"Flags",0x00010001,%Instance1.Flags%
+
+
+[JonMon.DriverFiles]
+%DriverName%.sys
+
+[SourceDisksFiles]
+JonMon.sys = 1,,
+
+[SourceDisksNames]
+1 = %DiskId1%,,,
+
+[Strings]
+; TODO - Add your manufacturer
+ManufacturerName        = "jsecurity101"
+ServiceDescription      = "JonMon Driver"
+ServiceName             = "JonMonDrv"
+DriverName              = "JonMon"
+DiskId1                 = "JonMon Disk"
+
+;Instances specific information.
+DefaultInstance         = "JonMon Instance"
+Instance1.Name          = "JonMon Instance"
+Instance1.Altitude      = "385202"
+Instance1.Flags         = 0x0              ; Allow all attachments
