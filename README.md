@@ -28,6 +28,7 @@ This project wouldn't be possible without many great people and projects. A spec
     * Helping me understand proper coding practices (especially in the kernel)
   * [Yarden Shafir](https://twitter.com/yarden_shafir)
     * Answering random questions and also hyping me up
+   * The Bois - for letting me work on JonMon during Bois nights. 
 * Beta Testers
   * [Roberto Rodriguez](https://twitter.com/Cyb3rWard0g)
   * [Olaf Hartong](https://twitter.com/olafhartong)
