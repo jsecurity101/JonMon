@@ -242,7 +242,7 @@ DWORD StopCustomService(
     }
     SC_HANDLE hService = OpenService(hSCManager, ServiceName, SERVICE_STOP);
     if (hService == nullptr) {
-        printf("[-] OpenService Failed");
+        printf("[-] OpenService Failed\n");
         CloseServiceHandle(hSCManager);
         return GetLastError();
     }
@@ -267,17 +267,17 @@ DWORD DeleteCustomService(
     SC_HANDLE hSCManager = nullptr;
     hSCManager = OpenSCManager(nullptr, nullptr, SC_MANAGER_CONNECT | SC_MANAGER_CREATE_SERVICE);
     if (hSCManager == nullptr) {
-        printf("[-] OpenSCManager Failed");
+        printf("[-] OpenSCManager Failed\n");
         return GetLastError();
     }
     SC_HANDLE hService = OpenService(hSCManager, ServiceName, DELETE);
     if (hService == nullptr) {
-        printf("[-] OpenService Failed");
+        printf("[-] OpenService Failed\n");
         CloseServiceHandle(hSCManager);
         return GetLastError();
     }
     if (!DeleteService(hService)) {
-        printf("[-] DeleteService Failed");
+        printf("[-] DeleteService Failed\n");
         CloseServiceHandle(hSCManager);
         CloseServiceHandle(hService);
         return GetLastError();

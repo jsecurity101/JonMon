@@ -73,7 +73,7 @@ int wmain(int argc, wchar_t* argv[])
 		}
 		status = CreateCustomService(L"JonMon", L"C:\\Windows\\JonMon-Service.exe -s", SERVICE_WIN32_OWN_PROCESS); //Need to change this to the actual path of the service
 		if (status != 0) {
-			printf("[-] InstallService Failed");
+			printf("[-] InstallService Failed\n");
 		}
 		status = StartCustomService(L"JonMon");
 		if (status != 0) {
