@@ -24,6 +24,8 @@ This project wouldn't be possible without many great people and projects. A spec
     * Helping me understand different coding concepts
   * [Evan McBroom](https://twitter.com/mcbroom_evan)
     * General coding help
+  * [Matt Hand](https://x.com/matterpreter?s=21&t=0un24qvU4Lu1y0j5qCtFiw)
+    * Kernel understanding and Debugging knowledge. 
   * [Connor McGarr](https://twitter.com/33y0re)
     * Helping me understand proper coding practices (especially in the kernel)
   * [Yarden Shafir](https://twitter.com/yarden_shafir)
