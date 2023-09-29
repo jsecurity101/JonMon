@@ -5,7 +5,7 @@ In addition to the kernel-level driver component, JonMon also features a user-mo
 
 The data collected by both components is made easily accessible to users through the Windows event log, allowing users to quickly and easily query the data and gain insights into their system operations. 
 
-JonMon started and will continue to be a researech project that allows for easy telemetry testing and verification.
+JonMon started and will continue to be a research project that allows for easy telemetry testing and verification.
 
 ## Disclaimer
 JonMon is currently in Beta release. The project is stable enough to release, but there may be improvements and bugs to fix before V1 is released. Please submit any bug issues as they arise! 
