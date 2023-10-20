@@ -52,6 +52,7 @@
 #include <evntrace.h>
 #include <evntprov.h>
 #include "../JonMon/jtime.h"
+
 #ifndef ETW_INLINE
   #ifdef _ETW_KM_
     // In kernel mode, save stack space by never inlining templates.

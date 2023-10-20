@@ -683,10 +683,10 @@ VOID CreateProcessWorkerThread(
 	}
 
 	ULONGLONG uParentPID = HandleToULong(sourcePID);
-	ULONGLONG uTargetPID = HandleToULong(targetPID);
+	ULONGLONG uTargetPID = HandleToULong(targetPID); 
 	ULONGLONG uCreatorPID = HandleToULong(creatorId.UniqueProcess);
 	
-	EventWriteProcessCreation(NULL, &fileTime, processImagePath.Buffer, callbackInfo->CommandLine.Buffer, uTargetPID, procStartKey, procStartTime, parentUserName.Buffer, childAuthenticationId, uParentPID, sourceThreadId, parentImagePath.Buffer, uCreatorPID, childUserName.Buffer, parentAuthenticationId);
+	EventWriteProcessCreation(NULL, &fileTime, processImagePath.Buffer, callbackInfo->CommandLine.Buffer, uTargetPID, procStartKey, procStartTime, childUserName.Buffer, childAuthenticationId, uParentPID, sourceThreadId, parentImagePath.Buffer, uCreatorPID, parentUserName.Buffer, parentAuthenticationId);
 
 
 	if (uParentPID != uCreatorPID) {
