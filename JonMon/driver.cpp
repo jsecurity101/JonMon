@@ -158,7 +158,7 @@ VOID AlterPPL(
 	RtlGetVersion((POSVERSIONINFOW)&osInfo);
 
 #ifdef _M_ARM64
-	if (osInfo.dwBuildNumber < 19045 && osInfo.dwBuildNumber > 26100) {
+	if (osInfo.dwBuildNumber < 19045 || osInfo.dwBuildNumber > 26100) {
 		DbgPrint("OS Version is not supported\n");
 		return;
 	}
@@ -175,7 +175,7 @@ VOID AlterPPL(
 
 #ifdef _M_X64
 
-	if (osInfo.dwBuildNumber < 19045 && osInfo.dwBuildNumber > 26100) {
+	if (osInfo.dwBuildNumber < 19045 || osInfo.dwBuildNumber > 26100) {
 		DbgPrint("OS Version is not supported\n");
 		return;
 	}
