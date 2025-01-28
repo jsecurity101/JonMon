@@ -2,13 +2,24 @@
 #include "callbacks.h"
 #include "process.h" 
 
+TRACELOGGING_DEFINE_PROVIDER(g_hJonMon, "JonMon",
+	(0xdd82bf6f, 0x5295, 0x4541, 0x96, 0x8d, 0x8c, 0xac, 0x58, 0xe5, 0x72, 0xe4));
+
 extern "C"
 NTSTATUS DriverEntry(
 	_In_ PDRIVER_OBJECT DriverObject, 
 	_In_ PUNICODE_STRING RegistryPath
 ) 
 {
-	EventRegisterJonMon();
+
+	TraceLoggingRegister(g_hJonMon);
+	TraceLoggingWrite(
+		g_hJonMon, 
+		"100", 
+		TraceLoggingInt32(100, "EventID"), 
+		TraceLoggingBool(TRUE, "TraceLogging Provider Registered")
+	);
+
 	g_RegPath.Buffer = (PWSTR)ExAllocatePool2(POOL_FLAG_PAGED,
 		RegistryPath->Length, DRIVER_TAG);
 
@@ -17,11 +28,14 @@ NTSTATUS DriverEntry(
 		return STATUS_INSUFFICIENT_RESOURCES;
 	}
 
+	//
+	//Copy DriverObject to global variable
+	//
+	g_DriverObject = DriverObject;
+
+
 	g_RegPath.Length = g_RegPath.MaximumLength = RegistryPath->Length;
 	memcpy(g_RegPath.Buffer, RegistryPath->Buffer, g_RegPath.Length);
-
-	DbgPrint("JonMon Driver Entry Called 0x%p\n", DriverObject);
-	DbgPrint("Registry Path %wZ\n", g_RegPath);
 
 	DriverObject->DriverUnload = JonMonUnload;
 	DriverObject->MajorFunction[IRP_MJ_CREATE] = JonMonCreateClose;
@@ -51,19 +65,12 @@ NTSTATUS DriverEntry(
 		return status;
 	}
 
-	status = RegisterCallbacks(DriverObject, DeviceObject);
-	if (!NT_SUCCESS(status)) {
-		DbgPrint("Error registering callbacks: 0x%X\n", status);
-		ExFreePool(g_RegPath.Buffer);
-		return status;
-	}
-
 	ExFreePool(g_RegPath.Buffer);
 	return status;
 }
 
 NTSTATUS JonMonDeviceControl(
-	_In_ PDEVICE_OBJECT, 
+	_In_ PDEVICE_OBJECT,
 	_In_ PIRP Irp
 ) {
 	auto irpSp = IoGetCurrentIrpStackLocation(Irp);
@@ -72,7 +79,68 @@ NTSTATUS JonMonDeviceControl(
 	auto len = 0;
 	switch (dic.IoControlCode) {
 	case IOCTL_CHANGE_PROTECTION_LEVEL_PROCESS:
+	{
 		ChangePPL();
+	}
+	case IOCTL_EVENT_CONFIGURATION:
+	{
+		if (dic.InputBufferLength < sizeof(EventSchema)) {
+			status = STATUS_BUFFER_TOO_SMALL;
+			break;
+		}
+		auto schema = (EventSchema*)Irp->AssociatedIrp.SystemBuffer;
+		if (schema == nullptr) {
+			status = STATUS_INVALID_PARAMETER;
+			break;
+		}
+
+		g_EventSchema.ConfigSet = true;
+		g_EventSchema.ConfigVersion = schema->ConfigVersion;
+		g_EventSchema.JonMonVersion = schema->JonMonVersion;
+		g_EventSchema.ProcessCreation = schema->ProcessCreation;
+		g_EventSchema.ProcessTermination = schema->ProcessTermination;
+		g_EventSchema.Registry = schema->Registry;
+		g_EventSchema.ProcessHandleCreation = schema->ProcessHandleCreation;
+		g_EventSchema.ProcessHandleDuplication = schema->ProcessHandleDuplication;
+		g_EventSchema.RemoteThreadCreation = schema->RemoteThreadCreation;
+		g_EventSchema.ImageLoad = schema->ImageLoad;
+		g_EventSchema.File = schema->File;
+
+		//
+		// TraceLogging Event
+		//
+		TraceLoggingWrite(
+			g_hJonMon, 
+			"101", 
+			TraceLoggingInt32(101, "EventID"),
+			TraceLoggingBool(schema->ProcessCreation, "ProcessCreation"),
+			TraceLoggingBool(schema->ProcessTermination, "ProcessTermination"),
+			TraceLoggingBool(schema->Registry, "RegistryEvents"),
+			TraceLoggingBool(schema->ProcessHandleCreation, "ProcessHandleCreation"),
+			TraceLoggingBool(schema->ProcessHandleDuplication, "ProcessHandleDuplication"),
+			TraceLoggingBool(schema->RemoteThreadCreation, "RemoteThreadCreation"),
+			TraceLoggingBool(schema->ImageLoad, "ImageLoad"),
+			TraceLoggingBool(schema->File, "FileEvents")
+		);
+
+		HANDLE hRegisterCallbackThread = NULL;
+		OBJECT_ATTRIBUTES objectAttributes;
+		InitializeObjectAttributes(&objectAttributes, NULL, OBJ_KERNEL_HANDLE, NULL, NULL);
+		status = PsCreateSystemThread(&hRegisterCallbackThread, THREAD_ALL_ACCESS, &objectAttributes, NULL, NULL, (PKSTART_ROUTINE)RegisterCallbacks, NULL);
+		if (!NT_SUCCESS(status)) {
+			DbgPrint("PsCreateSystemThread - RegisterCallback failed: %x\n", status);
+		}
+
+		if (hRegisterCallbackThread != NULL)
+		{
+			ZwClose(hRegisterCallbackThread);
+		}
+		status = STATUS_SUCCESS;
+
+		break;
+	}
+	default:
+		break;
 	}
 	return CompleteRequest(Irp, status, len);
 }
@@ -81,15 +149,55 @@ VOID AlterPPL(
 	_In_ ULONG PID,
 	_In_ ULONG value
 ) {
+
+	ULONG offset = 0x0;
+
+	RTL_OSVERSIONINFOEXW osInfo = { 0 };
+	osInfo.dwOSVersionInfoSize = sizeof(osInfo);
+
+	RtlGetVersion((POSVERSIONINFOW)&osInfo);
+
+#ifdef _M_ARM64
+	if (osInfo.dwBuildNumber < 19045 && osInfo.dwBuildNumber > 26100) {
+		DbgPrint("OS Version is not supported\n");
+		return;
+	}
+
+	if (osInfo.dwBuildNumber >= 19045 && osInfo.dwBuildNumber <= 22631) {
+		offset = 0x939;
+	}
+
+	if (osInfo.dwBuildNumber == 26100) {
+		offset = 0x6b8;
+	}
+
+#endif
+
+#ifdef _M_X64
+
+	if (osInfo.dwBuildNumber < 19045 && osInfo.dwBuildNumber > 26100) {
+		DbgPrint("OS Version is not supported\n");
+		return;
+	}
+
+	if (osInfo.dwBuildNumber >= 19045 && osInfo.dwBuildNumber <= 22631) {
+		offset = 0x878;
+	}
+
+	if (osInfo.dwBuildNumber == 26100) {
+		offset = 0x5f8;
+	}
+
+#endif
+
 	PEPROCESS pProcess = NULL;
 	PPROCESS_SIGNATURE_PROTECTION pSignatureProtect = NULL;
 
 	ULONG pid = PID;
-
 	NTSTATUS status = PsLookupProcessByProcessId((HANDLE)pid, &pProcess);
 	if (NT_SUCCESS(status)) {
 		DbgPrint("Changing PPL value for target PROCESS ID: %d\n", PID);
-		pSignatureProtect = (PPROCESS_SIGNATURE_PROTECTION)(((ULONG_PTR)pProcess) + 0x878);
+		pSignatureProtect = (PPROCESS_SIGNATURE_PROTECTION)(((ULONG_PTR)pProcess) + offset);
 		if (value == 1) {
 			pSignatureProtect->SignatureLevel = 0x11;
 			pSignatureProtect->SectionSignatureLevel = 0x11;
@@ -167,27 +275,53 @@ VOID JonMonUnload(
 	_In_ PDRIVER_OBJECT DriverObject
 ) {
 	PAGED_CODE();
-	EventUnregisterJonMon();
+
+	TraceLoggingWrite(
+		g_hJonMon, 
+		"100", 
+		TraceLoggingUInt32(100, "EventID"), 
+		TraceLoggingValue(FALSE, "TraceLogging Provider Registered")
+	);
+
+	TraceLoggingUnregister(g_hJonMon);
 
 	AlterPPL(g_ServicePID, 0);
 
-	CmUnRegisterCallback(Cookie);
+	if (g_EventSchema.Registry == TRUE)
+	{
+		CmUnRegisterCallback(Cookie);
+		DbgPrint((DPFLTR_IHVDRIVER_ID, DPFLTR_INFO_LEVEL, "CmUnRegisterCallback Unloaded\n"));
+	}
 	
-	ObUnRegisterCallbacks(ProcessRegistrationHandle);
-	DbgPrint((DPFLTR_IHVDRIVER_ID, DPFLTR_INFO_LEVEL, "PostProcessHandleCallback Unloaded\n"));
+	if(g_EventSchema.ProcessCreation == TRUE)
+	{
+		PsSetCreateProcessNotifyRoutineEx(CreateProcessNotifyRoutineEx, TRUE);
+		DbgPrint((DPFLTR_IHVDRIVER_ID, DPFLTR_INFO_LEVEL, "PsSetCreateProcessNotifyRoutineEx Unloaded\n"));
+	}
 
-	PsSetCreateProcessNotifyRoutineEx(CreateProcessNotifyRoutineEx, TRUE);
-	DbgPrint((DPFLTR_IHVDRIVER_ID, DPFLTR_INFO_LEVEL, "PsSetCreateProcessNotifyRoutineEx Unloaded\n"));
+	if (g_EventSchema.ProcessHandleCreation == TRUE || g_EventSchema.ProcessHandleDuplication == TRUE)
+	{
+		ObUnRegisterCallbacks(ProcessRegistrationHandle);
+		DbgPrint((DPFLTR_IHVDRIVER_ID, DPFLTR_INFO_LEVEL, "ObUnRegisterCallbacks Unloaded\n"));
+	}
 
-	PsRemoveLoadImageNotifyRoutine(LoadImageRoutine);
-	DbgPrint((DPFLTR_IHVDRIVER_ID, DPFLTR_INFO_LEVEL, "PsSetLoadImageNotifyRoutine Unloaded\n"));
-
-	PsRemoveCreateThreadNotifyRoutine(PsCreateThreadNotifyRoutine);
-	DbgPrint((DPFLTR_IHVDRIVER_ID, DPFLTR_INFO_LEVEL, "PsSetCreateThreadNotifyRoutine Unloaded\n"));
-
+	if (g_EventSchema.ImageLoad == TRUE)
+	{
+		PsRemoveLoadImageNotifyRoutine(LoadImageRoutine);
+		DbgPrint((DPFLTR_IHVDRIVER_ID, DPFLTR_INFO_LEVEL, "PsSetLoadImageNotifyRoutine Unloaded\n"));
+	}
 	
-	PsSetCreateProcessNotifyRoutine(TerminateProcessNotifyRoutine, TRUE);
-	DbgPrint((DPFLTR_IHVDRIVER_ID, DPFLTR_INFO_LEVEL, "PsSetCreateProcessNotifyRoutine Unloaded\n"));
+	if (g_EventSchema.RemoteThreadCreation == TRUE)
+	{
+		PsRemoveCreateThreadNotifyRoutine(PsCreateThreadNotifyRoutine);
+		DbgPrint((DPFLTR_IHVDRIVER_ID, DPFLTR_INFO_LEVEL, "PsSetCreateThreadNotifyRoutine Unloaded\n"));
+	}
+	
+	if (g_EventSchema.ProcessTermination == TRUE)
+	{
+		PsSetCreateProcessNotifyRoutine(TerminateProcessNotifyRoutine, TRUE);
+		DbgPrint((DPFLTR_IHVDRIVER_ID, DPFLTR_INFO_LEVEL, "PsSetCreateProcessNotifyRoutine Unloaded\n"));
+	}
 
 	//sleep for 5 seconds to allow worker threads to finish
 	LARGE_INTEGER interval;

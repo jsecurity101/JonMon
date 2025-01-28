@@ -1,5 +1,4 @@
 #include "process.h"
-#include "token.h"
 
 PAGED_FILE();
 
@@ -7,7 +6,6 @@ ZWQUERYINFORMATIONPROCESS ZwQueryInformationProcess;
 
 NTSTATUS GetProcessImageName(HANDLE processId, PUNICODE_STRING ProcessImageName)
 {
-	//Add NtQueryInformationProcess - https://stackoverflow.com/questions/3707133/how-to-use-zwqueryinformationprocess-to-get-processimagefilename-in-a-kernel-dri
 	PAGED_CODE();
 	NTSTATUS status;
 	ULONG returnedLength;
@@ -15,7 +13,6 @@ NTSTATUS GetProcessImageName(HANDLE processId, PUNICODE_STRING ProcessImageName)
 	HANDLE hProcess = NULL;
 	PVOID buffer{};
 	PEPROCESS eProcess;
-	//PUNICODE_STRING imageName;
 	UNICODE_STRING routineName;
 
 	status = PsLookupProcessByProcessId(processId, &eProcess);
@@ -78,7 +75,6 @@ NTSTATUS GetProcessImageName(HANDLE processId, PUNICODE_STRING ProcessImageName)
 	{
 		goto Exit;
 	}
-	//imageName = (PUNICODE_STRING)buffer;
 	RtlCopyUnicodeString(ProcessImageName, (PUNICODE_STRING)buffer);
 
 	//Adding null terminator
@@ -92,41 +88,6 @@ Exit:
 	if (buffer != NULL)
 	{
 		ExFreePoolWithTag(buffer, PROCESS_TAG);
-	}
-	return status;
-}
-NTSTATUS GetProcessToken(HANDLE processId, PHANDLE hToken) {
-	PAGED_CODE();
-	NTSTATUS status;
-	PEPROCESS eProcess;
-	HANDLE hProcess = NULL;
-	HANDLE htok = NULL;
-	status = PsLookupProcessByProcessId(processId, &eProcess);
-	if (!NT_SUCCESS(status))
-	{
-		goto Exit;
-	}
-	status = ObOpenObjectByPointer(eProcess, OBJ_KERNEL_HANDLE, NULL, 0, 0, KernelMode, &hProcess);
-	if (!NT_SUCCESS(status))
-	{
-		DbgPrint("ObOpenObjectByPointer Failed: %08x\n", status);
-		goto Exit;
-	}
-	ObDereferenceObject(eProcess);
-	status = ZwOpenProcessTokenEx(hProcess, TOKEN_QUERY, OBJ_KERNEL_HANDLE, &htok);
-	if (!NT_SUCCESS(status) || htok == NULL) {
-		DbgPrint("ZwOpenProcessTokenEx Failed: %08x\n", status);
-		goto Exit;
-	}
-
-Exit:
-	if (htok == NULL) {
-		status = STATUS_UNSUCCESSFUL;
-	}
-	*hToken = htok;
-	if (hProcess != NULL)
-	{
-		ZwClose(hProcess);
 	}
 	return status;
 }

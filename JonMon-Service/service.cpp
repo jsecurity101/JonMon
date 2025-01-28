@@ -1,13 +1,23 @@
 #include <Windows.h>
 #include <thread>
 #include "service.h"
+#include "config.h"
 #include "etwMain.h"
 
 
 SERVICE_STATUS_HANDLE g_hServiceStatus = NULL;
 SERVICE_STATUS g_ServiceStatus = { 0 };
 
-VOID LoadExtensions();
+
+
+//
+// JonMon TraceLogging Provider Information
+//
+TRACELOGGING_DECLARE_PROVIDER(g_hJonMon);
+
+TRACELOGGING_DEFINE_PROVIDER(g_hJonMon, "JonMon",
+    (0xdd82bf6f, 0x5295, 0x4541, 0x96, 0x8d, 0x8c, 0xac, 0x58, 0xe5, 0x72, 0xe4));
+
 
 VOID WINAPI ServiceCtrlHandler(
     _In_ DWORD dwCtrl
@@ -32,6 +42,9 @@ VOID WINAPI ServiceCtrlHandler(
         g_ServiceStatus.dwCheckPoint = 0;
         g_ServiceStatus.dwWaitHint = 0;
         SetServiceStatus(g_hServiceStatus, &g_ServiceStatus);
+
+        EventUnregisterJonMon();
+
         break;
 
     case SERVICE_CONTROL_PAUSE:
@@ -51,6 +64,7 @@ VOID WINAPI ServiceCtrlHandler(
         g_ServiceStatus.dwCheckPoint = 0;
         g_ServiceStatus.dwWaitHint = 0;
         SetServiceStatus(g_hServiceStatus, &g_ServiceStatus);
+
         break;
 
     case SERVICE_CONTROL_CONTINUE:
@@ -70,6 +84,7 @@ VOID WINAPI ServiceCtrlHandler(
         g_ServiceStatus.dwCheckPoint = 0;
         g_ServiceStatus.dwWaitHint = 0;
         SetServiceStatus(g_hServiceStatus, &g_ServiceStatus);
+
         break;
 
     case SERVICE_CONTROL_SHUTDOWN:
@@ -80,6 +95,7 @@ VOID WINAPI ServiceCtrlHandler(
         g_ServiceStatus.dwCheckPoint = 0;
         g_ServiceStatus.dwWaitHint = 0;
         SetServiceStatus(g_hServiceStatus, &g_ServiceStatus);
+
         break;
 
     default:
@@ -88,15 +104,18 @@ VOID WINAPI ServiceCtrlHandler(
         g_ServiceStatus.dwCheckPoint = 0;
         g_ServiceStatus.dwWaitHint = 0;
         SetServiceStatus(g_hServiceStatus, &g_ServiceStatus);
+
         break;
     }
 
 }
 
-void WINAPI ServiceMain(
+VOID WINAPI ServiceMain(
     _In_ DWORD argc, 
     _In_ LPTSTR* argv
 ) {
+
+    DWORD protectionLevel = 0;
 
     g_hServiceStatus = RegisterServiceCtrlHandlerExA("JonMon", (LPHANDLER_FUNCTION_EX)ServiceCtrlHandler, NULL);
     if (g_hServiceStatus == NULL) {
@@ -115,14 +134,91 @@ void WINAPI ServiceMain(
         return;
     }
 
+    //
+    // Register JonMon Providers
+    //
+    EventRegisterJonMon();
+    TraceLoggingRegister(g_hJonMon);
 
-    LoadExtensions();
-    TraceEvent();
+    EventSchema_Full eventSchema = { 0 };
+    int result = ConfigFile(argv[1], &eventSchema);
+    if (result != 0) {
+        printf("Failed to read configuration file\n");
+        return;
+    }
+
+    if (eventSchema.TokenImpersonation_Events)
+    {
+        LoadExtensions();
+    }
+
+    protectionLevel = ProtectionCheck();
+    if (protectionLevel != 31) {
+		ChangePPL();
+	}
+   
+    std::thread protectionCheck(ProtectionCheck);
+    protectionCheck.detach();
+
+
+    
+
+    TraceEvent(L"JonMon", JonMonGuid, &eventSchema);
+   
+    
+
 }
 
-//
-// Load extension DLLs
-//
+DWORD ProtectionCheck()
+{
+    Sleep(5000);
+    DWORD protectionLevel = 0;
+    do {
+        PROCESS_PROTECTION_LEVEL_INFORMATION protectionInfo = { 0 };
+        if (GetProcessInformation(GetCurrentProcess(), ProcessProtectionLevelInfo, &protectionInfo, sizeof(protectionInfo))) {
+            if (protectionInfo.ProtectionLevel != 5) {
+                protectionLevel = 1;
+                TraceLoggingWrite(
+                    g_hJonMon,
+                    "102",
+                    TraceLoggingInt32(102, "EventID"),
+                    TraceLoggingBool(TRUE, "JonMon Protection Level Changed")
+                );
+            }
+        }
+        else {
+            printf("Failed to retrieve PPL. Error code: %lu\n", GetLastError());
+            TraceLoggingWrite(
+                g_hJonMon,
+                "102",
+                TraceLoggingInt32(102, "EventID"),
+                TraceLoggingBool(FALSE, "JonMon Protection Level Changed")
+            );
+            return 1;
+        }
+    } while (protectionLevel == 0);
+    return 0;
+}
+
+VOID ChangePPL() {
+
+    HANDLE hDevice = CreateFile(L"\\\\.\\JonMon", GENERIC_WRITE, 0, NULL, OPEN_EXISTING, 0, NULL);
+    if (hDevice == INVALID_HANDLE_VALUE) {
+        printf("Error %u\n", GetLastError());
+        return;
+    }
+    DWORD bytes;
+    HANDLE hProcess;
+    if (DeviceIoControl(hDevice, IOCTL_CHANGE_PROTECTION_LEVEL_PROCESS, NULL, NULL, NULL, NULL, NULL, NULL)) {
+        OutputDebugStringW(L"Protection Level Changed\n");
+    }
+    else {
+        printf("Error: %u\n", GetLastError());
+    }
+
+    CloseHandle(hDevice);
+}
+
 VOID LoadExtensions()
 {
     
@@ -211,12 +307,28 @@ DWORD StartCustomService(
         dwError = GetLastError();
         goto Exit;
     }
-    if (!StartService(hService, 0, nullptr)) {
-        printf("[-] Start service failed on StartService\n");
-        dwError = GetLastError();
-        goto Exit;
+
+    if (ServiceName == L"JonMon")
+    {
+        LPCWSTR serviceArgs[] = { L"C:\\Windows\\JonMonConfig.json"};
+       
+        if (!StartService(hService, 1, serviceArgs)) {
+            printf("[-] Start service failed on %ws\n", ServiceName);
+            dwError = GetLastError();
+            goto Exit;
+        }
+        printf("[*] Service %ws started successfully\n", ServiceName);
     }
-    printf("[*] Service %ws started successfully\n", ServiceName);
+    else if (ServiceName == L"JonMonDrv")
+    {
+        if (!StartService(hService, 0, nullptr)) {
+            printf("[-] Start service failed on %ws\n", ServiceName);
+            dwError = GetLastError();
+            goto Exit;
+        }
+        printf("[*] Service %ws started successfully\n", ServiceName);
+    }
+    
 
 Exit:
     if (hSCManager != nullptr)
@@ -256,7 +368,14 @@ DWORD StopCustomService(
     CloseServiceHandle(hSCManager);
     CloseServiceHandle(hService);
 
+    if (g_hJonMon != NULL)
+    {
+        TraceLoggingUnregister(g_hJonMon);
+    }
+    
+
     printf("[*] Service %ws stopped successfully\n", ServiceName);
+
     return 0;
 }
 

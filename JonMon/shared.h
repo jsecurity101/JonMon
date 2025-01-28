@@ -7,8 +7,37 @@
 #include <Ntstrsafe.h>
 #include <fltKernel.h>
 #include <time.h>
-#include "../JonMonProvider/jonmon.h"
+#include <TraceLoggingProvider.h> 
+#include <minwindef.h>
 #define INVALID_HANDLE_VALUE ((HANDLE)(LONG_PTR)-1)
+
+
+TRACELOGGING_DECLARE_PROVIDER(g_hJonMon);
+
+/*
+TraceLogging Event Schema:
+---- Security Events ----
+EID 1 - Process Creation
+EID 2 - Process Termination
+EID 3 - Remote Thread Creation
+EID 4 - Load Image
+EID 5 - ProcessHandle (OpenProcess/DuplicateHandle)
+EID 6 - RegistrySaveKey
+EID 7 - RegistryDeleteKey
+EID 8 - RegistrySetValue
+EID 9 - RegistryCreateKey
+EID 10 - FileOperation (CreateFile)
+EID 11 - NamedPipeCreation 
+EID 12 - NamedPipeConnection
+EID 13 - MailslotCreation
+EID 14 - MailslotConnection
+EID 15 - RemoteFileConnection (Named Pipes/Mailslots)
+
+---- Debug/Informational Events ----
+EID 100 - TraceLogging Provider Registered (True or False)
+EID 101 - Event Schema Configuration
+EID 102 - Protection Level Changed 
+*/
 
 //
 // https://github.com/winsiderss/systeminformer/blob/0e3d514e23cf4813ba5895c74b6d596c8966e1b3/KSystemInformer/include/kph.h#L31

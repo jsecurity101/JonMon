@@ -43,14 +43,6 @@ GetRegistryKeyPath(
 	_In_ PCWSTR* keyPath
 );
 
-NTSTATUS 
-GetRegistryEventInfo(
-	_In_ HANDLE pid, 
-	_In_ PUNICODE_STRING pRequestorImagePath, 
-	_In_ PUNICODE_STRING pFullUserName, 
-	_In_ PULONG pLogonId
-);
-
 VOID 
 SendSetValueRegistryInfo(
 	_In_ PVOID StartContext

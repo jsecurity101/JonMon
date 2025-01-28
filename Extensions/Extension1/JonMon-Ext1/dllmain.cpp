@@ -10,6 +10,15 @@
 #include "tlhelp32.h"
 #include "sddl.h"
 #include "dllmain.h"
+#include "../../../JonMonProvider/jonmon.h"
+
+//
+// JonMon TraceLogging Provider Information
+//
+TRACELOGGING_DECLARE_PROVIDER(g_hJonMon);
+
+TRACELOGGING_DEFINE_PROVIDER(g_hJonMon, "JonMon",
+    (0xdd82bf6f, 0x5295, 0x4541, 0x96, 0x8d, 0x8c, 0xac, 0x58, 0xe5, 0x72, 0xe4));
 
 BOOL APIENTRY DllMain(HMODULE hModule,
     DWORD  ul_reason_for_call,
@@ -27,16 +36,15 @@ BOOL APIENTRY DllMain(HMODULE hModule,
     return TRUE;
 }
 
-DWORD IntegritySID(HANDLE hToken, std::wstring *IntegrityLevel) {
+DWORD IntegritySID(HANDLE hToken, PDWORD *IntegrityLevel) {
 
     PSID pIntegritySid = NULL;
-    PTOKEN_MANDATORY_LABEL pIntegrityLabel = NULL;
+    PTOKEN_MANDATORY_LABEL  pIntegrityLabel = NULL;
     DWORD retValue = 0;
 
     //
     // pull thread tokens integrity level
     //
-
     DWORD dwTokenInfoSize = 0;
     GetTokenInformation(hToken, TokenIntegrityLevel, NULL, 0, &dwTokenInfoSize);
 
@@ -59,7 +67,9 @@ DWORD IntegritySID(HANDLE hToken, std::wstring *IntegrityLevel) {
         goto Exit;
     }
 
+    //
     // Get the TOKEN_MANDATORY_LABEL structure
+    //
     if (!GetTokenInformation(hToken, TokenIntegrityLevel, pIntegrityLabel, dwTokenInfoSize, &dwTokenInfoSize))
     {
         printf("GetTokenInformation failed (%d)\n", GetLastError());
@@ -74,44 +84,8 @@ DWORD IntegritySID(HANDLE hToken, std::wstring *IntegrityLevel) {
 
     // Convert the integrity level SID to a human-readable string
 
-    //ConvertSidToStringSidW(pIntegritySid, pStringSid);
 
-    //
-    // switch statement to determine integrity level
-    //
-    switch (*GetSidSubAuthority(pIntegritySid, (DWORD)(UCHAR)(*GetSidSubAuthorityCount(pIntegritySid) - 1)))
-    {
-        case SECURITY_MANDATORY_UNTRUSTED_RID:
-        {
-            *IntegrityLevel = L"UNTRUSTED";
-            break;
-        }
-        case SECURITY_MANDATORY_LOW_RID:
-        {
-            *IntegrityLevel = L"LOW";
-            break;
-        }
-        case SECURITY_MANDATORY_MEDIUM_RID:
-        {
-            *IntegrityLevel = L"MEDIUM";
-			break;
-		}  
-        case SECURITY_MANDATORY_HIGH_RID:
-        {
-            *IntegrityLevel = L"HIGH";
-            break;
-        }
-        case SECURITY_MANDATORY_SYSTEM_RID:
-        {
-            *IntegrityLevel = L"SYSTEM";
-            break;
-        }
-        default:
-        {
-            *IntegrityLevel = L"UNKNOWN";
-            break;
-        }
-    }
+    *IntegrityLevel = GetSidSubAuthority(pIntegritySid, (DWORD)(UCHAR)(*GetSidSubAuthorityCount(pIntegritySid) - 1));
 
 Exit:
     //
@@ -128,7 +102,7 @@ Exit:
 DWORD TokenUserName(HANDLE hToken, LPWSTR* pStringSid)
 {
     DWORD retValue = 0;
-    PTOKEN_USER pTokenUser = NULL;
+    PTOKEN_USER processTokenUser = NULL;
     DWORD dwTokenInfoSize = 0;
     LPWSTR lpName = NULL;
     LPWSTR lpDomain = NULL;
@@ -137,9 +111,6 @@ DWORD TokenUserName(HANDLE hToken, LPWSTR* pStringSid)
     SID_NAME_USE eSidType;
     PSID pUserSid = NULL;
     DWORD dwSize = 0;
-    //
-    // pull thread tokens user
-    //
 
     GetTokenInformation(hToken, TokenUser, NULL, 0, &dwTokenInfoSize);
 
@@ -151,8 +122,8 @@ DWORD TokenUserName(HANDLE hToken, LPWSTR* pStringSid)
     }
 
     // Allocate memory for the TOKEN_USER structure
-    pTokenUser = (PTOKEN_USER)LocalAlloc(LPTR, dwTokenInfoSize);
-    if (pTokenUser == NULL)
+    processTokenUser = (PTOKEN_USER)LocalAlloc(LPTR, dwTokenInfoSize);
+    if (processTokenUser == NULL)
     {
         printf("Memory allocation failed\n");
         retValue = 1;
@@ -160,7 +131,7 @@ DWORD TokenUserName(HANDLE hToken, LPWSTR* pStringSid)
     }
 
     // Get the TOKEN_USER structure
-    if (!GetTokenInformation(hToken, TokenUser, pTokenUser, dwTokenInfoSize, &dwTokenInfoSize))
+    if (!GetTokenInformation(hToken, TokenUser, processTokenUser, dwTokenInfoSize, &dwTokenInfoSize))
     {
         printf("GetTokenInformation failed (%d)\n", GetLastError());
         retValue = 1;
@@ -168,12 +139,7 @@ DWORD TokenUserName(HANDLE hToken, LPWSTR* pStringSid)
     }
 
     // Extract the user SID from the TOKEN_USER structure
-    pUserSid = pTokenUser->User.Sid;
-
-    //
-    // Convert SID to actual username
-    //
-
+    pUserSid = processTokenUser->User.Sid;
 
     // First call to LookupAccountSid to get the buffer sizes
     LookupAccountSidW(NULL, pUserSid, NULL, &dwNameSize, NULL, &dwDomainSize, &eSidType);
@@ -217,9 +183,9 @@ DWORD TokenUserName(HANDLE hToken, LPWSTR* pStringSid)
 
 
 Exit:
-    if (pTokenUser != NULL)
+    if (processTokenUser != NULL)
     {
-        LocalFree(pTokenUser);
+        LocalFree(processTokenUser);
     }
     if (lpName != NULL)
     {
@@ -234,6 +200,7 @@ Exit:
 
 extern "C" void TokenImpersonationCheck()
 {
+    TraceLoggingRegister(g_hJonMon);
     //
     // Loop every 60s to use message box
     //
@@ -242,7 +209,6 @@ extern "C" void TokenImpersonationCheck()
         //
         // Get snapshot of all threads
         //
-
         HANDLE hThreadSnap = CreateToolhelp32Snapshot(TH32CS_SNAPTHREAD, 0);
         if (hThreadSnap == INVALID_HANDLE_VALUE)
         {
@@ -269,16 +235,16 @@ extern "C" void TokenImpersonationCheck()
             //
             HANDLE hThread = NULL;
             HANDLE hToken = NULL;
-            HANDLE pToken = NULL;
+            HANDLE processToken = NULL;
             HANDLE pHandle = NULL;
             DWORD retValue = 0;
             TOKEN_STATISTICS tokenStats;
             DWORD dwReturnLength;
-            LPWSTR uTokenUser = NULL;
-            LPWSTR pTokenUser = NULL;
-            std::wstring tIntegrityLevel;
-            std::wstring prIntegrityLevel;
-            SYSTEMTIME filetime;
+            LPWSTR threadTokenUser = NULL;
+            LPWSTR processTokenUser = NULL;
+            PDWORD threadIntegrityLevel = 0;
+            PDWORD processIntegrityLevel = 0;
+            SYSTEMTIME st;
             BOOL result;
             REGHANDLE RegistrationHandle = NULL;
 
@@ -293,15 +259,16 @@ extern "C" void TokenImpersonationCheck()
             //
             if (!OpenThreadToken(hThread, TOKEN_QUERY, FALSE, &hToken))
             {
-                //printf("OpenThreadToken failed (%d)\n", GetLastError());
                 goto Exit;
             }
 
-            retValue = IntegritySID(hToken, &tIntegrityLevel);
+            retValue = IntegritySID(hToken, &threadIntegrityLevel);
             if (retValue != 0)
             {
                 goto Exit;
             }
+
+
             if (!GetTokenInformation(hToken, TokenStatistics, &tokenStats, sizeof(TOKEN_STATISTICS), &dwReturnLength))
             {
                 printf("GetTokenInformation failed (%d)\n", GetLastError());
@@ -309,8 +276,8 @@ extern "C" void TokenImpersonationCheck()
             }
 
 
-            retValue = TokenUserName(hToken, &uTokenUser);
-            if (retValue != 0 || uTokenUser == NULL)
+            retValue = TokenUserName(hToken, &threadTokenUser);
+            if (retValue != 0 || threadTokenUser == NULL)
             {
                 goto Exit;
             }
@@ -326,77 +293,76 @@ extern "C" void TokenImpersonationCheck()
                 printf("OpenProcess failed (%d), ProcessID: %d\n", GetLastError(), te32.th32OwnerProcessID);
                 goto Exit;
             }
-            result = OpenProcessToken(pHandle, TOKEN_QUERY, &pToken);
-            if (pToken == NULL) {
+            result = OpenProcessToken(pHandle, TOKEN_QUERY, &processToken);
+            if (processToken == NULL) {
                 printf("OpenProcessToken failed (%d) ProcessId: %d\n", GetLastError(), te32.th32OwnerProcessID);
                 goto Exit;
             }
 
-            retValue = IntegritySID(pToken, &prIntegrityLevel);
+            retValue = IntegritySID(processToken, &processIntegrityLevel);
             if (retValue != 0)
             {
                 printf("IntegritySID failed (%d)\n", GetLastError());
                 goto Exit;
             }
 
-            retValue = TokenUserName(pToken, &pTokenUser);
-            if (retValue != 0 || pTokenUser == NULL)
+            retValue = TokenUserName(processToken, &processTokenUser);
+            if (retValue != 0 || processTokenUser == NULL)
             {
                 goto Exit;
             }
 
-            if ((prIntegrityLevel != L"SYSTEM") && (wcscmp(pTokenUser, uTokenUser) != 0)) {
+            if ((*processIntegrityLevel != 16384) && (wcscmp(processTokenUser, threadTokenUser) != 0))
+            {
 
-                FILETIME st;
-                GetSystemTimeAsFileTime(&st);
+                
+                GetSystemTime(&st);
 
-                EventRegister(&JonMonProvider,
-                    NULL,
-                    NULL,
-                    &RegistrationHandle
+                TraceLoggingWrite(
+                    g_hJonMon,
+                    "16",
+                    TraceLoggingInt32(16, "EventID"),
+                    TraceLoggingUInt32(te32.th32ThreadID, "ThreadID"),
+                    TraceLoggingUInt32(te32.th32OwnerProcessID, "ProcessID"),
+                    TraceLoggingUInt32(*threadIntegrityLevel, "ThreadIntegrityLevel"),
+                    TraceLoggingSystemTime(st, "EventTime"),
+                    TraceLoggingWideString(threadTokenUser, "ImpersonatedUser")
                 );
-                EVENT_DATA_DESCRIPTOR EventData[7];
-                //
-                //Write events
-                //
-                EventDataDescCreate(&EventData[0], &st, sizeof(st));
-                EventDataDescCreate(&EventData[1], &te32.th32OwnerProcessID, sizeof(DWORD));
-                EventDataDescCreate(&EventData[2], &te32.th32ThreadID, sizeof(DWORD));
-                EventDataDescCreate(&EventData[3], uTokenUser, (wcslen(uTokenUser) + 1) * sizeof(WCHAR));
-                EventDataDescCreate(&EventData[4], tIntegrityLevel.c_str(), (wcslen(tIntegrityLevel.c_str()) + 1) * sizeof(WCHAR));
-                EventDataDescCreate(&EventData[5], pTokenUser, (wcslen(pTokenUser) + 1) * sizeof(WCHAR));
-                EventDataDescCreate(&EventData[6], prIntegrityLevel.c_str(), (wcslen(prIntegrityLevel.c_str()) + 1) * sizeof(WCHAR));
-                EventWrite(RegistrationHandle, &ThreadTokenImpersonation, 7, EventData);
-                EventUnregister(RegistrationHandle);
-                CloseHandle(&RegistrationHandle);
-           }
+            }
 
 
         Exit:
-            if (uTokenUser != NULL)
+            if (threadTokenUser != NULL)
             {
-                LocalFree(uTokenUser);
+                LocalFree(threadTokenUser);
+                threadTokenUser = NULL;
             }
-            if (pTokenUser != NULL)
+            if (processTokenUser != NULL)
             {
-                LocalFree(pTokenUser);
+                LocalFree(processTokenUser);
+                processTokenUser = NULL;
             }
             if (hThread != NULL)
             {
                 CloseHandle(hThread);
+                hThread = NULL;
             }
             if (hToken != NULL)
             {
                 CloseHandle(hToken);
+                hToken = NULL;
             }
             if (pHandle != NULL)
             {
                 CloseHandle(pHandle);
+                pHandle = NULL;
             }
-            if (pToken != NULL)
+            if (processToken != NULL)
             {
-                CloseHandle(pToken);
+                CloseHandle(processToken);
+                processToken = NULL;
             }
+
 
 
         } while (Thread32Next(hThreadSnap, &te32));

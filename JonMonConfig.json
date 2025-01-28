@@ -1,0 +1,27 @@
+{
+    "ConfigVersion": "1.0",
+    "JonMonVersion": "2.0",
+    "ProcessCreation_Events": false,
+    "File_Events": false,
+    "ProcessHandleCreation_Events": false,
+    "ProcessHandleDuplication_Events": false,
+    "Registry_Events": false,
+    "RemoteThreadCreation_Events": false,
+    "ImageLoad_Events": false,
+    "ProcessTermination_Events": false,
+    "RPC_Events": false,
+    "Network_Events": false,
+    "DotNetLoad_Events": false,
+    "AMSI_Events": false,
+    "SchedTask_Events": false,
+    "WMIEventSubscription_Events": false,
+    "CryptUnprotect_Events": false,
+    "ThreatIntelligence_Events":
+    {
+        "RemoteReadProcessMemory": false,
+        "RemoteWriteProcessMemory": false,
+        "RemoteVirtualAllocation": false,
+        "RemoteQueueUserAPC": false
+    },
+    "TokenImpersonation_Events": false
+}

@@ -51,7 +51,6 @@
 #include <wmistr.h>
 #include <evntrace.h>
 #include <evntprov.h>
-#include "../JonMon/jtime.h"
 
 #ifndef ETW_INLINE
   #ifdef _ETW_KM_
@@ -660,7 +659,7 @@ Remarks:
 #endif // MCGEN_DISABLE_PROVIDER_CODE_GENERATION
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Provider "JonMon" event count 32
+// Provider "JonMon" event count 27
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 // Provider GUID = d8909c24-5be9-4502-98ca-ab7bdc24899d
@@ -681,68 +680,58 @@ EXTERN_C __declspec(selectany) const GUID JonMonProvider = {0xd8909c24, 0x5be9, 
 //
 EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR ProcessCreation = {0x1, 0x0, 0x10, 0x4, 0x0, 0x0, 0x8000000000000000};
 #define ProcessCreation_value 0x1
-EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR ProcessAccess = {0x2, 0x0, 0x10, 0x4, 0x0, 0x0, 0x8000000000000000};
-#define ProcessAccess_value 0x2
-EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR ProcessAccessDuplicated = {0x3, 0x0, 0x10, 0x4, 0x0, 0x0, 0x8000000000000000};
-#define ProcessAccessDuplicated_value 0x3
+EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR ProcessTerminate = {0x2, 0x0, 0x10, 0x4, 0x0, 0x0, 0x8000000000000000};
+#define ProcessTerminate_value 0x2
+EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR RemoteThreadCreation = {0x3, 0x0, 0x10, 0x4, 0x0, 0x0, 0x8000000000000000};
+#define RemoteThreadCreation_value 0x3
 EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR ImageLoaded = {0x4, 0x0, 0x10, 0x4, 0x0, 0x0, 0x8000000000000000};
 #define ImageLoaded_value 0x4
-EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR RegistryCreateKey = {0x5, 0x0, 0x10, 0x4, 0x0, 0x0, 0x8000000000000000};
-#define RegistryCreateKey_value 0x5
-EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR RegistryDeleteKey = {0x6, 0x0, 0x10, 0x4, 0x0, 0x0, 0x8000000000000000};
-#define RegistryDeleteKey_value 0x6
-EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR RegistrySetValue = {0x7, 0x0, 0x10, 0x4, 0x0, 0x0, 0x8000000000000000};
-#define RegistrySetValue_value 0x7
-EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR ProcessReparenting = {0x8, 0x0, 0x10, 0x4, 0x0, 0x0, 0x8000000000000000};
-#define ProcessReparenting_value 0x8
-EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR ProcessTerminate = {0x9, 0x0, 0x10, 0x4, 0x0, 0x0, 0x8000000000000000};
-#define ProcessTerminate_value 0x9
-EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR FileRename = {0xa, 0x0, 0x10, 0x4, 0x0, 0x0, 0x8000000000000000};
-#define FileRename_value 0xa
-EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR RPCClientCall = {0xb, 0x0, 0x10, 0x4, 0x0, 0x0, 0x8000000000000000};
-#define RPCClientCall_value 0xb
-EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR RPCServerCall = {0xc, 0x0, 0x10, 0x4, 0x0, 0x0, 0x8000000000000000};
-#define RPCServerCall_value 0xc
-EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR NetworkConnectionAccepted = {0xd, 0x0, 0x10, 0x4, 0x0, 0x0, 0x8000000000000000};
-#define NetworkConnectionAccepted_value 0xd
-EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR RegistrySaveKey = {0xe, 0x0, 0x10, 0x4, 0x0, 0x0, 0x8000000000000000};
-#define RegistrySaveKey_value 0xe
-EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR DotNetLoad = {0xf, 0x0, 0x10, 0x4, 0x0, 0x0, 0x8000000000000000};
-#define DotNetLoad_value 0xf
-EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR AMSI = {0x10, 0x0, 0x10, 0x4, 0x0, 0x0, 0x8000000000000000};
-#define AMSI_value 0x10
-EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR ImpersonationAction = {0x11, 0x0, 0x10, 0x4, 0x0, 0x0, 0x8000000000000000};
-#define ImpersonationAction_value 0x11
-EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR RemoteThreadCreation = {0x12, 0x0, 0x10, 0x4, 0x0, 0x0, 0x8000000000000000};
-#define RemoteThreadCreation_value 0x12
-EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR SchedTaskCreation = {0x13, 0x0, 0x10, 0x4, 0x0, 0x0, 0x8000000000000000};
-#define SchedTaskCreation_value 0x13
-EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR SchedTaskStarted = {0x14, 0x0, 0x10, 0x4, 0x0, 0x0, 0x8000000000000000};
-#define SchedTaskStarted_value 0x14
-EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR FileCreate = {0x15, 0x0, 0x10, 0x4, 0x0, 0x0, 0x8000000000000000};
-#define FileCreate_value 0x15
-EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR FileDelete = {0x16, 0x0, 0x10, 0x4, 0x0, 0x0, 0x8000000000000000};
-#define FileDelete_value 0x16
-EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR NamedPipeCreate = {0x17, 0x0, 0x10, 0x4, 0x0, 0x0, 0x8000000000000000};
-#define NamedPipeCreate_value 0x17
-EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR NamedPipeOpen = {0x18, 0x0, 0x10, 0x4, 0x0, 0x0, 0x8000000000000000};
-#define NamedPipeOpen_value 0x18
-EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR WMIFilterToConsumerBinding = {0x19, 0x0, 0x10, 0x4, 0x0, 0x0, 0x8000000000000000};
-#define WMIFilterToConsumerBinding_value 0x19
-EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR TIQueueUserAPCEvent = {0x1a, 0x0, 0x10, 0x4, 0x0, 0x0, 0x8000000000000000};
-#define TIQueueUserAPCEvent_value 0x1a
-EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR DriverLoad = {0x1b, 0x0, 0x10, 0x4, 0x0, 0x0, 0x8000000000000000};
-#define DriverLoad_value 0x1b
-EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR DPAPI = {0x1c, 0x0, 0x10, 0x4, 0x0, 0x0, 0x8000000000000000};
-#define DPAPI_value 0x1c
-EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR TIWriteProcessMemory = {0x1d, 0x0, 0x10, 0x4, 0x0, 0x0, 0x8000000000000000};
-#define TIWriteProcessMemory_value 0x1d
-EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR TIReadProcessMemory = {0x1e, 0x0, 0x10, 0x4, 0x0, 0x0, 0x8000000000000000};
-#define TIReadProcessMemory_value 0x1e
-EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR ThreadTokenImpersonation = {0x1f, 0x0, 0x10, 0x4, 0x0, 0x0, 0x8000000000000000};
-#define ThreadTokenImpersonation_value 0x1f
-EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR TIRemoteAllocateVirtualMemory = {0x20, 0x0, 0x10, 0x4, 0x0, 0x0, 0x8000000000000000};
-#define TIRemoteAllocateVirtualMemory_value 0x20
+EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR ProcessAccess = {0x5, 0x0, 0x10, 0x4, 0x0, 0x0, 0x8000000000000000};
+#define ProcessAccess_value 0x5
+EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR RegistrySaveKey = {0x6, 0x0, 0x10, 0x4, 0x0, 0x0, 0x8000000000000000};
+#define RegistrySaveKey_value 0x6
+EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR RegistrySetValueKey = {0x8, 0x0, 0x10, 0x4, 0x0, 0x0, 0x8000000000000000};
+#define RegistrySetValueKey_value 0x8
+EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR RegistryCreateKey = {0x9, 0x0, 0x10, 0x4, 0x0, 0x0, 0x8000000000000000};
+#define RegistryCreateKey_value 0x9
+EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR FileCreation = {0xa, 0x0, 0x10, 0x4, 0x0, 0x0, 0x8000000000000000};
+#define FileCreation_value 0xa
+EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR NamedPipeCreation = {0xb, 0x0, 0x10, 0x4, 0x0, 0x0, 0x8000000000000000};
+#define NamedPipeCreation_value 0xb
+EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR NamedPipeConnection = {0xc, 0x0, 0x10, 0x4, 0x0, 0x0, 0x8000000000000000};
+#define NamedPipeConnection_value 0xc
+EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR MailslotCreation = {0xd, 0x0, 0x10, 0x4, 0x0, 0x0, 0x8000000000000000};
+#define MailslotCreation_value 0xd
+EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR MailslotConnection = {0xe, 0x0, 0x10, 0x4, 0x0, 0x0, 0x8000000000000000};
+#define MailslotConnection_value 0xe
+EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR RemoteFileConnection = {0xf, 0x0, 0x10, 0x4, 0x0, 0x0, 0x8000000000000000};
+#define RemoteFileConnection_value 0xf
+EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR DotNetLoad = {0x10, 0x0, 0x10, 0x4, 0x0, 0x0, 0x8000000000000000};
+#define DotNetLoad_value 0x10
+EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR WMIEventFilter = {0x11, 0x0, 0x10, 0x4, 0x0, 0x0, 0x8000000000000000};
+#define WMIEventFilter_value 0x11
+EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR RPCClient = {0x12, 0x0, 0x10, 0x4, 0x0, 0x0, 0x8000000000000000};
+#define RPCClient_value 0x12
+EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR RPCServer = {0x13, 0x0, 0x10, 0x4, 0x0, 0x0, 0x8000000000000000};
+#define RPCServer_value 0x13
+EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR DPAPIUnprotect = {0x14, 0x0, 0x10, 0x4, 0x0, 0x0, 0x8000000000000000};
+#define DPAPIUnprotect_value 0x14
+EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR NetworkConnection = {0x15, 0x0, 0x10, 0x4, 0x0, 0x0, 0x8000000000000000};
+#define NetworkConnection_value 0x15
+EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR AMSI = {0x16, 0x0, 0x10, 0x4, 0x0, 0x0, 0x8000000000000000};
+#define AMSI_value 0x16
+EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR RemoteReadProcessMemory = {0x17, 0x0, 0x10, 0x4, 0x0, 0x0, 0x8000000000000000};
+#define RemoteReadProcessMemory_value 0x17
+EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR RemoteWriteProcessMemory = {0x18, 0x0, 0x10, 0x4, 0x0, 0x0, 0x8000000000000000};
+#define RemoteWriteProcessMemory_value 0x18
+EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR RemoteVirtualAllocation = {0x19, 0x0, 0x10, 0x4, 0x0, 0x0, 0x8000000000000000};
+#define RemoteVirtualAllocation_value 0x19
+EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR RemoteQueueUserAPC = {0x1a, 0x0, 0x10, 0x4, 0x0, 0x0, 0x8000000000000000};
+#define RemoteQueueUserAPC_value 0x1a
+EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR QueryTokenImpersonation = {0x1b, 0x0, 0x10, 0x4, 0x0, 0x0, 0x8000000000000000};
+#define QueryTokenImpersonation_value 0x1b
+EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR DebugLog102 = {0x66, 0x0, 0x10, 0x4, 0x0, 0x0, 0x8000000000000000};
+#define DebugLog102_value 0x66
 
 //
 // MCGEN_DISABLE_PROVIDER_CODE_GENERATION macro:
@@ -770,10 +759,10 @@ EXTERN_C __declspec(selectany) MCGEN_TRACE_CONTEXT JonMonProvider_Context = {0, 
 #define JonMonHandle (JonMonProvider_Context.RegistrationHandle)
 
 //
-// This macro is set to 1, indicating that the EventWrite[Name] macros
+// This macro is set to 0, indicating that the EventWrite[Name] macros do not
 // have an Activity parameter. This is controlled by the -km and -um options.
 //
-#define JonMonProvider_EventWriteActivity 1
+#define JonMonProvider_EventWriteActivity 0
 
 //
 // Register with ETW using the control GUID specified in the manifest.
@@ -888,180 +877,19 @@ _mcgen_CheckContextType_JonMon(_In_ McGenContext_JonMon* pContext)
 //
 // Event write macros for event "ProcessCreation"
 //
-#define EventWriteProcessCreation(Activity, EventTime_, NewProcessFilePath, NewProcessCommandLine, NewProcessId, NewProcessStartKey, NewProcessStartTime, NewProcessProcessUser, NewProcessUserLogonId, ParentProcessId, ParentProcessThreadId, ParentProcessFilePath, CreatorProcessId, ParentProcessUser, ParentProcessUserLogonId) \
+#define EventWriteProcessCreation(EventTime, CreatorThreadId, CreatorProcessId, ParentProcessId, ParentProcessStartKey, ParentProcessFilePath, ParentProcessUser, ParentProcessUserLogonId, ParentProcessIntegrityLevel, ParentProcessSessionId, ParentProcessTokenType, ProcessFilePath, ProcessCommandLine, ProcessId, ProcessStartKey, ProcessUser, ProcessUserLogonId, ProcessUserLinkedLogonId, ProcessIntegrityLevel, ProcessSessionId, ProcessTokenType, ProcessReparented) \
         MCGEN_EVENT_ENABLED(ProcessCreation) \
-        ? _mcgen_TEMPLATE_FOR_ProcessCreation(&JonMonProvider_Context, &ProcessCreation, Activity, EventTime_, NewProcessFilePath, NewProcessCommandLine, NewProcessId, NewProcessStartKey, NewProcessStartTime, NewProcessProcessUser, NewProcessUserLogonId, ParentProcessId, ParentProcessThreadId, ParentProcessFilePath, CreatorProcessId, ParentProcessUser, ParentProcessUserLogonId) : 0
-#define EventWriteProcessCreation_AssumeEnabled(EventTime_, NewProcessFilePath, NewProcessCommandLine, NewProcessId, NewProcessStartKey, NewProcessStartTime, NewProcessProcessUser, NewProcessUserLogonId, ParentProcessId, ParentProcessThreadId, ParentProcessFilePath, CreatorProcessId, ParentProcessUser, ParentProcessUserLogonId) \
-        _mcgen_TEMPLATE_FOR_ProcessCreation(&JonMonProvider_Context, &ProcessCreation, NULL, EventTime_, NewProcessFilePath, NewProcessCommandLine, NewProcessId, NewProcessStartKey, NewProcessStartTime, NewProcessProcessUser, NewProcessUserLogonId, ParentProcessId, ParentProcessThreadId, ParentProcessFilePath, CreatorProcessId, ParentProcessUser, ParentProcessUserLogonId)
-#define EventWriteProcessCreation_ForContext(pContext, Activity, EventTime_, NewProcessFilePath, NewProcessCommandLine, NewProcessId, NewProcessStartKey, NewProcessStartTime, NewProcessProcessUser, NewProcessUserLogonId, ParentProcessId, ParentProcessThreadId, ParentProcessFilePath, CreatorProcessId, ParentProcessUser, ParentProcessUserLogonId) \
+        ? _mcgen_TEMPLATE_FOR_ProcessCreation(&JonMonProvider_Context, &ProcessCreation, EventTime, CreatorThreadId, CreatorProcessId, ParentProcessId, ParentProcessStartKey, ParentProcessFilePath, ParentProcessUser, ParentProcessUserLogonId, ParentProcessIntegrityLevel, ParentProcessSessionId, ParentProcessTokenType, ProcessFilePath, ProcessCommandLine, ProcessId, ProcessStartKey, ProcessUser, ProcessUserLogonId, ProcessUserLinkedLogonId, ProcessIntegrityLevel, ProcessSessionId, ProcessTokenType, ProcessReparented) : 0
+#define EventWriteProcessCreation_AssumeEnabled(EventTime, CreatorThreadId, CreatorProcessId, ParentProcessId, ParentProcessStartKey, ParentProcessFilePath, ParentProcessUser, ParentProcessUserLogonId, ParentProcessIntegrityLevel, ParentProcessSessionId, ParentProcessTokenType, ProcessFilePath, ProcessCommandLine, ProcessId, ProcessStartKey, ProcessUser, ProcessUserLogonId, ProcessUserLinkedLogonId, ProcessIntegrityLevel, ProcessSessionId, ProcessTokenType, ProcessReparented) \
+        _mcgen_TEMPLATE_FOR_ProcessCreation(&JonMonProvider_Context, &ProcessCreation, EventTime, CreatorThreadId, CreatorProcessId, ParentProcessId, ParentProcessStartKey, ParentProcessFilePath, ParentProcessUser, ParentProcessUserLogonId, ParentProcessIntegrityLevel, ParentProcessSessionId, ParentProcessTokenType, ProcessFilePath, ProcessCommandLine, ProcessId, ProcessStartKey, ProcessUser, ProcessUserLogonId, ProcessUserLinkedLogonId, ProcessIntegrityLevel, ProcessSessionId, ProcessTokenType, ProcessReparented)
+#define EventWriteProcessCreation_ForContext(pContext, EventTime, CreatorThreadId, CreatorProcessId, ParentProcessId, ParentProcessStartKey, ParentProcessFilePath, ParentProcessUser, ParentProcessUserLogonId, ParentProcessIntegrityLevel, ParentProcessSessionId, ParentProcessTokenType, ProcessFilePath, ProcessCommandLine, ProcessId, ProcessStartKey, ProcessUser, ProcessUserLogonId, ProcessUserLinkedLogonId, ProcessIntegrityLevel, ProcessSessionId, ProcessTokenType, ProcessReparented) \
         MCGEN_EVENT_ENABLED_FORCONTEXT(pContext, ProcessCreation) \
-        ? _mcgen_TEMPLATE_FOR_ProcessCreation(&(pContext)->Context, &ProcessCreation, Activity, EventTime_, NewProcessFilePath, NewProcessCommandLine, NewProcessId, NewProcessStartKey, NewProcessStartTime, NewProcessProcessUser, NewProcessUserLogonId, ParentProcessId, ParentProcessThreadId, ParentProcessFilePath, CreatorProcessId, ParentProcessUser, ParentProcessUserLogonId) : 0
-#define EventWriteProcessCreation_ForContextAssumeEnabled(pContext, EventTime_, NewProcessFilePath, NewProcessCommandLine, NewProcessId, NewProcessStartKey, NewProcessStartTime, NewProcessProcessUser, NewProcessUserLogonId, ParentProcessId, ParentProcessThreadId, ParentProcessFilePath, CreatorProcessId, ParentProcessUser, ParentProcessUserLogonId) \
-        _mcgen_TEMPLATE_FOR_ProcessCreation(&_mcgen_CheckContextType_JonMon(pContext)->Context, &ProcessCreation, NULL, EventTime_, NewProcessFilePath, NewProcessCommandLine, NewProcessId, NewProcessStartKey, NewProcessStartTime, NewProcessProcessUser, NewProcessUserLogonId, ParentProcessId, ParentProcessThreadId, ParentProcessFilePath, CreatorProcessId, ParentProcessUser, ParentProcessUserLogonId)
+        ? _mcgen_TEMPLATE_FOR_ProcessCreation(&(pContext)->Context, &ProcessCreation, EventTime, CreatorThreadId, CreatorProcessId, ParentProcessId, ParentProcessStartKey, ParentProcessFilePath, ParentProcessUser, ParentProcessUserLogonId, ParentProcessIntegrityLevel, ParentProcessSessionId, ParentProcessTokenType, ProcessFilePath, ProcessCommandLine, ProcessId, ProcessStartKey, ProcessUser, ProcessUserLogonId, ProcessUserLinkedLogonId, ProcessIntegrityLevel, ProcessSessionId, ProcessTokenType, ProcessReparented) : 0
+#define EventWriteProcessCreation_ForContextAssumeEnabled(pContext, EventTime, CreatorThreadId, CreatorProcessId, ParentProcessId, ParentProcessStartKey, ParentProcessFilePath, ParentProcessUser, ParentProcessUserLogonId, ParentProcessIntegrityLevel, ParentProcessSessionId, ParentProcessTokenType, ProcessFilePath, ProcessCommandLine, ProcessId, ProcessStartKey, ProcessUser, ProcessUserLogonId, ProcessUserLinkedLogonId, ProcessIntegrityLevel, ProcessSessionId, ProcessTokenType, ProcessReparented) \
+        _mcgen_TEMPLATE_FOR_ProcessCreation(&_mcgen_CheckContextType_JonMon(pContext)->Context, &ProcessCreation, EventTime, CreatorThreadId, CreatorProcessId, ParentProcessId, ParentProcessStartKey, ParentProcessFilePath, ParentProcessUser, ParentProcessUserLogonId, ParentProcessIntegrityLevel, ParentProcessSessionId, ParentProcessTokenType, ProcessFilePath, ProcessCommandLine, ProcessId, ProcessStartKey, ProcessUser, ProcessUserLogonId, ProcessUserLinkedLogonId, ProcessIntegrityLevel, ProcessSessionId, ProcessTokenType, ProcessReparented)
 
 // This macro is for use by MC-generated code and should not be used directly.
-#define _mcgen_TEMPLATE_FOR_ProcessCreation _mcgen_PASTE2(McTemplateK0mzzxxxzqxxzxzq_, MCGEN_EVENTWRITETRANSFER)
-
-//
-// Enablement check macro for event "ProcessAccess"
-//
-#define EventEnabledProcessAccess() _mcgen_EVENT_BIT_SET(JonMonEnableBits, 0)
-#define EventEnabledProcessAccess_ForContext(pContext) _mcgen_EVENT_BIT_SET(_mcgen_CheckContextType_JonMon(pContext)->EnableBits, 0)
-
-//
-// Event write macros for event "ProcessAccess"
-//
-#define EventWriteProcessAccess(Activity, EventTime_, SourceProcessGrantedAccess, TargetProcessId, TargetProcessStartKey, TargetImagePath, SourceProcessId, SourceThreadId, SourceProcessStartKey, SourceProcessFilePath, SourceProcessUser, SourceProcessUserLogonId) \
-        MCGEN_EVENT_ENABLED(ProcessAccess) \
-        ? _mcgen_TEMPLATE_FOR_ProcessAccess(&JonMonProvider_Context, &ProcessAccess, Activity, EventTime_, SourceProcessGrantedAccess, TargetProcessId, TargetProcessStartKey, TargetImagePath, SourceProcessId, SourceThreadId, SourceProcessStartKey, SourceProcessFilePath, SourceProcessUser, SourceProcessUserLogonId) : 0
-#define EventWriteProcessAccess_AssumeEnabled(EventTime_, SourceProcessGrantedAccess, TargetProcessId, TargetProcessStartKey, TargetImagePath, SourceProcessId, SourceThreadId, SourceProcessStartKey, SourceProcessFilePath, SourceProcessUser, SourceProcessUserLogonId) \
-        _mcgen_TEMPLATE_FOR_ProcessAccess(&JonMonProvider_Context, &ProcessAccess, NULL, EventTime_, SourceProcessGrantedAccess, TargetProcessId, TargetProcessStartKey, TargetImagePath, SourceProcessId, SourceThreadId, SourceProcessStartKey, SourceProcessFilePath, SourceProcessUser, SourceProcessUserLogonId)
-#define EventWriteProcessAccess_ForContext(pContext, Activity, EventTime_, SourceProcessGrantedAccess, TargetProcessId, TargetProcessStartKey, TargetImagePath, SourceProcessId, SourceThreadId, SourceProcessStartKey, SourceProcessFilePath, SourceProcessUser, SourceProcessUserLogonId) \
-        MCGEN_EVENT_ENABLED_FORCONTEXT(pContext, ProcessAccess) \
-        ? _mcgen_TEMPLATE_FOR_ProcessAccess(&(pContext)->Context, &ProcessAccess, Activity, EventTime_, SourceProcessGrantedAccess, TargetProcessId, TargetProcessStartKey, TargetImagePath, SourceProcessId, SourceThreadId, SourceProcessStartKey, SourceProcessFilePath, SourceProcessUser, SourceProcessUserLogonId) : 0
-#define EventWriteProcessAccess_ForContextAssumeEnabled(pContext, EventTime_, SourceProcessGrantedAccess, TargetProcessId, TargetProcessStartKey, TargetImagePath, SourceProcessId, SourceThreadId, SourceProcessStartKey, SourceProcessFilePath, SourceProcessUser, SourceProcessUserLogonId) \
-        _mcgen_TEMPLATE_FOR_ProcessAccess(&_mcgen_CheckContextType_JonMon(pContext)->Context, &ProcessAccess, NULL, EventTime_, SourceProcessGrantedAccess, TargetProcessId, TargetProcessStartKey, TargetImagePath, SourceProcessId, SourceThreadId, SourceProcessStartKey, SourceProcessFilePath, SourceProcessUser, SourceProcessUserLogonId)
-
-// This macro is for use by MC-generated code and should not be used directly.
-#define _mcgen_TEMPLATE_FOR_ProcessAccess _mcgen_PASTE2(McTemplateK0mdxxzxxxzzq_, MCGEN_EVENTWRITETRANSFER)
-
-//
-// Enablement check macro for event "ProcessAccessDuplicated"
-//
-#define EventEnabledProcessAccessDuplicated() _mcgen_EVENT_BIT_SET(JonMonEnableBits, 0)
-#define EventEnabledProcessAccessDuplicated_ForContext(pContext) _mcgen_EVENT_BIT_SET(_mcgen_CheckContextType_JonMon(pContext)->EnableBits, 0)
-
-//
-// Event write macros for event "ProcessAccessDuplicated"
-//
-#define EventWriteProcessAccessDuplicated(Activity, EventTime_, SourceProcessDuplicatedGrantedAccess, TargetProcessId, TargetProcessStartKey, TargetImagePath, SourceProcessId, SourceThreadId, SourceProcessStartKey, SourceProcessFilePath, SourceProcessUser, SourceProcessUserLogonId) \
-        MCGEN_EVENT_ENABLED(ProcessAccessDuplicated) \
-        ? _mcgen_TEMPLATE_FOR_ProcessAccessDuplicated(&JonMonProvider_Context, &ProcessAccessDuplicated, Activity, EventTime_, SourceProcessDuplicatedGrantedAccess, TargetProcessId, TargetProcessStartKey, TargetImagePath, SourceProcessId, SourceThreadId, SourceProcessStartKey, SourceProcessFilePath, SourceProcessUser, SourceProcessUserLogonId) : 0
-#define EventWriteProcessAccessDuplicated_AssumeEnabled(EventTime_, SourceProcessDuplicatedGrantedAccess, TargetProcessId, TargetProcessStartKey, TargetImagePath, SourceProcessId, SourceThreadId, SourceProcessStartKey, SourceProcessFilePath, SourceProcessUser, SourceProcessUserLogonId) \
-        _mcgen_TEMPLATE_FOR_ProcessAccessDuplicated(&JonMonProvider_Context, &ProcessAccessDuplicated, NULL, EventTime_, SourceProcessDuplicatedGrantedAccess, TargetProcessId, TargetProcessStartKey, TargetImagePath, SourceProcessId, SourceThreadId, SourceProcessStartKey, SourceProcessFilePath, SourceProcessUser, SourceProcessUserLogonId)
-#define EventWriteProcessAccessDuplicated_ForContext(pContext, Activity, EventTime_, SourceProcessDuplicatedGrantedAccess, TargetProcessId, TargetProcessStartKey, TargetImagePath, SourceProcessId, SourceThreadId, SourceProcessStartKey, SourceProcessFilePath, SourceProcessUser, SourceProcessUserLogonId) \
-        MCGEN_EVENT_ENABLED_FORCONTEXT(pContext, ProcessAccessDuplicated) \
-        ? _mcgen_TEMPLATE_FOR_ProcessAccessDuplicated(&(pContext)->Context, &ProcessAccessDuplicated, Activity, EventTime_, SourceProcessDuplicatedGrantedAccess, TargetProcessId, TargetProcessStartKey, TargetImagePath, SourceProcessId, SourceThreadId, SourceProcessStartKey, SourceProcessFilePath, SourceProcessUser, SourceProcessUserLogonId) : 0
-#define EventWriteProcessAccessDuplicated_ForContextAssumeEnabled(pContext, EventTime_, SourceProcessDuplicatedGrantedAccess, TargetProcessId, TargetProcessStartKey, TargetImagePath, SourceProcessId, SourceThreadId, SourceProcessStartKey, SourceProcessFilePath, SourceProcessUser, SourceProcessUserLogonId) \
-        _mcgen_TEMPLATE_FOR_ProcessAccessDuplicated(&_mcgen_CheckContextType_JonMon(pContext)->Context, &ProcessAccessDuplicated, NULL, EventTime_, SourceProcessDuplicatedGrantedAccess, TargetProcessId, TargetProcessStartKey, TargetImagePath, SourceProcessId, SourceThreadId, SourceProcessStartKey, SourceProcessFilePath, SourceProcessUser, SourceProcessUserLogonId)
-
-// This macro is for use by MC-generated code and should not be used directly.
-#define _mcgen_TEMPLATE_FOR_ProcessAccessDuplicated _mcgen_PASTE2(McTemplateK0mdxxzxxxzzq_, MCGEN_EVENTWRITETRANSFER)
-
-//
-// Enablement check macro for event "ImageLoaded"
-//
-#define EventEnabledImageLoaded() _mcgen_EVENT_BIT_SET(JonMonEnableBits, 0)
-#define EventEnabledImageLoaded_ForContext(pContext) _mcgen_EVENT_BIT_SET(_mcgen_CheckContextType_JonMon(pContext)->EnableBits, 0)
-
-//
-// Event write macros for event "ImageLoaded"
-//
-#define EventWriteImageLoaded(Activity, EventTime_, SourceProcessFilePath, SourceProcessId, SourceThreadId, SourceProcessStartKey, ModulePath, SourceProcessUser, SourceProcessUserLogonId) \
-        MCGEN_EVENT_ENABLED(ImageLoaded) \
-        ? _mcgen_TEMPLATE_FOR_ImageLoaded(&JonMonProvider_Context, &ImageLoaded, Activity, EventTime_, SourceProcessFilePath, SourceProcessId, SourceThreadId, SourceProcessStartKey, ModulePath, SourceProcessUser, SourceProcessUserLogonId) : 0
-#define EventWriteImageLoaded_AssumeEnabled(EventTime_, SourceProcessFilePath, SourceProcessId, SourceThreadId, SourceProcessStartKey, ModulePath, SourceProcessUser, SourceProcessUserLogonId) \
-        _mcgen_TEMPLATE_FOR_ImageLoaded(&JonMonProvider_Context, &ImageLoaded, NULL, EventTime_, SourceProcessFilePath, SourceProcessId, SourceThreadId, SourceProcessStartKey, ModulePath, SourceProcessUser, SourceProcessUserLogonId)
-#define EventWriteImageLoaded_ForContext(pContext, Activity, EventTime_, SourceProcessFilePath, SourceProcessId, SourceThreadId, SourceProcessStartKey, ModulePath, SourceProcessUser, SourceProcessUserLogonId) \
-        MCGEN_EVENT_ENABLED_FORCONTEXT(pContext, ImageLoaded) \
-        ? _mcgen_TEMPLATE_FOR_ImageLoaded(&(pContext)->Context, &ImageLoaded, Activity, EventTime_, SourceProcessFilePath, SourceProcessId, SourceThreadId, SourceProcessStartKey, ModulePath, SourceProcessUser, SourceProcessUserLogonId) : 0
-#define EventWriteImageLoaded_ForContextAssumeEnabled(pContext, EventTime_, SourceProcessFilePath, SourceProcessId, SourceThreadId, SourceProcessStartKey, ModulePath, SourceProcessUser, SourceProcessUserLogonId) \
-        _mcgen_TEMPLATE_FOR_ImageLoaded(&_mcgen_CheckContextType_JonMon(pContext)->Context, &ImageLoaded, NULL, EventTime_, SourceProcessFilePath, SourceProcessId, SourceThreadId, SourceProcessStartKey, ModulePath, SourceProcessUser, SourceProcessUserLogonId)
-
-// This macro is for use by MC-generated code and should not be used directly.
-#define _mcgen_TEMPLATE_FOR_ImageLoaded _mcgen_PASTE2(McTemplateK0mzxxxzzq_, MCGEN_EVENTWRITETRANSFER)
-
-//
-// Enablement check macro for event "RegistryCreateKey"
-//
-#define EventEnabledRegistryCreateKey() _mcgen_EVENT_BIT_SET(JonMonEnableBits, 0)
-#define EventEnabledRegistryCreateKey_ForContext(pContext) _mcgen_EVENT_BIT_SET(_mcgen_CheckContextType_JonMon(pContext)->EnableBits, 0)
-
-//
-// Event write macros for event "RegistryCreateKey"
-//
-#define EventWriteRegistryCreateKey(Activity, EventTime_, SourceProcessFilePath, SourceProcessId, SourceThreadId, SourceProcessStartKey, SourceRegistryKeyPath, SourceProcessGrantedAccess, SourceProcessUser, SourceProcessUserLogonId) \
-        MCGEN_EVENT_ENABLED(RegistryCreateKey) \
-        ? _mcgen_TEMPLATE_FOR_RegistryCreateKey(&JonMonProvider_Context, &RegistryCreateKey, Activity, EventTime_, SourceProcessFilePath, SourceProcessId, SourceThreadId, SourceProcessStartKey, SourceRegistryKeyPath, SourceProcessGrantedAccess, SourceProcessUser, SourceProcessUserLogonId) : 0
-#define EventWriteRegistryCreateKey_AssumeEnabled(EventTime_, SourceProcessFilePath, SourceProcessId, SourceThreadId, SourceProcessStartKey, SourceRegistryKeyPath, SourceProcessGrantedAccess, SourceProcessUser, SourceProcessUserLogonId) \
-        _mcgen_TEMPLATE_FOR_RegistryCreateKey(&JonMonProvider_Context, &RegistryCreateKey, NULL, EventTime_, SourceProcessFilePath, SourceProcessId, SourceThreadId, SourceProcessStartKey, SourceRegistryKeyPath, SourceProcessGrantedAccess, SourceProcessUser, SourceProcessUserLogonId)
-#define EventWriteRegistryCreateKey_ForContext(pContext, Activity, EventTime_, SourceProcessFilePath, SourceProcessId, SourceThreadId, SourceProcessStartKey, SourceRegistryKeyPath, SourceProcessGrantedAccess, SourceProcessUser, SourceProcessUserLogonId) \
-        MCGEN_EVENT_ENABLED_FORCONTEXT(pContext, RegistryCreateKey) \
-        ? _mcgen_TEMPLATE_FOR_RegistryCreateKey(&(pContext)->Context, &RegistryCreateKey, Activity, EventTime_, SourceProcessFilePath, SourceProcessId, SourceThreadId, SourceProcessStartKey, SourceRegistryKeyPath, SourceProcessGrantedAccess, SourceProcessUser, SourceProcessUserLogonId) : 0
-#define EventWriteRegistryCreateKey_ForContextAssumeEnabled(pContext, EventTime_, SourceProcessFilePath, SourceProcessId, SourceThreadId, SourceProcessStartKey, SourceRegistryKeyPath, SourceProcessGrantedAccess, SourceProcessUser, SourceProcessUserLogonId) \
-        _mcgen_TEMPLATE_FOR_RegistryCreateKey(&_mcgen_CheckContextType_JonMon(pContext)->Context, &RegistryCreateKey, NULL, EventTime_, SourceProcessFilePath, SourceProcessId, SourceThreadId, SourceProcessStartKey, SourceRegistryKeyPath, SourceProcessGrantedAccess, SourceProcessUser, SourceProcessUserLogonId)
-
-// This macro is for use by MC-generated code and should not be used directly.
-#define _mcgen_TEMPLATE_FOR_RegistryCreateKey _mcgen_PASTE2(McTemplateK0mzxxxzdzq_, MCGEN_EVENTWRITETRANSFER)
-
-//
-// Enablement check macro for event "RegistryDeleteKey"
-//
-#define EventEnabledRegistryDeleteKey() _mcgen_EVENT_BIT_SET(JonMonEnableBits, 0)
-#define EventEnabledRegistryDeleteKey_ForContext(pContext) _mcgen_EVENT_BIT_SET(_mcgen_CheckContextType_JonMon(pContext)->EnableBits, 0)
-
-//
-// Event write macros for event "RegistryDeleteKey"
-//
-#define EventWriteRegistryDeleteKey(Activity, EventTime_, SourceProcessFilePath, SourceProcessId, SourceThreadId, SourceProcessStartKey, RegistryKeyPath, SourceProcessUser, SourceProcessUserLogonId) \
-        MCGEN_EVENT_ENABLED(RegistryDeleteKey) \
-        ? _mcgen_TEMPLATE_FOR_RegistryDeleteKey(&JonMonProvider_Context, &RegistryDeleteKey, Activity, EventTime_, SourceProcessFilePath, SourceProcessId, SourceThreadId, SourceProcessStartKey, RegistryKeyPath, SourceProcessUser, SourceProcessUserLogonId) : 0
-#define EventWriteRegistryDeleteKey_AssumeEnabled(EventTime_, SourceProcessFilePath, SourceProcessId, SourceThreadId, SourceProcessStartKey, RegistryKeyPath, SourceProcessUser, SourceProcessUserLogonId) \
-        _mcgen_TEMPLATE_FOR_RegistryDeleteKey(&JonMonProvider_Context, &RegistryDeleteKey, NULL, EventTime_, SourceProcessFilePath, SourceProcessId, SourceThreadId, SourceProcessStartKey, RegistryKeyPath, SourceProcessUser, SourceProcessUserLogonId)
-#define EventWriteRegistryDeleteKey_ForContext(pContext, Activity, EventTime_, SourceProcessFilePath, SourceProcessId, SourceThreadId, SourceProcessStartKey, RegistryKeyPath, SourceProcessUser, SourceProcessUserLogonId) \
-        MCGEN_EVENT_ENABLED_FORCONTEXT(pContext, RegistryDeleteKey) \
-        ? _mcgen_TEMPLATE_FOR_RegistryDeleteKey(&(pContext)->Context, &RegistryDeleteKey, Activity, EventTime_, SourceProcessFilePath, SourceProcessId, SourceThreadId, SourceProcessStartKey, RegistryKeyPath, SourceProcessUser, SourceProcessUserLogonId) : 0
-#define EventWriteRegistryDeleteKey_ForContextAssumeEnabled(pContext, EventTime_, SourceProcessFilePath, SourceProcessId, SourceThreadId, SourceProcessStartKey, RegistryKeyPath, SourceProcessUser, SourceProcessUserLogonId) \
-        _mcgen_TEMPLATE_FOR_RegistryDeleteKey(&_mcgen_CheckContextType_JonMon(pContext)->Context, &RegistryDeleteKey, NULL, EventTime_, SourceProcessFilePath, SourceProcessId, SourceThreadId, SourceProcessStartKey, RegistryKeyPath, SourceProcessUser, SourceProcessUserLogonId)
-
-// This macro is for use by MC-generated code and should not be used directly.
-#define _mcgen_TEMPLATE_FOR_RegistryDeleteKey _mcgen_PASTE2(McTemplateK0mzxxxzzq_, MCGEN_EVENTWRITETRANSFER)
-
-//
-// Enablement check macro for event "RegistrySetValue"
-//
-#define EventEnabledRegistrySetValue() _mcgen_EVENT_BIT_SET(JonMonEnableBits, 0)
-#define EventEnabledRegistrySetValue_ForContext(pContext) _mcgen_EVENT_BIT_SET(_mcgen_CheckContextType_JonMon(pContext)->EnableBits, 0)
-
-//
-// Event write macros for event "RegistrySetValue"
-//
-#define EventWriteRegistrySetValue(Activity, EventTime_, SourceProcessFilePath, SourceProcessId, SourceThreadId, SourceProcessStartKey, RegistryKeyPath, RegistryValueName, RegistryValueData, RegistryValueDataType, SourceProcessUser, SourceProcessUserLogonId) \
-        MCGEN_EVENT_ENABLED(RegistrySetValue) \
-        ? _mcgen_TEMPLATE_FOR_RegistrySetValue(&JonMonProvider_Context, &RegistrySetValue, Activity, EventTime_, SourceProcessFilePath, SourceProcessId, SourceThreadId, SourceProcessStartKey, RegistryKeyPath, RegistryValueName, RegistryValueData, RegistryValueDataType, SourceProcessUser, SourceProcessUserLogonId) : 0
-#define EventWriteRegistrySetValue_AssumeEnabled(EventTime_, SourceProcessFilePath, SourceProcessId, SourceThreadId, SourceProcessStartKey, RegistryKeyPath, RegistryValueName, RegistryValueData, RegistryValueDataType, SourceProcessUser, SourceProcessUserLogonId) \
-        _mcgen_TEMPLATE_FOR_RegistrySetValue(&JonMonProvider_Context, &RegistrySetValue, NULL, EventTime_, SourceProcessFilePath, SourceProcessId, SourceThreadId, SourceProcessStartKey, RegistryKeyPath, RegistryValueName, RegistryValueData, RegistryValueDataType, SourceProcessUser, SourceProcessUserLogonId)
-#define EventWriteRegistrySetValue_ForContext(pContext, Activity, EventTime_, SourceProcessFilePath, SourceProcessId, SourceThreadId, SourceProcessStartKey, RegistryKeyPath, RegistryValueName, RegistryValueData, RegistryValueDataType, SourceProcessUser, SourceProcessUserLogonId) \
-        MCGEN_EVENT_ENABLED_FORCONTEXT(pContext, RegistrySetValue) \
-        ? _mcgen_TEMPLATE_FOR_RegistrySetValue(&(pContext)->Context, &RegistrySetValue, Activity, EventTime_, SourceProcessFilePath, SourceProcessId, SourceThreadId, SourceProcessStartKey, RegistryKeyPath, RegistryValueName, RegistryValueData, RegistryValueDataType, SourceProcessUser, SourceProcessUserLogonId) : 0
-#define EventWriteRegistrySetValue_ForContextAssumeEnabled(pContext, EventTime_, SourceProcessFilePath, SourceProcessId, SourceThreadId, SourceProcessStartKey, RegistryKeyPath, RegistryValueName, RegistryValueData, RegistryValueDataType, SourceProcessUser, SourceProcessUserLogonId) \
-        _mcgen_TEMPLATE_FOR_RegistrySetValue(&_mcgen_CheckContextType_JonMon(pContext)->Context, &RegistrySetValue, NULL, EventTime_, SourceProcessFilePath, SourceProcessId, SourceThreadId, SourceProcessStartKey, RegistryKeyPath, RegistryValueName, RegistryValueData, RegistryValueDataType, SourceProcessUser, SourceProcessUserLogonId)
-
-// This macro is for use by MC-generated code and should not be used directly.
-#define _mcgen_TEMPLATE_FOR_RegistrySetValue _mcgen_PASTE2(McTemplateK0mzxxxzzzzzq_, MCGEN_EVENTWRITETRANSFER)
-
-//
-// Enablement check macro for event "ProcessReparenting"
-//
-#define EventEnabledProcessReparenting() _mcgen_EVENT_BIT_SET(JonMonEnableBits, 0)
-#define EventEnabledProcessReparenting_ForContext(pContext) _mcgen_EVENT_BIT_SET(_mcgen_CheckContextType_JonMon(pContext)->EnableBits, 0)
-
-//
-// Event write macros for event "ProcessReparenting"
-//
-#define EventWriteProcessReparenting(Activity, EventTime_, NewProcessFilePath, NewProcessCommandLine, ParentProcessId, ParentThreadId, NewProcessId, NewProcessStartKey, NewProcessStartTime, ParentProcessFilePath, CreatorProcessId, CreatorProcessFilePath, CreatorProcessUser, ParentProcessUser, NewProcessUser, ParentProcessLogonId, NewProcessUserLogonId, CreatorProcessLogonId) \
-        MCGEN_EVENT_ENABLED(ProcessReparenting) \
-        ? _mcgen_TEMPLATE_FOR_ProcessReparenting(&JonMonProvider_Context, &ProcessReparenting, Activity, EventTime_, NewProcessFilePath, NewProcessCommandLine, ParentProcessId, ParentThreadId, NewProcessId, NewProcessStartKey, NewProcessStartTime, ParentProcessFilePath, CreatorProcessId, CreatorProcessFilePath, CreatorProcessUser, ParentProcessUser, NewProcessUser, ParentProcessLogonId, NewProcessUserLogonId, CreatorProcessLogonId) : 0
-#define EventWriteProcessReparenting_AssumeEnabled(EventTime_, NewProcessFilePath, NewProcessCommandLine, ParentProcessId, ParentThreadId, NewProcessId, NewProcessStartKey, NewProcessStartTime, ParentProcessFilePath, CreatorProcessId, CreatorProcessFilePath, CreatorProcessUser, ParentProcessUser, NewProcessUser, ParentProcessLogonId, NewProcessUserLogonId, CreatorProcessLogonId) \
-        _mcgen_TEMPLATE_FOR_ProcessReparenting(&JonMonProvider_Context, &ProcessReparenting, NULL, EventTime_, NewProcessFilePath, NewProcessCommandLine, ParentProcessId, ParentThreadId, NewProcessId, NewProcessStartKey, NewProcessStartTime, ParentProcessFilePath, CreatorProcessId, CreatorProcessFilePath, CreatorProcessUser, ParentProcessUser, NewProcessUser, ParentProcessLogonId, NewProcessUserLogonId, CreatorProcessLogonId)
-#define EventWriteProcessReparenting_ForContext(pContext, Activity, EventTime_, NewProcessFilePath, NewProcessCommandLine, ParentProcessId, ParentThreadId, NewProcessId, NewProcessStartKey, NewProcessStartTime, ParentProcessFilePath, CreatorProcessId, CreatorProcessFilePath, CreatorProcessUser, ParentProcessUser, NewProcessUser, ParentProcessLogonId, NewProcessUserLogonId, CreatorProcessLogonId) \
-        MCGEN_EVENT_ENABLED_FORCONTEXT(pContext, ProcessReparenting) \
-        ? _mcgen_TEMPLATE_FOR_ProcessReparenting(&(pContext)->Context, &ProcessReparenting, Activity, EventTime_, NewProcessFilePath, NewProcessCommandLine, ParentProcessId, ParentThreadId, NewProcessId, NewProcessStartKey, NewProcessStartTime, ParentProcessFilePath, CreatorProcessId, CreatorProcessFilePath, CreatorProcessUser, ParentProcessUser, NewProcessUser, ParentProcessLogonId, NewProcessUserLogonId, CreatorProcessLogonId) : 0
-#define EventWriteProcessReparenting_ForContextAssumeEnabled(pContext, EventTime_, NewProcessFilePath, NewProcessCommandLine, ParentProcessId, ParentThreadId, NewProcessId, NewProcessStartKey, NewProcessStartTime, ParentProcessFilePath, CreatorProcessId, CreatorProcessFilePath, CreatorProcessUser, ParentProcessUser, NewProcessUser, ParentProcessLogonId, NewProcessUserLogonId, CreatorProcessLogonId) \
-        _mcgen_TEMPLATE_FOR_ProcessReparenting(&_mcgen_CheckContextType_JonMon(pContext)->Context, &ProcessReparenting, NULL, EventTime_, NewProcessFilePath, NewProcessCommandLine, ParentProcessId, ParentThreadId, NewProcessId, NewProcessStartKey, NewProcessStartTime, ParentProcessFilePath, CreatorProcessId, CreatorProcessFilePath, CreatorProcessUser, ParentProcessUser, NewProcessUser, ParentProcessLogonId, NewProcessUserLogonId, CreatorProcessLogonId)
-
-// This macro is for use by MC-generated code and should not be used directly.
-#define _mcgen_TEMPLATE_FOR_ProcessReparenting _mcgen_PASTE2(McTemplateK0mzzxxxxxzxzzzzqqq_, MCGEN_EVENTWRITETRANSFER)
+#define _mcgen_TEMPLATE_FOR_ProcessCreation _mcgen_PASTE2(McTemplateU0yiiiizzqzqqzziizqqzqqt_, MCGEN_EVENTWRITETRANSFER)
 
 //
 // Enablement check macro for event "ProcessTerminate"
@@ -1072,203 +900,19 @@ _mcgen_CheckContextType_JonMon(_In_ McGenContext_JonMon* pContext)
 //
 // Event write macros for event "ProcessTerminate"
 //
-#define EventWriteProcessTerminate(Activity, EventTime_, SourceProcessFilePath, SourceProcessId, SourceThreadId, TargetProcessFilePath, TargetProcessId) \
+#define EventWriteProcessTerminate(EventTime, SourceProcessId, SourceProcessStartKey, TargetProcessFilePath, TargetProcessId) \
         MCGEN_EVENT_ENABLED(ProcessTerminate) \
-        ? _mcgen_TEMPLATE_FOR_ProcessTerminate(&JonMonProvider_Context, &ProcessTerminate, Activity, EventTime_, SourceProcessFilePath, SourceProcessId, SourceThreadId, TargetProcessFilePath, TargetProcessId) : 0
-#define EventWriteProcessTerminate_AssumeEnabled(EventTime_, SourceProcessFilePath, SourceProcessId, SourceThreadId, TargetProcessFilePath, TargetProcessId) \
-        _mcgen_TEMPLATE_FOR_ProcessTerminate(&JonMonProvider_Context, &ProcessTerminate, NULL, EventTime_, SourceProcessFilePath, SourceProcessId, SourceThreadId, TargetProcessFilePath, TargetProcessId)
-#define EventWriteProcessTerminate_ForContext(pContext, Activity, EventTime_, SourceProcessFilePath, SourceProcessId, SourceThreadId, TargetProcessFilePath, TargetProcessId) \
+        ? _mcgen_TEMPLATE_FOR_ProcessTerminate(&JonMonProvider_Context, &ProcessTerminate, EventTime, SourceProcessId, SourceProcessStartKey, TargetProcessFilePath, TargetProcessId) : 0
+#define EventWriteProcessTerminate_AssumeEnabled(EventTime, SourceProcessId, SourceProcessStartKey, TargetProcessFilePath, TargetProcessId) \
+        _mcgen_TEMPLATE_FOR_ProcessTerminate(&JonMonProvider_Context, &ProcessTerminate, EventTime, SourceProcessId, SourceProcessStartKey, TargetProcessFilePath, TargetProcessId)
+#define EventWriteProcessTerminate_ForContext(pContext, EventTime, SourceProcessId, SourceProcessStartKey, TargetProcessFilePath, TargetProcessId) \
         MCGEN_EVENT_ENABLED_FORCONTEXT(pContext, ProcessTerminate) \
-        ? _mcgen_TEMPLATE_FOR_ProcessTerminate(&(pContext)->Context, &ProcessTerminate, Activity, EventTime_, SourceProcessFilePath, SourceProcessId, SourceThreadId, TargetProcessFilePath, TargetProcessId) : 0
-#define EventWriteProcessTerminate_ForContextAssumeEnabled(pContext, EventTime_, SourceProcessFilePath, SourceProcessId, SourceThreadId, TargetProcessFilePath, TargetProcessId) \
-        _mcgen_TEMPLATE_FOR_ProcessTerminate(&_mcgen_CheckContextType_JonMon(pContext)->Context, &ProcessTerminate, NULL, EventTime_, SourceProcessFilePath, SourceProcessId, SourceThreadId, TargetProcessFilePath, TargetProcessId)
+        ? _mcgen_TEMPLATE_FOR_ProcessTerminate(&(pContext)->Context, &ProcessTerminate, EventTime, SourceProcessId, SourceProcessStartKey, TargetProcessFilePath, TargetProcessId) : 0
+#define EventWriteProcessTerminate_ForContextAssumeEnabled(pContext, EventTime, SourceProcessId, SourceProcessStartKey, TargetProcessFilePath, TargetProcessId) \
+        _mcgen_TEMPLATE_FOR_ProcessTerminate(&_mcgen_CheckContextType_JonMon(pContext)->Context, &ProcessTerminate, EventTime, SourceProcessId, SourceProcessStartKey, TargetProcessFilePath, TargetProcessId)
 
 // This macro is for use by MC-generated code and should not be used directly.
-#define _mcgen_TEMPLATE_FOR_ProcessTerminate _mcgen_PASTE2(McTemplateK0mzxxzx_, MCGEN_EVENTWRITETRANSFER)
-
-//
-// Enablement check macro for event "FileRename"
-//
-#define EventEnabledFileRename() _mcgen_EVENT_BIT_SET(JonMonEnableBits, 0)
-#define EventEnabledFileRename_ForContext(pContext) _mcgen_EVENT_BIT_SET(_mcgen_CheckContextType_JonMon(pContext)->EnableBits, 0)
-
-//
-// Event write macros for event "FileRename"
-//
-#define EventWriteFileRename(Activity, EventTime_, SourceImagePath, SourceProcessId, SourceProcessStartKey, SourceThreadId, SourceUserName, SourceUserLogonId, SourceProcessIntegrityLevel, TargetFile) \
-        MCGEN_EVENT_ENABLED(FileRename) \
-        ? _mcgen_TEMPLATE_FOR_FileRename(&JonMonProvider_Context, &FileRename, Activity, EventTime_, SourceImagePath, SourceProcessId, SourceProcessStartKey, SourceThreadId, SourceUserName, SourceUserLogonId, SourceProcessIntegrityLevel, TargetFile) : 0
-#define EventWriteFileRename_AssumeEnabled(EventTime_, SourceImagePath, SourceProcessId, SourceProcessStartKey, SourceThreadId, SourceUserName, SourceUserLogonId, SourceProcessIntegrityLevel, TargetFile) \
-        _mcgen_TEMPLATE_FOR_FileRename(&JonMonProvider_Context, &FileRename, NULL, EventTime_, SourceImagePath, SourceProcessId, SourceProcessStartKey, SourceThreadId, SourceUserName, SourceUserLogonId, SourceProcessIntegrityLevel, TargetFile)
-#define EventWriteFileRename_ForContext(pContext, Activity, EventTime_, SourceImagePath, SourceProcessId, SourceProcessStartKey, SourceThreadId, SourceUserName, SourceUserLogonId, SourceProcessIntegrityLevel, TargetFile) \
-        MCGEN_EVENT_ENABLED_FORCONTEXT(pContext, FileRename) \
-        ? _mcgen_TEMPLATE_FOR_FileRename(&(pContext)->Context, &FileRename, Activity, EventTime_, SourceImagePath, SourceProcessId, SourceProcessStartKey, SourceThreadId, SourceUserName, SourceUserLogonId, SourceProcessIntegrityLevel, TargetFile) : 0
-#define EventWriteFileRename_ForContextAssumeEnabled(pContext, EventTime_, SourceImagePath, SourceProcessId, SourceProcessStartKey, SourceThreadId, SourceUserName, SourceUserLogonId, SourceProcessIntegrityLevel, TargetFile) \
-        _mcgen_TEMPLATE_FOR_FileRename(&_mcgen_CheckContextType_JonMon(pContext)->Context, &FileRename, NULL, EventTime_, SourceImagePath, SourceProcessId, SourceProcessStartKey, SourceThreadId, SourceUserName, SourceUserLogonId, SourceProcessIntegrityLevel, TargetFile)
-
-// This macro is for use by MC-generated code and should not be used directly.
-#define _mcgen_TEMPLATE_FOR_FileRename _mcgen_PASTE2(McTemplateK0mzxxxzqzz_, MCGEN_EVENTWRITETRANSFER)
-
-//
-// Enablement check macro for event "RPCClientCall"
-//
-#define EventEnabledRPCClientCall() _mcgen_EVENT_BIT_SET(JonMonEnableBits, 0)
-#define EventEnabledRPCClientCall_ForContext(pContext) _mcgen_EVENT_BIT_SET(_mcgen_CheckContextType_JonMon(pContext)->EnableBits, 0)
-
-//
-// Event write macros for event "RPCClientCall"
-//
-#define EventWriteRPCClientCall(Activity, EventTime_, Interface_UUID, ProcNum, Protocol, ProcessId, NetworkAddress, Endpoint, InterfaceString, MethodString, ProcessUser, ProcessFilePath, CallStack) \
-        MCGEN_EVENT_ENABLED(RPCClientCall) \
-        ? _mcgen_TEMPLATE_FOR_RPCClientCall(&JonMonProvider_Context, &RPCClientCall, Activity, EventTime_, Interface_UUID, ProcNum, Protocol, ProcessId, NetworkAddress, Endpoint, InterfaceString, MethodString, ProcessUser, ProcessFilePath, CallStack) : 0
-#define EventWriteRPCClientCall_AssumeEnabled(EventTime_, Interface_UUID, ProcNum, Protocol, ProcessId, NetworkAddress, Endpoint, InterfaceString, MethodString, ProcessUser, ProcessFilePath, CallStack) \
-        _mcgen_TEMPLATE_FOR_RPCClientCall(&JonMonProvider_Context, &RPCClientCall, NULL, EventTime_, Interface_UUID, ProcNum, Protocol, ProcessId, NetworkAddress, Endpoint, InterfaceString, MethodString, ProcessUser, ProcessFilePath, CallStack)
-#define EventWriteRPCClientCall_ForContext(pContext, Activity, EventTime_, Interface_UUID, ProcNum, Protocol, ProcessId, NetworkAddress, Endpoint, InterfaceString, MethodString, ProcessUser, ProcessFilePath, CallStack) \
-        MCGEN_EVENT_ENABLED_FORCONTEXT(pContext, RPCClientCall) \
-        ? _mcgen_TEMPLATE_FOR_RPCClientCall(&(pContext)->Context, &RPCClientCall, Activity, EventTime_, Interface_UUID, ProcNum, Protocol, ProcessId, NetworkAddress, Endpoint, InterfaceString, MethodString, ProcessUser, ProcessFilePath, CallStack) : 0
-#define EventWriteRPCClientCall_ForContextAssumeEnabled(pContext, EventTime_, Interface_UUID, ProcNum, Protocol, ProcessId, NetworkAddress, Endpoint, InterfaceString, MethodString, ProcessUser, ProcessFilePath, CallStack) \
-        _mcgen_TEMPLATE_FOR_RPCClientCall(&_mcgen_CheckContextType_JonMon(pContext)->Context, &RPCClientCall, NULL, EventTime_, Interface_UUID, ProcNum, Protocol, ProcessId, NetworkAddress, Endpoint, InterfaceString, MethodString, ProcessUser, ProcessFilePath, CallStack)
-
-// This macro is for use by MC-generated code and should not be used directly.
-#define _mcgen_TEMPLATE_FOR_RPCClientCall _mcgen_PASTE2(McTemplateK0mzqqqzzzzzzz_, MCGEN_EVENTWRITETRANSFER)
-
-//
-// Enablement check macro for event "RPCServerCall"
-//
-#define EventEnabledRPCServerCall() _mcgen_EVENT_BIT_SET(JonMonEnableBits, 0)
-#define EventEnabledRPCServerCall_ForContext(pContext) _mcgen_EVENT_BIT_SET(_mcgen_CheckContextType_JonMon(pContext)->EnableBits, 0)
-
-//
-// Event write macros for event "RPCServerCall"
-//
-#define EventWriteRPCServerCall(Activity, EventTime_, Interface_UUID, ProcNum, Protocol, ProcessId, NetworkAddress, Endpoint, InterfaceString, MethodString, ProcessUser, ProcessFilePath, CallStack) \
-        MCGEN_EVENT_ENABLED(RPCServerCall) \
-        ? _mcgen_TEMPLATE_FOR_RPCServerCall(&JonMonProvider_Context, &RPCServerCall, Activity, EventTime_, Interface_UUID, ProcNum, Protocol, ProcessId, NetworkAddress, Endpoint, InterfaceString, MethodString, ProcessUser, ProcessFilePath, CallStack) : 0
-#define EventWriteRPCServerCall_AssumeEnabled(EventTime_, Interface_UUID, ProcNum, Protocol, ProcessId, NetworkAddress, Endpoint, InterfaceString, MethodString, ProcessUser, ProcessFilePath, CallStack) \
-        _mcgen_TEMPLATE_FOR_RPCServerCall(&JonMonProvider_Context, &RPCServerCall, NULL, EventTime_, Interface_UUID, ProcNum, Protocol, ProcessId, NetworkAddress, Endpoint, InterfaceString, MethodString, ProcessUser, ProcessFilePath, CallStack)
-#define EventWriteRPCServerCall_ForContext(pContext, Activity, EventTime_, Interface_UUID, ProcNum, Protocol, ProcessId, NetworkAddress, Endpoint, InterfaceString, MethodString, ProcessUser, ProcessFilePath, CallStack) \
-        MCGEN_EVENT_ENABLED_FORCONTEXT(pContext, RPCServerCall) \
-        ? _mcgen_TEMPLATE_FOR_RPCServerCall(&(pContext)->Context, &RPCServerCall, Activity, EventTime_, Interface_UUID, ProcNum, Protocol, ProcessId, NetworkAddress, Endpoint, InterfaceString, MethodString, ProcessUser, ProcessFilePath, CallStack) : 0
-#define EventWriteRPCServerCall_ForContextAssumeEnabled(pContext, EventTime_, Interface_UUID, ProcNum, Protocol, ProcessId, NetworkAddress, Endpoint, InterfaceString, MethodString, ProcessUser, ProcessFilePath, CallStack) \
-        _mcgen_TEMPLATE_FOR_RPCServerCall(&_mcgen_CheckContextType_JonMon(pContext)->Context, &RPCServerCall, NULL, EventTime_, Interface_UUID, ProcNum, Protocol, ProcessId, NetworkAddress, Endpoint, InterfaceString, MethodString, ProcessUser, ProcessFilePath, CallStack)
-
-// This macro is for use by MC-generated code and should not be used directly.
-#define _mcgen_TEMPLATE_FOR_RPCServerCall _mcgen_PASTE2(McTemplateK0mzqqqzzzzzzz_, MCGEN_EVENTWRITETRANSFER)
-
-//
-// Enablement check macro for event "NetworkConnectionAccepted"
-//
-#define EventEnabledNetworkConnectionAccepted() _mcgen_EVENT_BIT_SET(JonMonEnableBits, 0)
-#define EventEnabledNetworkConnectionAccepted_ForContext(pContext) _mcgen_EVENT_BIT_SET(_mcgen_CheckContextType_JonMon(pContext)->EnableBits, 0)
-
-//
-// Event write macros for event "NetworkConnectionAccepted"
-//
-#define EventWriteNetworkConnectionAccepted(Activity, EventTime_, ProcessId, SrcIpAddressIpv4, DestIpAddressIpv4, SrcPort, DestPort, Initiated, ProcessUser, ProcessFilePath) \
-        MCGEN_EVENT_ENABLED(NetworkConnectionAccepted) \
-        ? _mcgen_TEMPLATE_FOR_NetworkConnectionAccepted(&JonMonProvider_Context, &NetworkConnectionAccepted, Activity, EventTime_, ProcessId, SrcIpAddressIpv4, DestIpAddressIpv4, SrcPort, DestPort, Initiated, ProcessUser, ProcessFilePath) : 0
-#define EventWriteNetworkConnectionAccepted_AssumeEnabled(EventTime_, ProcessId, SrcIpAddressIpv4, DestIpAddressIpv4, SrcPort, DestPort, Initiated, ProcessUser, ProcessFilePath) \
-        _mcgen_TEMPLATE_FOR_NetworkConnectionAccepted(&JonMonProvider_Context, &NetworkConnectionAccepted, NULL, EventTime_, ProcessId, SrcIpAddressIpv4, DestIpAddressIpv4, SrcPort, DestPort, Initiated, ProcessUser, ProcessFilePath)
-#define EventWriteNetworkConnectionAccepted_ForContext(pContext, Activity, EventTime_, ProcessId, SrcIpAddressIpv4, DestIpAddressIpv4, SrcPort, DestPort, Initiated, ProcessUser, ProcessFilePath) \
-        MCGEN_EVENT_ENABLED_FORCONTEXT(pContext, NetworkConnectionAccepted) \
-        ? _mcgen_TEMPLATE_FOR_NetworkConnectionAccepted(&(pContext)->Context, &NetworkConnectionAccepted, Activity, EventTime_, ProcessId, SrcIpAddressIpv4, DestIpAddressIpv4, SrcPort, DestPort, Initiated, ProcessUser, ProcessFilePath) : 0
-#define EventWriteNetworkConnectionAccepted_ForContextAssumeEnabled(pContext, EventTime_, ProcessId, SrcIpAddressIpv4, DestIpAddressIpv4, SrcPort, DestPort, Initiated, ProcessUser, ProcessFilePath) \
-        _mcgen_TEMPLATE_FOR_NetworkConnectionAccepted(&_mcgen_CheckContextType_JonMon(pContext)->Context, &NetworkConnectionAccepted, NULL, EventTime_, ProcessId, SrcIpAddressIpv4, DestIpAddressIpv4, SrcPort, DestPort, Initiated, ProcessUser, ProcessFilePath)
-
-// This macro is for use by MC-generated code and should not be used directly.
-#define _mcgen_TEMPLATE_FOR_NetworkConnectionAccepted _mcgen_PASTE2(McTemplateK0mqzzhhzzz_, MCGEN_EVENTWRITETRANSFER)
-
-//
-// Enablement check macro for event "RegistrySaveKey"
-//
-#define EventEnabledRegistrySaveKey() _mcgen_EVENT_BIT_SET(JonMonEnableBits, 0)
-#define EventEnabledRegistrySaveKey_ForContext(pContext) _mcgen_EVENT_BIT_SET(_mcgen_CheckContextType_JonMon(pContext)->EnableBits, 0)
-
-//
-// Event write macros for event "RegistrySaveKey"
-//
-#define EventWriteRegistrySaveKey(Activity, EventTime_, SourceProcessFilePath, SourceProcessId, SourceThreadId, SourceProcessStartKey, RegistryKeyPath, SourceProcessUser, SourceProcessUserLogonId) \
-        MCGEN_EVENT_ENABLED(RegistrySaveKey) \
-        ? _mcgen_TEMPLATE_FOR_RegistrySaveKey(&JonMonProvider_Context, &RegistrySaveKey, Activity, EventTime_, SourceProcessFilePath, SourceProcessId, SourceThreadId, SourceProcessStartKey, RegistryKeyPath, SourceProcessUser, SourceProcessUserLogonId) : 0
-#define EventWriteRegistrySaveKey_AssumeEnabled(EventTime_, SourceProcessFilePath, SourceProcessId, SourceThreadId, SourceProcessStartKey, RegistryKeyPath, SourceProcessUser, SourceProcessUserLogonId) \
-        _mcgen_TEMPLATE_FOR_RegistrySaveKey(&JonMonProvider_Context, &RegistrySaveKey, NULL, EventTime_, SourceProcessFilePath, SourceProcessId, SourceThreadId, SourceProcessStartKey, RegistryKeyPath, SourceProcessUser, SourceProcessUserLogonId)
-#define EventWriteRegistrySaveKey_ForContext(pContext, Activity, EventTime_, SourceProcessFilePath, SourceProcessId, SourceThreadId, SourceProcessStartKey, RegistryKeyPath, SourceProcessUser, SourceProcessUserLogonId) \
-        MCGEN_EVENT_ENABLED_FORCONTEXT(pContext, RegistrySaveKey) \
-        ? _mcgen_TEMPLATE_FOR_RegistrySaveKey(&(pContext)->Context, &RegistrySaveKey, Activity, EventTime_, SourceProcessFilePath, SourceProcessId, SourceThreadId, SourceProcessStartKey, RegistryKeyPath, SourceProcessUser, SourceProcessUserLogonId) : 0
-#define EventWriteRegistrySaveKey_ForContextAssumeEnabled(pContext, EventTime_, SourceProcessFilePath, SourceProcessId, SourceThreadId, SourceProcessStartKey, RegistryKeyPath, SourceProcessUser, SourceProcessUserLogonId) \
-        _mcgen_TEMPLATE_FOR_RegistrySaveKey(&_mcgen_CheckContextType_JonMon(pContext)->Context, &RegistrySaveKey, NULL, EventTime_, SourceProcessFilePath, SourceProcessId, SourceThreadId, SourceProcessStartKey, RegistryKeyPath, SourceProcessUser, SourceProcessUserLogonId)
-
-// This macro is for use by MC-generated code and should not be used directly.
-#define _mcgen_TEMPLATE_FOR_RegistrySaveKey _mcgen_PASTE2(McTemplateK0mzxxxzzq_, MCGEN_EVENTWRITETRANSFER)
-
-//
-// Enablement check macro for event "DotNetLoad"
-//
-#define EventEnabledDotNetLoad() _mcgen_EVENT_BIT_SET(JonMonEnableBits, 0)
-#define EventEnabledDotNetLoad_ForContext(pContext) _mcgen_EVENT_BIT_SET(_mcgen_CheckContextType_JonMon(pContext)->EnableBits, 0)
-
-//
-// Event write macros for event "DotNetLoad"
-//
-#define EventWriteDotNetLoad(Activity, EventTime_, ProcessId, AssemblyName, ProcessUser, ProcessFilePath, ClrInstanceID) \
-        MCGEN_EVENT_ENABLED(DotNetLoad) \
-        ? _mcgen_TEMPLATE_FOR_DotNetLoad(&JonMonProvider_Context, &DotNetLoad, Activity, EventTime_, ProcessId, AssemblyName, ProcessUser, ProcessFilePath, ClrInstanceID) : 0
-#define EventWriteDotNetLoad_AssumeEnabled(EventTime_, ProcessId, AssemblyName, ProcessUser, ProcessFilePath, ClrInstanceID) \
-        _mcgen_TEMPLATE_FOR_DotNetLoad(&JonMonProvider_Context, &DotNetLoad, NULL, EventTime_, ProcessId, AssemblyName, ProcessUser, ProcessFilePath, ClrInstanceID)
-#define EventWriteDotNetLoad_ForContext(pContext, Activity, EventTime_, ProcessId, AssemblyName, ProcessUser, ProcessFilePath, ClrInstanceID) \
-        MCGEN_EVENT_ENABLED_FORCONTEXT(pContext, DotNetLoad) \
-        ? _mcgen_TEMPLATE_FOR_DotNetLoad(&(pContext)->Context, &DotNetLoad, Activity, EventTime_, ProcessId, AssemblyName, ProcessUser, ProcessFilePath, ClrInstanceID) : 0
-#define EventWriteDotNetLoad_ForContextAssumeEnabled(pContext, EventTime_, ProcessId, AssemblyName, ProcessUser, ProcessFilePath, ClrInstanceID) \
-        _mcgen_TEMPLATE_FOR_DotNetLoad(&_mcgen_CheckContextType_JonMon(pContext)->Context, &DotNetLoad, NULL, EventTime_, ProcessId, AssemblyName, ProcessUser, ProcessFilePath, ClrInstanceID)
-
-// This macro is for use by MC-generated code and should not be used directly.
-#define _mcgen_TEMPLATE_FOR_DotNetLoad _mcgen_PASTE2(McTemplateK0mqzzzh_, MCGEN_EVENTWRITETRANSFER)
-
-//
-// Enablement check macro for event "AMSI"
-//
-#define EventEnabledAMSI() _mcgen_EVENT_BIT_SET(JonMonEnableBits, 0)
-#define EventEnabledAMSI_ForContext(pContext) _mcgen_EVENT_BIT_SET(_mcgen_CheckContextType_JonMon(pContext)->EnableBits, 0)
-
-//
-// Event write macros for event "AMSI"
-//
-#define EventWriteAMSI(Activity, EventTime_, ProcessId, AppName, ScanResults, ContentSize) \
-        MCGEN_EVENT_ENABLED(AMSI) \
-        ? _mcgen_TEMPLATE_FOR_AMSI(&JonMonProvider_Context, &AMSI, Activity, EventTime_, ProcessId, AppName, ScanResults, ContentSize) : 0
-#define EventWriteAMSI_AssumeEnabled(EventTime_, ProcessId, AppName, ScanResults, ContentSize) \
-        _mcgen_TEMPLATE_FOR_AMSI(&JonMonProvider_Context, &AMSI, NULL, EventTime_, ProcessId, AppName, ScanResults, ContentSize)
-#define EventWriteAMSI_ForContext(pContext, Activity, EventTime_, ProcessId, AppName, ScanResults, ContentSize) \
-        MCGEN_EVENT_ENABLED_FORCONTEXT(pContext, AMSI) \
-        ? _mcgen_TEMPLATE_FOR_AMSI(&(pContext)->Context, &AMSI, Activity, EventTime_, ProcessId, AppName, ScanResults, ContentSize) : 0
-#define EventWriteAMSI_ForContextAssumeEnabled(pContext, EventTime_, ProcessId, AppName, ScanResults, ContentSize) \
-        _mcgen_TEMPLATE_FOR_AMSI(&_mcgen_CheckContextType_JonMon(pContext)->Context, &AMSI, NULL, EventTime_, ProcessId, AppName, ScanResults, ContentSize)
-
-// This macro is for use by MC-generated code and should not be used directly.
-#define _mcgen_TEMPLATE_FOR_AMSI _mcgen_PASTE2(McTemplateK0mqzqq_, MCGEN_EVENTWRITETRANSFER)
-
-//
-// Enablement check macro for event "ImpersonationAction"
-//
-#define EventEnabledImpersonationAction() _mcgen_EVENT_BIT_SET(JonMonEnableBits, 0)
-#define EventEnabledImpersonationAction_ForContext(pContext) _mcgen_EVENT_BIT_SET(_mcgen_CheckContextType_JonMon(pContext)->EnableBits, 0)
-
-//
-// Event write macros for event "ImpersonationAction"
-//
-#define EventWriteImpersonationAction(Activity, EventTime_, ProcessName, ProcessId, ProcessStartKey, ProcessIntegrityLevel, ProcessUserName, ThreadId, ImpersonationLevel, ImpersonationLevelName, ImpersonatedUserName, ThreadIntegrityLevel, OperationType) \
-        MCGEN_EVENT_ENABLED(ImpersonationAction) \
-        ? _mcgen_TEMPLATE_FOR_ImpersonationAction(&JonMonProvider_Context, &ImpersonationAction, Activity, EventTime_, ProcessName, ProcessId, ProcessStartKey, ProcessIntegrityLevel, ProcessUserName, ThreadId, ImpersonationLevel, ImpersonationLevelName, ImpersonatedUserName, ThreadIntegrityLevel, OperationType) : 0
-#define EventWriteImpersonationAction_AssumeEnabled(EventTime_, ProcessName, ProcessId, ProcessStartKey, ProcessIntegrityLevel, ProcessUserName, ThreadId, ImpersonationLevel, ImpersonationLevelName, ImpersonatedUserName, ThreadIntegrityLevel, OperationType) \
-        _mcgen_TEMPLATE_FOR_ImpersonationAction(&JonMonProvider_Context, &ImpersonationAction, NULL, EventTime_, ProcessName, ProcessId, ProcessStartKey, ProcessIntegrityLevel, ProcessUserName, ThreadId, ImpersonationLevel, ImpersonationLevelName, ImpersonatedUserName, ThreadIntegrityLevel, OperationType)
-#define EventWriteImpersonationAction_ForContext(pContext, Activity, EventTime_, ProcessName, ProcessId, ProcessStartKey, ProcessIntegrityLevel, ProcessUserName, ThreadId, ImpersonationLevel, ImpersonationLevelName, ImpersonatedUserName, ThreadIntegrityLevel, OperationType) \
-        MCGEN_EVENT_ENABLED_FORCONTEXT(pContext, ImpersonationAction) \
-        ? _mcgen_TEMPLATE_FOR_ImpersonationAction(&(pContext)->Context, &ImpersonationAction, Activity, EventTime_, ProcessName, ProcessId, ProcessStartKey, ProcessIntegrityLevel, ProcessUserName, ThreadId, ImpersonationLevel, ImpersonationLevelName, ImpersonatedUserName, ThreadIntegrityLevel, OperationType) : 0
-#define EventWriteImpersonationAction_ForContextAssumeEnabled(pContext, EventTime_, ProcessName, ProcessId, ProcessStartKey, ProcessIntegrityLevel, ProcessUserName, ThreadId, ImpersonationLevel, ImpersonationLevelName, ImpersonatedUserName, ThreadIntegrityLevel, OperationType) \
-        _mcgen_TEMPLATE_FOR_ImpersonationAction(&_mcgen_CheckContextType_JonMon(pContext)->Context, &ImpersonationAction, NULL, EventTime_, ProcessName, ProcessId, ProcessStartKey, ProcessIntegrityLevel, ProcessUserName, ThreadId, ImpersonationLevel, ImpersonationLevelName, ImpersonatedUserName, ThreadIntegrityLevel, OperationType)
-
-// This macro is for use by MC-generated code and should not be used directly.
-#define _mcgen_TEMPLATE_FOR_ImpersonationAction _mcgen_PASTE2(McTemplateK0mzxxzzxdzzzz_, MCGEN_EVENTWRITETRANSFER)
+#define _mcgen_TEMPLATE_FOR_ProcessTerminate _mcgen_PASTE2(McTemplateU0yiizi_, MCGEN_EVENTWRITETRANSFER)
 
 //
 // Enablement check macro for event "RemoteThreadCreation"
@@ -1279,341 +923,571 @@ _mcgen_CheckContextType_JonMon(_In_ McGenContext_JonMon* pContext)
 //
 // Event write macros for event "RemoteThreadCreation"
 //
-#define EventWriteRemoteThreadCreation(Activity, EventTime_, SourceImagePath, SourceProcessId, SourceThreadId, SourceProcessStartKey, SourceUserName, SourceUserLogonId, SourceProcessIntegrityLevel, TargetImagePath, TargetProcessId, TargetProcessStartKey, TargetThreadId, TargetUserName, TargetUserLogonId, TargetProcessIntegrityLevel) \
+#define EventWriteRemoteThreadCreation(EventTime, SourceProcessId, SourceProcessStartKey, SourceThreadId, SourceProcessFilePath, SourceProcessUser, SourceProcessUserLogonId, SourceProcessIntegrityLevel, SourceProcessSessionId, SourceProcessTokenType, TargetProcessFilePath, TargetProcessId, TargetProcessStartKey, TargetThreadId, TargetProcessUser, TargetProcessUserLogonId, TargetProcessUserLinkedLogonId, TargetProcessIntegrityLevel, TargetProcessSessionId) \
         MCGEN_EVENT_ENABLED(RemoteThreadCreation) \
-        ? _mcgen_TEMPLATE_FOR_RemoteThreadCreation(&JonMonProvider_Context, &RemoteThreadCreation, Activity, EventTime_, SourceImagePath, SourceProcessId, SourceThreadId, SourceProcessStartKey, SourceUserName, SourceUserLogonId, SourceProcessIntegrityLevel, TargetImagePath, TargetProcessId, TargetProcessStartKey, TargetThreadId, TargetUserName, TargetUserLogonId, TargetProcessIntegrityLevel) : 0
-#define EventWriteRemoteThreadCreation_AssumeEnabled(EventTime_, SourceImagePath, SourceProcessId, SourceThreadId, SourceProcessStartKey, SourceUserName, SourceUserLogonId, SourceProcessIntegrityLevel, TargetImagePath, TargetProcessId, TargetProcessStartKey, TargetThreadId, TargetUserName, TargetUserLogonId, TargetProcessIntegrityLevel) \
-        _mcgen_TEMPLATE_FOR_RemoteThreadCreation(&JonMonProvider_Context, &RemoteThreadCreation, NULL, EventTime_, SourceImagePath, SourceProcessId, SourceThreadId, SourceProcessStartKey, SourceUserName, SourceUserLogonId, SourceProcessIntegrityLevel, TargetImagePath, TargetProcessId, TargetProcessStartKey, TargetThreadId, TargetUserName, TargetUserLogonId, TargetProcessIntegrityLevel)
-#define EventWriteRemoteThreadCreation_ForContext(pContext, Activity, EventTime_, SourceImagePath, SourceProcessId, SourceThreadId, SourceProcessStartKey, SourceUserName, SourceUserLogonId, SourceProcessIntegrityLevel, TargetImagePath, TargetProcessId, TargetProcessStartKey, TargetThreadId, TargetUserName, TargetUserLogonId, TargetProcessIntegrityLevel) \
+        ? _mcgen_TEMPLATE_FOR_RemoteThreadCreation(&JonMonProvider_Context, &RemoteThreadCreation, EventTime, SourceProcessId, SourceProcessStartKey, SourceThreadId, SourceProcessFilePath, SourceProcessUser, SourceProcessUserLogonId, SourceProcessIntegrityLevel, SourceProcessSessionId, SourceProcessTokenType, TargetProcessFilePath, TargetProcessId, TargetProcessStartKey, TargetThreadId, TargetProcessUser, TargetProcessUserLogonId, TargetProcessUserLinkedLogonId, TargetProcessIntegrityLevel, TargetProcessSessionId) : 0
+#define EventWriteRemoteThreadCreation_AssumeEnabled(EventTime, SourceProcessId, SourceProcessStartKey, SourceThreadId, SourceProcessFilePath, SourceProcessUser, SourceProcessUserLogonId, SourceProcessIntegrityLevel, SourceProcessSessionId, SourceProcessTokenType, TargetProcessFilePath, TargetProcessId, TargetProcessStartKey, TargetThreadId, TargetProcessUser, TargetProcessUserLogonId, TargetProcessUserLinkedLogonId, TargetProcessIntegrityLevel, TargetProcessSessionId) \
+        _mcgen_TEMPLATE_FOR_RemoteThreadCreation(&JonMonProvider_Context, &RemoteThreadCreation, EventTime, SourceProcessId, SourceProcessStartKey, SourceThreadId, SourceProcessFilePath, SourceProcessUser, SourceProcessUserLogonId, SourceProcessIntegrityLevel, SourceProcessSessionId, SourceProcessTokenType, TargetProcessFilePath, TargetProcessId, TargetProcessStartKey, TargetThreadId, TargetProcessUser, TargetProcessUserLogonId, TargetProcessUserLinkedLogonId, TargetProcessIntegrityLevel, TargetProcessSessionId)
+#define EventWriteRemoteThreadCreation_ForContext(pContext, EventTime, SourceProcessId, SourceProcessStartKey, SourceThreadId, SourceProcessFilePath, SourceProcessUser, SourceProcessUserLogonId, SourceProcessIntegrityLevel, SourceProcessSessionId, SourceProcessTokenType, TargetProcessFilePath, TargetProcessId, TargetProcessStartKey, TargetThreadId, TargetProcessUser, TargetProcessUserLogonId, TargetProcessUserLinkedLogonId, TargetProcessIntegrityLevel, TargetProcessSessionId) \
         MCGEN_EVENT_ENABLED_FORCONTEXT(pContext, RemoteThreadCreation) \
-        ? _mcgen_TEMPLATE_FOR_RemoteThreadCreation(&(pContext)->Context, &RemoteThreadCreation, Activity, EventTime_, SourceImagePath, SourceProcessId, SourceThreadId, SourceProcessStartKey, SourceUserName, SourceUserLogonId, SourceProcessIntegrityLevel, TargetImagePath, TargetProcessId, TargetProcessStartKey, TargetThreadId, TargetUserName, TargetUserLogonId, TargetProcessIntegrityLevel) : 0
-#define EventWriteRemoteThreadCreation_ForContextAssumeEnabled(pContext, EventTime_, SourceImagePath, SourceProcessId, SourceThreadId, SourceProcessStartKey, SourceUserName, SourceUserLogonId, SourceProcessIntegrityLevel, TargetImagePath, TargetProcessId, TargetProcessStartKey, TargetThreadId, TargetUserName, TargetUserLogonId, TargetProcessIntegrityLevel) \
-        _mcgen_TEMPLATE_FOR_RemoteThreadCreation(&_mcgen_CheckContextType_JonMon(pContext)->Context, &RemoteThreadCreation, NULL, EventTime_, SourceImagePath, SourceProcessId, SourceThreadId, SourceProcessStartKey, SourceUserName, SourceUserLogonId, SourceProcessIntegrityLevel, TargetImagePath, TargetProcessId, TargetProcessStartKey, TargetThreadId, TargetUserName, TargetUserLogonId, TargetProcessIntegrityLevel)
+        ? _mcgen_TEMPLATE_FOR_RemoteThreadCreation(&(pContext)->Context, &RemoteThreadCreation, EventTime, SourceProcessId, SourceProcessStartKey, SourceThreadId, SourceProcessFilePath, SourceProcessUser, SourceProcessUserLogonId, SourceProcessIntegrityLevel, SourceProcessSessionId, SourceProcessTokenType, TargetProcessFilePath, TargetProcessId, TargetProcessStartKey, TargetThreadId, TargetProcessUser, TargetProcessUserLogonId, TargetProcessUserLinkedLogonId, TargetProcessIntegrityLevel, TargetProcessSessionId) : 0
+#define EventWriteRemoteThreadCreation_ForContextAssumeEnabled(pContext, EventTime, SourceProcessId, SourceProcessStartKey, SourceThreadId, SourceProcessFilePath, SourceProcessUser, SourceProcessUserLogonId, SourceProcessIntegrityLevel, SourceProcessSessionId, SourceProcessTokenType, TargetProcessFilePath, TargetProcessId, TargetProcessStartKey, TargetThreadId, TargetProcessUser, TargetProcessUserLogonId, TargetProcessUserLinkedLogonId, TargetProcessIntegrityLevel, TargetProcessSessionId) \
+        _mcgen_TEMPLATE_FOR_RemoteThreadCreation(&_mcgen_CheckContextType_JonMon(pContext)->Context, &RemoteThreadCreation, EventTime, SourceProcessId, SourceProcessStartKey, SourceThreadId, SourceProcessFilePath, SourceProcessUser, SourceProcessUserLogonId, SourceProcessIntegrityLevel, SourceProcessSessionId, SourceProcessTokenType, TargetProcessFilePath, TargetProcessId, TargetProcessStartKey, TargetThreadId, TargetProcessUser, TargetProcessUserLogonId, TargetProcessUserLinkedLogonId, TargetProcessIntegrityLevel, TargetProcessSessionId)
 
 // This macro is for use by MC-generated code and should not be used directly.
-#define _mcgen_TEMPLATE_FOR_RemoteThreadCreation _mcgen_PASTE2(McTemplateK0mzxxxzqzzxxxzqz_, MCGEN_EVENTWRITETRANSFER)
+#define _mcgen_TEMPLATE_FOR_RemoteThreadCreation _mcgen_PASTE2(McTemplateU0yiiizzqzqqziiizqqzq_, MCGEN_EVENTWRITETRANSFER)
 
 //
-// Enablement check macro for event "SchedTaskCreation"
+// Enablement check macro for event "ImageLoaded"
 //
-#define EventEnabledSchedTaskCreation() _mcgen_EVENT_BIT_SET(JonMonEnableBits, 0)
-#define EventEnabledSchedTaskCreation_ForContext(pContext) _mcgen_EVENT_BIT_SET(_mcgen_CheckContextType_JonMon(pContext)->EnableBits, 0)
+#define EventEnabledImageLoaded() _mcgen_EVENT_BIT_SET(JonMonEnableBits, 0)
+#define EventEnabledImageLoaded_ForContext(pContext) _mcgen_EVENT_BIT_SET(_mcgen_CheckContextType_JonMon(pContext)->EnableBits, 0)
 
 //
-// Event write macros for event "SchedTaskCreation"
+// Event write macros for event "ImageLoaded"
 //
-#define EventWriteSchedTaskCreation(Activity, EventTime_, TaskName, UserName, SourceProcessId) \
-        MCGEN_EVENT_ENABLED(SchedTaskCreation) \
-        ? _mcgen_TEMPLATE_FOR_SchedTaskCreation(&JonMonProvider_Context, &SchedTaskCreation, Activity, EventTime_, TaskName, UserName, SourceProcessId) : 0
-#define EventWriteSchedTaskCreation_AssumeEnabled(EventTime_, TaskName, UserName, SourceProcessId) \
-        _mcgen_TEMPLATE_FOR_SchedTaskCreation(&JonMonProvider_Context, &SchedTaskCreation, NULL, EventTime_, TaskName, UserName, SourceProcessId)
-#define EventWriteSchedTaskCreation_ForContext(pContext, Activity, EventTime_, TaskName, UserName, SourceProcessId) \
-        MCGEN_EVENT_ENABLED_FORCONTEXT(pContext, SchedTaskCreation) \
-        ? _mcgen_TEMPLATE_FOR_SchedTaskCreation(&(pContext)->Context, &SchedTaskCreation, Activity, EventTime_, TaskName, UserName, SourceProcessId) : 0
-#define EventWriteSchedTaskCreation_ForContextAssumeEnabled(pContext, EventTime_, TaskName, UserName, SourceProcessId) \
-        _mcgen_TEMPLATE_FOR_SchedTaskCreation(&_mcgen_CheckContextType_JonMon(pContext)->Context, &SchedTaskCreation, NULL, EventTime_, TaskName, UserName, SourceProcessId)
-
-// This macro is for use by MC-generated code and should not be used directly.
-#define _mcgen_TEMPLATE_FOR_SchedTaskCreation _mcgen_PASTE2(McTemplateK0mzzq_, MCGEN_EVENTWRITETRANSFER)
-
-//
-// Enablement check macro for event "SchedTaskStarted"
-//
-#define EventEnabledSchedTaskStarted() _mcgen_EVENT_BIT_SET(JonMonEnableBits, 0)
-#define EventEnabledSchedTaskStarted_ForContext(pContext) _mcgen_EVENT_BIT_SET(_mcgen_CheckContextType_JonMon(pContext)->EnableBits, 0)
-
-//
-// Event write macros for event "SchedTaskStarted"
-//
-#define EventWriteSchedTaskStarted(Activity, EventTime_, TaskName, ImagePath, SourceProcessId) \
-        MCGEN_EVENT_ENABLED(SchedTaskStarted) \
-        ? _mcgen_TEMPLATE_FOR_SchedTaskStarted(&JonMonProvider_Context, &SchedTaskStarted, Activity, EventTime_, TaskName, ImagePath, SourceProcessId) : 0
-#define EventWriteSchedTaskStarted_AssumeEnabled(EventTime_, TaskName, ImagePath, SourceProcessId) \
-        _mcgen_TEMPLATE_FOR_SchedTaskStarted(&JonMonProvider_Context, &SchedTaskStarted, NULL, EventTime_, TaskName, ImagePath, SourceProcessId)
-#define EventWriteSchedTaskStarted_ForContext(pContext, Activity, EventTime_, TaskName, ImagePath, SourceProcessId) \
-        MCGEN_EVENT_ENABLED_FORCONTEXT(pContext, SchedTaskStarted) \
-        ? _mcgen_TEMPLATE_FOR_SchedTaskStarted(&(pContext)->Context, &SchedTaskStarted, Activity, EventTime_, TaskName, ImagePath, SourceProcessId) : 0
-#define EventWriteSchedTaskStarted_ForContextAssumeEnabled(pContext, EventTime_, TaskName, ImagePath, SourceProcessId) \
-        _mcgen_TEMPLATE_FOR_SchedTaskStarted(&_mcgen_CheckContextType_JonMon(pContext)->Context, &SchedTaskStarted, NULL, EventTime_, TaskName, ImagePath, SourceProcessId)
+#define EventWriteImageLoaded(EventTime, ProcessFilePath, ProcessId, ProcessThreadId, ProcessStartKey, ProcessUser, ProcessUserLogonId, ProcessUserLinkedLogonId, ProcessIntegrityLevel, ProcessSessionId, ProcessTokenType, ModulePath, SystemModeImage) \
+        MCGEN_EVENT_ENABLED(ImageLoaded) \
+        ? _mcgen_TEMPLATE_FOR_ImageLoaded(&JonMonProvider_Context, &ImageLoaded, EventTime, ProcessFilePath, ProcessId, ProcessThreadId, ProcessStartKey, ProcessUser, ProcessUserLogonId, ProcessUserLinkedLogonId, ProcessIntegrityLevel, ProcessSessionId, ProcessTokenType, ModulePath, SystemModeImage) : 0
+#define EventWriteImageLoaded_AssumeEnabled(EventTime, ProcessFilePath, ProcessId, ProcessThreadId, ProcessStartKey, ProcessUser, ProcessUserLogonId, ProcessUserLinkedLogonId, ProcessIntegrityLevel, ProcessSessionId, ProcessTokenType, ModulePath, SystemModeImage) \
+        _mcgen_TEMPLATE_FOR_ImageLoaded(&JonMonProvider_Context, &ImageLoaded, EventTime, ProcessFilePath, ProcessId, ProcessThreadId, ProcessStartKey, ProcessUser, ProcessUserLogonId, ProcessUserLinkedLogonId, ProcessIntegrityLevel, ProcessSessionId, ProcessTokenType, ModulePath, SystemModeImage)
+#define EventWriteImageLoaded_ForContext(pContext, EventTime, ProcessFilePath, ProcessId, ProcessThreadId, ProcessStartKey, ProcessUser, ProcessUserLogonId, ProcessUserLinkedLogonId, ProcessIntegrityLevel, ProcessSessionId, ProcessTokenType, ModulePath, SystemModeImage) \
+        MCGEN_EVENT_ENABLED_FORCONTEXT(pContext, ImageLoaded) \
+        ? _mcgen_TEMPLATE_FOR_ImageLoaded(&(pContext)->Context, &ImageLoaded, EventTime, ProcessFilePath, ProcessId, ProcessThreadId, ProcessStartKey, ProcessUser, ProcessUserLogonId, ProcessUserLinkedLogonId, ProcessIntegrityLevel, ProcessSessionId, ProcessTokenType, ModulePath, SystemModeImage) : 0
+#define EventWriteImageLoaded_ForContextAssumeEnabled(pContext, EventTime, ProcessFilePath, ProcessId, ProcessThreadId, ProcessStartKey, ProcessUser, ProcessUserLogonId, ProcessUserLinkedLogonId, ProcessIntegrityLevel, ProcessSessionId, ProcessTokenType, ModulePath, SystemModeImage) \
+        _mcgen_TEMPLATE_FOR_ImageLoaded(&_mcgen_CheckContextType_JonMon(pContext)->Context, &ImageLoaded, EventTime, ProcessFilePath, ProcessId, ProcessThreadId, ProcessStartKey, ProcessUser, ProcessUserLogonId, ProcessUserLinkedLogonId, ProcessIntegrityLevel, ProcessSessionId, ProcessTokenType, ModulePath, SystemModeImage)
 
 // This macro is for use by MC-generated code and should not be used directly.
-#define _mcgen_TEMPLATE_FOR_SchedTaskStarted _mcgen_PASTE2(McTemplateK0mzzq_, MCGEN_EVENTWRITETRANSFER)
+#define _mcgen_TEMPLATE_FOR_ImageLoaded _mcgen_PASTE2(McTemplateU0yziiizqqzqqzi_, MCGEN_EVENTWRITETRANSFER)
 
 //
-// Enablement check macro for event "FileCreate"
+// Enablement check macro for event "ProcessAccess"
 //
-#define EventEnabledFileCreate() _mcgen_EVENT_BIT_SET(JonMonEnableBits, 0)
-#define EventEnabledFileCreate_ForContext(pContext) _mcgen_EVENT_BIT_SET(_mcgen_CheckContextType_JonMon(pContext)->EnableBits, 0)
+#define EventEnabledProcessAccess() _mcgen_EVENT_BIT_SET(JonMonEnableBits, 0)
+#define EventEnabledProcessAccess_ForContext(pContext) _mcgen_EVENT_BIT_SET(_mcgen_CheckContextType_JonMon(pContext)->EnableBits, 0)
 
 //
-// Event write macros for event "FileCreate"
+// Event write macros for event "ProcessAccess"
 //
-#define EventWriteFileCreate(Activity, EventTime_, SourceImagePath, SourceProcessId, SourceProcessStartKey, SourceThreadId, SourceUserName, SourceUserLogonId, SourceProcessIntegrityLevel, TargetFile) \
-        MCGEN_EVENT_ENABLED(FileCreate) \
-        ? _mcgen_TEMPLATE_FOR_FileCreate(&JonMonProvider_Context, &FileCreate, Activity, EventTime_, SourceImagePath, SourceProcessId, SourceProcessStartKey, SourceThreadId, SourceUserName, SourceUserLogonId, SourceProcessIntegrityLevel, TargetFile) : 0
-#define EventWriteFileCreate_AssumeEnabled(EventTime_, SourceImagePath, SourceProcessId, SourceProcessStartKey, SourceThreadId, SourceUserName, SourceUserLogonId, SourceProcessIntegrityLevel, TargetFile) \
-        _mcgen_TEMPLATE_FOR_FileCreate(&JonMonProvider_Context, &FileCreate, NULL, EventTime_, SourceImagePath, SourceProcessId, SourceProcessStartKey, SourceThreadId, SourceUserName, SourceUserLogonId, SourceProcessIntegrityLevel, TargetFile)
-#define EventWriteFileCreate_ForContext(pContext, Activity, EventTime_, SourceImagePath, SourceProcessId, SourceProcessStartKey, SourceThreadId, SourceUserName, SourceUserLogonId, SourceProcessIntegrityLevel, TargetFile) \
-        MCGEN_EVENT_ENABLED_FORCONTEXT(pContext, FileCreate) \
-        ? _mcgen_TEMPLATE_FOR_FileCreate(&(pContext)->Context, &FileCreate, Activity, EventTime_, SourceImagePath, SourceProcessId, SourceProcessStartKey, SourceThreadId, SourceUserName, SourceUserLogonId, SourceProcessIntegrityLevel, TargetFile) : 0
-#define EventWriteFileCreate_ForContextAssumeEnabled(pContext, EventTime_, SourceImagePath, SourceProcessId, SourceProcessStartKey, SourceThreadId, SourceUserName, SourceUserLogonId, SourceProcessIntegrityLevel, TargetFile) \
-        _mcgen_TEMPLATE_FOR_FileCreate(&_mcgen_CheckContextType_JonMon(pContext)->Context, &FileCreate, NULL, EventTime_, SourceImagePath, SourceProcessId, SourceProcessStartKey, SourceThreadId, SourceUserName, SourceUserLogonId, SourceProcessIntegrityLevel, TargetFile)
-
-// This macro is for use by MC-generated code and should not be used directly.
-#define _mcgen_TEMPLATE_FOR_FileCreate _mcgen_PASTE2(McTemplateK0mzxxxzqzz_, MCGEN_EVENTWRITETRANSFER)
-
-//
-// Enablement check macro for event "FileDelete"
-//
-#define EventEnabledFileDelete() _mcgen_EVENT_BIT_SET(JonMonEnableBits, 0)
-#define EventEnabledFileDelete_ForContext(pContext) _mcgen_EVENT_BIT_SET(_mcgen_CheckContextType_JonMon(pContext)->EnableBits, 0)
-
-//
-// Event write macros for event "FileDelete"
-//
-#define EventWriteFileDelete(Activity, EventTime_, SourceImagePath, SourceProcessId, SourceProcessStartKey, SourceThreadId, SourceUserName, SourceUserLogonId, SourceProcessIntegrityLevel, TargetFile) \
-        MCGEN_EVENT_ENABLED(FileDelete) \
-        ? _mcgen_TEMPLATE_FOR_FileDelete(&JonMonProvider_Context, &FileDelete, Activity, EventTime_, SourceImagePath, SourceProcessId, SourceProcessStartKey, SourceThreadId, SourceUserName, SourceUserLogonId, SourceProcessIntegrityLevel, TargetFile) : 0
-#define EventWriteFileDelete_AssumeEnabled(EventTime_, SourceImagePath, SourceProcessId, SourceProcessStartKey, SourceThreadId, SourceUserName, SourceUserLogonId, SourceProcessIntegrityLevel, TargetFile) \
-        _mcgen_TEMPLATE_FOR_FileDelete(&JonMonProvider_Context, &FileDelete, NULL, EventTime_, SourceImagePath, SourceProcessId, SourceProcessStartKey, SourceThreadId, SourceUserName, SourceUserLogonId, SourceProcessIntegrityLevel, TargetFile)
-#define EventWriteFileDelete_ForContext(pContext, Activity, EventTime_, SourceImagePath, SourceProcessId, SourceProcessStartKey, SourceThreadId, SourceUserName, SourceUserLogonId, SourceProcessIntegrityLevel, TargetFile) \
-        MCGEN_EVENT_ENABLED_FORCONTEXT(pContext, FileDelete) \
-        ? _mcgen_TEMPLATE_FOR_FileDelete(&(pContext)->Context, &FileDelete, Activity, EventTime_, SourceImagePath, SourceProcessId, SourceProcessStartKey, SourceThreadId, SourceUserName, SourceUserLogonId, SourceProcessIntegrityLevel, TargetFile) : 0
-#define EventWriteFileDelete_ForContextAssumeEnabled(pContext, EventTime_, SourceImagePath, SourceProcessId, SourceProcessStartKey, SourceThreadId, SourceUserName, SourceUserLogonId, SourceProcessIntegrityLevel, TargetFile) \
-        _mcgen_TEMPLATE_FOR_FileDelete(&_mcgen_CheckContextType_JonMon(pContext)->Context, &FileDelete, NULL, EventTime_, SourceImagePath, SourceProcessId, SourceProcessStartKey, SourceThreadId, SourceUserName, SourceUserLogonId, SourceProcessIntegrityLevel, TargetFile)
+#define EventWriteProcessAccess(EventTime, SourceProcessId, SourceThreadId, SourceProcessStartKey, SourceProcessFilePath, SourceProcessUser, SourceProcessUserLogonId, SourceProcessIntegrityLevel, SourceProcessSessionId, SourceProcessTokenType, ProcessId, ProcessStartKey, ProcessFilePath, ProcessUser, ProcessUserLogonId, ProcessUserLinkedLogonId, ProcessIntegrityLevel, ProcessSessionId, ProcessTokenType, DesiredAccess, OperationType) \
+        MCGEN_EVENT_ENABLED(ProcessAccess) \
+        ? _mcgen_TEMPLATE_FOR_ProcessAccess(&JonMonProvider_Context, &ProcessAccess, EventTime, SourceProcessId, SourceThreadId, SourceProcessStartKey, SourceProcessFilePath, SourceProcessUser, SourceProcessUserLogonId, SourceProcessIntegrityLevel, SourceProcessSessionId, SourceProcessTokenType, ProcessId, ProcessStartKey, ProcessFilePath, ProcessUser, ProcessUserLogonId, ProcessUserLinkedLogonId, ProcessIntegrityLevel, ProcessSessionId, ProcessTokenType, DesiredAccess, OperationType) : 0
+#define EventWriteProcessAccess_AssumeEnabled(EventTime, SourceProcessId, SourceThreadId, SourceProcessStartKey, SourceProcessFilePath, SourceProcessUser, SourceProcessUserLogonId, SourceProcessIntegrityLevel, SourceProcessSessionId, SourceProcessTokenType, ProcessId, ProcessStartKey, ProcessFilePath, ProcessUser, ProcessUserLogonId, ProcessUserLinkedLogonId, ProcessIntegrityLevel, ProcessSessionId, ProcessTokenType, DesiredAccess, OperationType) \
+        _mcgen_TEMPLATE_FOR_ProcessAccess(&JonMonProvider_Context, &ProcessAccess, EventTime, SourceProcessId, SourceThreadId, SourceProcessStartKey, SourceProcessFilePath, SourceProcessUser, SourceProcessUserLogonId, SourceProcessIntegrityLevel, SourceProcessSessionId, SourceProcessTokenType, ProcessId, ProcessStartKey, ProcessFilePath, ProcessUser, ProcessUserLogonId, ProcessUserLinkedLogonId, ProcessIntegrityLevel, ProcessSessionId, ProcessTokenType, DesiredAccess, OperationType)
+#define EventWriteProcessAccess_ForContext(pContext, EventTime, SourceProcessId, SourceThreadId, SourceProcessStartKey, SourceProcessFilePath, SourceProcessUser, SourceProcessUserLogonId, SourceProcessIntegrityLevel, SourceProcessSessionId, SourceProcessTokenType, ProcessId, ProcessStartKey, ProcessFilePath, ProcessUser, ProcessUserLogonId, ProcessUserLinkedLogonId, ProcessIntegrityLevel, ProcessSessionId, ProcessTokenType, DesiredAccess, OperationType) \
+        MCGEN_EVENT_ENABLED_FORCONTEXT(pContext, ProcessAccess) \
+        ? _mcgen_TEMPLATE_FOR_ProcessAccess(&(pContext)->Context, &ProcessAccess, EventTime, SourceProcessId, SourceThreadId, SourceProcessStartKey, SourceProcessFilePath, SourceProcessUser, SourceProcessUserLogonId, SourceProcessIntegrityLevel, SourceProcessSessionId, SourceProcessTokenType, ProcessId, ProcessStartKey, ProcessFilePath, ProcessUser, ProcessUserLogonId, ProcessUserLinkedLogonId, ProcessIntegrityLevel, ProcessSessionId, ProcessTokenType, DesiredAccess, OperationType) : 0
+#define EventWriteProcessAccess_ForContextAssumeEnabled(pContext, EventTime, SourceProcessId, SourceThreadId, SourceProcessStartKey, SourceProcessFilePath, SourceProcessUser, SourceProcessUserLogonId, SourceProcessIntegrityLevel, SourceProcessSessionId, SourceProcessTokenType, ProcessId, ProcessStartKey, ProcessFilePath, ProcessUser, ProcessUserLogonId, ProcessUserLinkedLogonId, ProcessIntegrityLevel, ProcessSessionId, ProcessTokenType, DesiredAccess, OperationType) \
+        _mcgen_TEMPLATE_FOR_ProcessAccess(&_mcgen_CheckContextType_JonMon(pContext)->Context, &ProcessAccess, EventTime, SourceProcessId, SourceThreadId, SourceProcessStartKey, SourceProcessFilePath, SourceProcessUser, SourceProcessUserLogonId, SourceProcessIntegrityLevel, SourceProcessSessionId, SourceProcessTokenType, ProcessId, ProcessStartKey, ProcessFilePath, ProcessUser, ProcessUserLogonId, ProcessUserLinkedLogonId, ProcessIntegrityLevel, ProcessSessionId, ProcessTokenType, DesiredAccess, OperationType)
 
 // This macro is for use by MC-generated code and should not be used directly.
-#define _mcgen_TEMPLATE_FOR_FileDelete _mcgen_PASTE2(McTemplateK0mzxxxzqzz_, MCGEN_EVENTWRITETRANSFER)
+#define _mcgen_TEMPLATE_FOR_ProcessAccess _mcgen_PASTE2(McTemplateU0yiiizzqzqqiizzqqzqqdd_, MCGEN_EVENTWRITETRANSFER)
 
 //
-// Enablement check macro for event "NamedPipeCreate"
+// Enablement check macro for event "RegistrySaveKey"
 //
-#define EventEnabledNamedPipeCreate() _mcgen_EVENT_BIT_SET(JonMonEnableBits, 0)
-#define EventEnabledNamedPipeCreate_ForContext(pContext) _mcgen_EVENT_BIT_SET(_mcgen_CheckContextType_JonMon(pContext)->EnableBits, 0)
+#define EventEnabledRegistrySaveKey() _mcgen_EVENT_BIT_SET(JonMonEnableBits, 0)
+#define EventEnabledRegistrySaveKey_ForContext(pContext) _mcgen_EVENT_BIT_SET(_mcgen_CheckContextType_JonMon(pContext)->EnableBits, 0)
 
 //
-// Event write macros for event "NamedPipeCreate"
+// Event write macros for event "RegistrySaveKey"
 //
-#define EventWriteNamedPipeCreate(Activity, EventTime_, SourceImagePath, SourceProcessId, SourceProcessStartKey, SourceThreadId, SourceUserName, SourceUserLogonId, SourceProcessIntegrityLevel, PipeName, RemoteCreation, PipeCreationAccess) \
-        MCGEN_EVENT_ENABLED(NamedPipeCreate) \
-        ? _mcgen_TEMPLATE_FOR_NamedPipeCreate(&JonMonProvider_Context, &NamedPipeCreate, Activity, EventTime_, SourceImagePath, SourceProcessId, SourceProcessStartKey, SourceThreadId, SourceUserName, SourceUserLogonId, SourceProcessIntegrityLevel, PipeName, RemoteCreation, PipeCreationAccess) : 0
-#define EventWriteNamedPipeCreate_AssumeEnabled(EventTime_, SourceImagePath, SourceProcessId, SourceProcessStartKey, SourceThreadId, SourceUserName, SourceUserLogonId, SourceProcessIntegrityLevel, PipeName, RemoteCreation, PipeCreationAccess) \
-        _mcgen_TEMPLATE_FOR_NamedPipeCreate(&JonMonProvider_Context, &NamedPipeCreate, NULL, EventTime_, SourceImagePath, SourceProcessId, SourceProcessStartKey, SourceThreadId, SourceUserName, SourceUserLogonId, SourceProcessIntegrityLevel, PipeName, RemoteCreation, PipeCreationAccess)
-#define EventWriteNamedPipeCreate_ForContext(pContext, Activity, EventTime_, SourceImagePath, SourceProcessId, SourceProcessStartKey, SourceThreadId, SourceUserName, SourceUserLogonId, SourceProcessIntegrityLevel, PipeName, RemoteCreation, PipeCreationAccess) \
-        MCGEN_EVENT_ENABLED_FORCONTEXT(pContext, NamedPipeCreate) \
-        ? _mcgen_TEMPLATE_FOR_NamedPipeCreate(&(pContext)->Context, &NamedPipeCreate, Activity, EventTime_, SourceImagePath, SourceProcessId, SourceProcessStartKey, SourceThreadId, SourceUserName, SourceUserLogonId, SourceProcessIntegrityLevel, PipeName, RemoteCreation, PipeCreationAccess) : 0
-#define EventWriteNamedPipeCreate_ForContextAssumeEnabled(pContext, EventTime_, SourceImagePath, SourceProcessId, SourceProcessStartKey, SourceThreadId, SourceUserName, SourceUserLogonId, SourceProcessIntegrityLevel, PipeName, RemoteCreation, PipeCreationAccess) \
-        _mcgen_TEMPLATE_FOR_NamedPipeCreate(&_mcgen_CheckContextType_JonMon(pContext)->Context, &NamedPipeCreate, NULL, EventTime_, SourceImagePath, SourceProcessId, SourceProcessStartKey, SourceThreadId, SourceUserName, SourceUserLogonId, SourceProcessIntegrityLevel, PipeName, RemoteCreation, PipeCreationAccess)
-
-// This macro is for use by MC-generated code and should not be used directly.
-#define _mcgen_TEMPLATE_FOR_NamedPipeCreate _mcgen_PASTE2(McTemplateK0mzxxxzqzztd_, MCGEN_EVENTWRITETRANSFER)
-
-//
-// Enablement check macro for event "NamedPipeOpen"
-//
-#define EventEnabledNamedPipeOpen() _mcgen_EVENT_BIT_SET(JonMonEnableBits, 0)
-#define EventEnabledNamedPipeOpen_ForContext(pContext) _mcgen_EVENT_BIT_SET(_mcgen_CheckContextType_JonMon(pContext)->EnableBits, 0)
-
-//
-// Event write macros for event "NamedPipeOpen"
-//
-#define EventWriteNamedPipeOpen(Activity, EventTime_, SourceImagePath, SourceProcessId, SourceProcessStartKey, SourceThreadId, SourceUserName, SourceUserLogonId, SourceProcessIntegrityLevel, PipeName, PipeRequestedAccess, PipeGrantedAccess) \
-        MCGEN_EVENT_ENABLED(NamedPipeOpen) \
-        ? _mcgen_TEMPLATE_FOR_NamedPipeOpen(&JonMonProvider_Context, &NamedPipeOpen, Activity, EventTime_, SourceImagePath, SourceProcessId, SourceProcessStartKey, SourceThreadId, SourceUserName, SourceUserLogonId, SourceProcessIntegrityLevel, PipeName, PipeRequestedAccess, PipeGrantedAccess) : 0
-#define EventWriteNamedPipeOpen_AssumeEnabled(EventTime_, SourceImagePath, SourceProcessId, SourceProcessStartKey, SourceThreadId, SourceUserName, SourceUserLogonId, SourceProcessIntegrityLevel, PipeName, PipeRequestedAccess, PipeGrantedAccess) \
-        _mcgen_TEMPLATE_FOR_NamedPipeOpen(&JonMonProvider_Context, &NamedPipeOpen, NULL, EventTime_, SourceImagePath, SourceProcessId, SourceProcessStartKey, SourceThreadId, SourceUserName, SourceUserLogonId, SourceProcessIntegrityLevel, PipeName, PipeRequestedAccess, PipeGrantedAccess)
-#define EventWriteNamedPipeOpen_ForContext(pContext, Activity, EventTime_, SourceImagePath, SourceProcessId, SourceProcessStartKey, SourceThreadId, SourceUserName, SourceUserLogonId, SourceProcessIntegrityLevel, PipeName, PipeRequestedAccess, PipeGrantedAccess) \
-        MCGEN_EVENT_ENABLED_FORCONTEXT(pContext, NamedPipeOpen) \
-        ? _mcgen_TEMPLATE_FOR_NamedPipeOpen(&(pContext)->Context, &NamedPipeOpen, Activity, EventTime_, SourceImagePath, SourceProcessId, SourceProcessStartKey, SourceThreadId, SourceUserName, SourceUserLogonId, SourceProcessIntegrityLevel, PipeName, PipeRequestedAccess, PipeGrantedAccess) : 0
-#define EventWriteNamedPipeOpen_ForContextAssumeEnabled(pContext, EventTime_, SourceImagePath, SourceProcessId, SourceProcessStartKey, SourceThreadId, SourceUserName, SourceUserLogonId, SourceProcessIntegrityLevel, PipeName, PipeRequestedAccess, PipeGrantedAccess) \
-        _mcgen_TEMPLATE_FOR_NamedPipeOpen(&_mcgen_CheckContextType_JonMon(pContext)->Context, &NamedPipeOpen, NULL, EventTime_, SourceImagePath, SourceProcessId, SourceProcessStartKey, SourceThreadId, SourceUserName, SourceUserLogonId, SourceProcessIntegrityLevel, PipeName, PipeRequestedAccess, PipeGrantedAccess)
+#define EventWriteRegistrySaveKey(EventTime, ProcessFilePath, ProcessId, ProcessThreadId, ProcessStartKey, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, RegKeyPath) \
+        MCGEN_EVENT_ENABLED(RegistrySaveKey) \
+        ? _mcgen_TEMPLATE_FOR_RegistrySaveKey(&JonMonProvider_Context, &RegistrySaveKey, EventTime, ProcessFilePath, ProcessId, ProcessThreadId, ProcessStartKey, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, RegKeyPath) : 0
+#define EventWriteRegistrySaveKey_AssumeEnabled(EventTime, ProcessFilePath, ProcessId, ProcessThreadId, ProcessStartKey, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, RegKeyPath) \
+        _mcgen_TEMPLATE_FOR_RegistrySaveKey(&JonMonProvider_Context, &RegistrySaveKey, EventTime, ProcessFilePath, ProcessId, ProcessThreadId, ProcessStartKey, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, RegKeyPath)
+#define EventWriteRegistrySaveKey_ForContext(pContext, EventTime, ProcessFilePath, ProcessId, ProcessThreadId, ProcessStartKey, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, RegKeyPath) \
+        MCGEN_EVENT_ENABLED_FORCONTEXT(pContext, RegistrySaveKey) \
+        ? _mcgen_TEMPLATE_FOR_RegistrySaveKey(&(pContext)->Context, &RegistrySaveKey, EventTime, ProcessFilePath, ProcessId, ProcessThreadId, ProcessStartKey, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, RegKeyPath) : 0
+#define EventWriteRegistrySaveKey_ForContextAssumeEnabled(pContext, EventTime, ProcessFilePath, ProcessId, ProcessThreadId, ProcessStartKey, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, RegKeyPath) \
+        _mcgen_TEMPLATE_FOR_RegistrySaveKey(&_mcgen_CheckContextType_JonMon(pContext)->Context, &RegistrySaveKey, EventTime, ProcessFilePath, ProcessId, ProcessThreadId, ProcessStartKey, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, RegKeyPath)
 
 // This macro is for use by MC-generated code and should not be used directly.
-#define _mcgen_TEMPLATE_FOR_NamedPipeOpen _mcgen_PASTE2(McTemplateK0mzxxxzqzzdd_, MCGEN_EVENTWRITETRANSFER)
+#define _mcgen_TEMPLATE_FOR_RegistrySaveKey _mcgen_PASTE2(McTemplateU0yziiizqzqz_, MCGEN_EVENTWRITETRANSFER)
 
 //
-// Enablement check macro for event "WMIFilterToConsumerBinding"
+// Enablement check macro for event "RegistrySetValueKey"
 //
-#define EventEnabledWMIFilterToConsumerBinding() _mcgen_EVENT_BIT_SET(JonMonEnableBits, 0)
-#define EventEnabledWMIFilterToConsumerBinding_ForContext(pContext) _mcgen_EVENT_BIT_SET(_mcgen_CheckContextType_JonMon(pContext)->EnableBits, 0)
+#define EventEnabledRegistrySetValueKey() _mcgen_EVENT_BIT_SET(JonMonEnableBits, 0)
+#define EventEnabledRegistrySetValueKey_ForContext(pContext) _mcgen_EVENT_BIT_SET(_mcgen_CheckContextType_JonMon(pContext)->EnableBits, 0)
 
 //
-// Event write macros for event "WMIFilterToConsumerBinding"
+// Event write macros for event "RegistrySetValueKey"
 //
-#define EventWriteWMIFilterToConsumerBinding(Activity, EventTime_, Namespace, ESS, Consumer, PossibleCause) \
-        MCGEN_EVENT_ENABLED(WMIFilterToConsumerBinding) \
-        ? _mcgen_TEMPLATE_FOR_WMIFilterToConsumerBinding(&JonMonProvider_Context, &WMIFilterToConsumerBinding, Activity, EventTime_, Namespace, ESS, Consumer, PossibleCause) : 0
-#define EventWriteWMIFilterToConsumerBinding_AssumeEnabled(EventTime_, Namespace, ESS, Consumer, PossibleCause) \
-        _mcgen_TEMPLATE_FOR_WMIFilterToConsumerBinding(&JonMonProvider_Context, &WMIFilterToConsumerBinding, NULL, EventTime_, Namespace, ESS, Consumer, PossibleCause)
-#define EventWriteWMIFilterToConsumerBinding_ForContext(pContext, Activity, EventTime_, Namespace, ESS, Consumer, PossibleCause) \
-        MCGEN_EVENT_ENABLED_FORCONTEXT(pContext, WMIFilterToConsumerBinding) \
-        ? _mcgen_TEMPLATE_FOR_WMIFilterToConsumerBinding(&(pContext)->Context, &WMIFilterToConsumerBinding, Activity, EventTime_, Namespace, ESS, Consumer, PossibleCause) : 0
-#define EventWriteWMIFilterToConsumerBinding_ForContextAssumeEnabled(pContext, EventTime_, Namespace, ESS, Consumer, PossibleCause) \
-        _mcgen_TEMPLATE_FOR_WMIFilterToConsumerBinding(&_mcgen_CheckContextType_JonMon(pContext)->Context, &WMIFilterToConsumerBinding, NULL, EventTime_, Namespace, ESS, Consumer, PossibleCause)
-
-// This macro is for use by MC-generated code and should not be used directly.
-#define _mcgen_TEMPLATE_FOR_WMIFilterToConsumerBinding _mcgen_PASTE2(McTemplateK0mzzzz_, MCGEN_EVENTWRITETRANSFER)
-
-//
-// Enablement check macro for event "TIQueueUserAPCEvent"
-//
-#define EventEnabledTIQueueUserAPCEvent() _mcgen_EVENT_BIT_SET(JonMonEnableBits, 0)
-#define EventEnabledTIQueueUserAPCEvent_ForContext(pContext) _mcgen_EVENT_BIT_SET(_mcgen_CheckContextType_JonMon(pContext)->EnableBits, 0)
-
-//
-// Event write macros for event "TIQueueUserAPCEvent"
-//
-#define EventWriteTIQueueUserAPCEvent(Activity, EventTime_, SourceThreadId, SourceProcessId, TargetProcessId, TargetThreadId, SourceProcessStartKey, TargetProcessStartKey, OriginalProcessId, APCRoutine, APCArgument, SourceProcessFilePath, TargetProcessFilePath, CallStack) \
-        MCGEN_EVENT_ENABLED(TIQueueUserAPCEvent) \
-        ? _mcgen_TEMPLATE_FOR_TIQueueUserAPCEvent(&JonMonProvider_Context, &TIQueueUserAPCEvent, Activity, EventTime_, SourceThreadId, SourceProcessId, TargetProcessId, TargetThreadId, SourceProcessStartKey, TargetProcessStartKey, OriginalProcessId, APCRoutine, APCArgument, SourceProcessFilePath, TargetProcessFilePath, CallStack) : 0
-#define EventWriteTIQueueUserAPCEvent_AssumeEnabled(EventTime_, SourceThreadId, SourceProcessId, TargetProcessId, TargetThreadId, SourceProcessStartKey, TargetProcessStartKey, OriginalProcessId, APCRoutine, APCArgument, SourceProcessFilePath, TargetProcessFilePath, CallStack) \
-        _mcgen_TEMPLATE_FOR_TIQueueUserAPCEvent(&JonMonProvider_Context, &TIQueueUserAPCEvent, NULL, EventTime_, SourceThreadId, SourceProcessId, TargetProcessId, TargetThreadId, SourceProcessStartKey, TargetProcessStartKey, OriginalProcessId, APCRoutine, APCArgument, SourceProcessFilePath, TargetProcessFilePath, CallStack)
-#define EventWriteTIQueueUserAPCEvent_ForContext(pContext, Activity, EventTime_, SourceThreadId, SourceProcessId, TargetProcessId, TargetThreadId, SourceProcessStartKey, TargetProcessStartKey, OriginalProcessId, APCRoutine, APCArgument, SourceProcessFilePath, TargetProcessFilePath, CallStack) \
-        MCGEN_EVENT_ENABLED_FORCONTEXT(pContext, TIQueueUserAPCEvent) \
-        ? _mcgen_TEMPLATE_FOR_TIQueueUserAPCEvent(&(pContext)->Context, &TIQueueUserAPCEvent, Activity, EventTime_, SourceThreadId, SourceProcessId, TargetProcessId, TargetThreadId, SourceProcessStartKey, TargetProcessStartKey, OriginalProcessId, APCRoutine, APCArgument, SourceProcessFilePath, TargetProcessFilePath, CallStack) : 0
-#define EventWriteTIQueueUserAPCEvent_ForContextAssumeEnabled(pContext, EventTime_, SourceThreadId, SourceProcessId, TargetProcessId, TargetThreadId, SourceProcessStartKey, TargetProcessStartKey, OriginalProcessId, APCRoutine, APCArgument, SourceProcessFilePath, TargetProcessFilePath, CallStack) \
-        _mcgen_TEMPLATE_FOR_TIQueueUserAPCEvent(&_mcgen_CheckContextType_JonMon(pContext)->Context, &TIQueueUserAPCEvent, NULL, EventTime_, SourceThreadId, SourceProcessId, TargetProcessId, TargetThreadId, SourceProcessStartKey, TargetProcessStartKey, OriginalProcessId, APCRoutine, APCArgument, SourceProcessFilePath, TargetProcessFilePath, CallStack)
+#define EventWriteRegistrySetValueKey(EventTime, ProcessFilePath, ProcessId, ProcessThreadId, ProcessStartKey, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, RegKeyPath, DataType, Data, ValueName) \
+        MCGEN_EVENT_ENABLED(RegistrySetValueKey) \
+        ? _mcgen_TEMPLATE_FOR_RegistrySetValueKey(&JonMonProvider_Context, &RegistrySetValueKey, EventTime, ProcessFilePath, ProcessId, ProcessThreadId, ProcessStartKey, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, RegKeyPath, DataType, Data, ValueName) : 0
+#define EventWriteRegistrySetValueKey_AssumeEnabled(EventTime, ProcessFilePath, ProcessId, ProcessThreadId, ProcessStartKey, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, RegKeyPath, DataType, Data, ValueName) \
+        _mcgen_TEMPLATE_FOR_RegistrySetValueKey(&JonMonProvider_Context, &RegistrySetValueKey, EventTime, ProcessFilePath, ProcessId, ProcessThreadId, ProcessStartKey, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, RegKeyPath, DataType, Data, ValueName)
+#define EventWriteRegistrySetValueKey_ForContext(pContext, EventTime, ProcessFilePath, ProcessId, ProcessThreadId, ProcessStartKey, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, RegKeyPath, DataType, Data, ValueName) \
+        MCGEN_EVENT_ENABLED_FORCONTEXT(pContext, RegistrySetValueKey) \
+        ? _mcgen_TEMPLATE_FOR_RegistrySetValueKey(&(pContext)->Context, &RegistrySetValueKey, EventTime, ProcessFilePath, ProcessId, ProcessThreadId, ProcessStartKey, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, RegKeyPath, DataType, Data, ValueName) : 0
+#define EventWriteRegistrySetValueKey_ForContextAssumeEnabled(pContext, EventTime, ProcessFilePath, ProcessId, ProcessThreadId, ProcessStartKey, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, RegKeyPath, DataType, Data, ValueName) \
+        _mcgen_TEMPLATE_FOR_RegistrySetValueKey(&_mcgen_CheckContextType_JonMon(pContext)->Context, &RegistrySetValueKey, EventTime, ProcessFilePath, ProcessId, ProcessThreadId, ProcessStartKey, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, RegKeyPath, DataType, Data, ValueName)
 
 // This macro is for use by MC-generated code and should not be used directly.
-#define _mcgen_TEMPLATE_FOR_TIQueueUserAPCEvent _mcgen_PASTE2(McTemplateK0mqqqqxxqppzzz_, MCGEN_EVENTWRITETRANSFER)
+#define _mcgen_TEMPLATE_FOR_RegistrySetValueKey _mcgen_PASTE2(McTemplateU0yziiizqzqzdzz_, MCGEN_EVENTWRITETRANSFER)
 
 //
-// Enablement check macro for event "DriverLoad"
+// Enablement check macro for event "RegistryCreateKey"
 //
-#define EventEnabledDriverLoad() _mcgen_EVENT_BIT_SET(JonMonEnableBits, 0)
-#define EventEnabledDriverLoad_ForContext(pContext) _mcgen_EVENT_BIT_SET(_mcgen_CheckContextType_JonMon(pContext)->EnableBits, 0)
+#define EventEnabledRegistryCreateKey() _mcgen_EVENT_BIT_SET(JonMonEnableBits, 0)
+#define EventEnabledRegistryCreateKey_ForContext(pContext) _mcgen_EVENT_BIT_SET(_mcgen_CheckContextType_JonMon(pContext)->EnableBits, 0)
 
 //
-// Event write macros for event "DriverLoad"
+// Event write macros for event "RegistryCreateKey"
 //
-#define EventWriteDriverLoad(Activity, EventTime_, ModulePath) \
-        MCGEN_EVENT_ENABLED(DriverLoad) \
-        ? _mcgen_TEMPLATE_FOR_DriverLoad(&JonMonProvider_Context, &DriverLoad, Activity, EventTime_, ModulePath) : 0
-#define EventWriteDriverLoad_AssumeEnabled(EventTime_, ModulePath) \
-        _mcgen_TEMPLATE_FOR_DriverLoad(&JonMonProvider_Context, &DriverLoad, NULL, EventTime_, ModulePath)
-#define EventWriteDriverLoad_ForContext(pContext, Activity, EventTime_, ModulePath) \
-        MCGEN_EVENT_ENABLED_FORCONTEXT(pContext, DriverLoad) \
-        ? _mcgen_TEMPLATE_FOR_DriverLoad(&(pContext)->Context, &DriverLoad, Activity, EventTime_, ModulePath) : 0
-#define EventWriteDriverLoad_ForContextAssumeEnabled(pContext, EventTime_, ModulePath) \
-        _mcgen_TEMPLATE_FOR_DriverLoad(&_mcgen_CheckContextType_JonMon(pContext)->Context, &DriverLoad, NULL, EventTime_, ModulePath)
-
-// This macro is for use by MC-generated code and should not be used directly.
-#define _mcgen_TEMPLATE_FOR_DriverLoad _mcgen_PASTE2(McTemplateK0mz_, MCGEN_EVENTWRITETRANSFER)
-
-//
-// Enablement check macro for event "DPAPI"
-//
-#define EventEnabledDPAPI() _mcgen_EVENT_BIT_SET(JonMonEnableBits, 0)
-#define EventEnabledDPAPI_ForContext(pContext) _mcgen_EVENT_BIT_SET(_mcgen_CheckContextType_JonMon(pContext)->EnableBits, 0)
-
-//
-// Event write macros for event "DPAPI"
-//
-#define EventWriteDPAPI(Activity, EventTime_, Operation, DataDescription, SourceProcessId, Flags, ProtectionFlags) \
-        MCGEN_EVENT_ENABLED(DPAPI) \
-        ? _mcgen_TEMPLATE_FOR_DPAPI(&JonMonProvider_Context, &DPAPI, Activity, EventTime_, Operation, DataDescription, SourceProcessId, Flags, ProtectionFlags) : 0
-#define EventWriteDPAPI_AssumeEnabled(EventTime_, Operation, DataDescription, SourceProcessId, Flags, ProtectionFlags) \
-        _mcgen_TEMPLATE_FOR_DPAPI(&JonMonProvider_Context, &DPAPI, NULL, EventTime_, Operation, DataDescription, SourceProcessId, Flags, ProtectionFlags)
-#define EventWriteDPAPI_ForContext(pContext, Activity, EventTime_, Operation, DataDescription, SourceProcessId, Flags, ProtectionFlags) \
-        MCGEN_EVENT_ENABLED_FORCONTEXT(pContext, DPAPI) \
-        ? _mcgen_TEMPLATE_FOR_DPAPI(&(pContext)->Context, &DPAPI, Activity, EventTime_, Operation, DataDescription, SourceProcessId, Flags, ProtectionFlags) : 0
-#define EventWriteDPAPI_ForContextAssumeEnabled(pContext, EventTime_, Operation, DataDescription, SourceProcessId, Flags, ProtectionFlags) \
-        _mcgen_TEMPLATE_FOR_DPAPI(&_mcgen_CheckContextType_JonMon(pContext)->Context, &DPAPI, NULL, EventTime_, Operation, DataDescription, SourceProcessId, Flags, ProtectionFlags)
+#define EventWriteRegistryCreateKey(EventTime, ProcessFilePath, ProcessId, ProcessThreadId, ProcessStartKey, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, RegKeyPath) \
+        MCGEN_EVENT_ENABLED(RegistryCreateKey) \
+        ? _mcgen_TEMPLATE_FOR_RegistryCreateKey(&JonMonProvider_Context, &RegistryCreateKey, EventTime, ProcessFilePath, ProcessId, ProcessThreadId, ProcessStartKey, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, RegKeyPath) : 0
+#define EventWriteRegistryCreateKey_AssumeEnabled(EventTime, ProcessFilePath, ProcessId, ProcessThreadId, ProcessStartKey, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, RegKeyPath) \
+        _mcgen_TEMPLATE_FOR_RegistryCreateKey(&JonMonProvider_Context, &RegistryCreateKey, EventTime, ProcessFilePath, ProcessId, ProcessThreadId, ProcessStartKey, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, RegKeyPath)
+#define EventWriteRegistryCreateKey_ForContext(pContext, EventTime, ProcessFilePath, ProcessId, ProcessThreadId, ProcessStartKey, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, RegKeyPath) \
+        MCGEN_EVENT_ENABLED_FORCONTEXT(pContext, RegistryCreateKey) \
+        ? _mcgen_TEMPLATE_FOR_RegistryCreateKey(&(pContext)->Context, &RegistryCreateKey, EventTime, ProcessFilePath, ProcessId, ProcessThreadId, ProcessStartKey, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, RegKeyPath) : 0
+#define EventWriteRegistryCreateKey_ForContextAssumeEnabled(pContext, EventTime, ProcessFilePath, ProcessId, ProcessThreadId, ProcessStartKey, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, RegKeyPath) \
+        _mcgen_TEMPLATE_FOR_RegistryCreateKey(&_mcgen_CheckContextType_JonMon(pContext)->Context, &RegistryCreateKey, EventTime, ProcessFilePath, ProcessId, ProcessThreadId, ProcessStartKey, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, RegKeyPath)
 
 // This macro is for use by MC-generated code and should not be used directly.
-#define _mcgen_TEMPLATE_FOR_DPAPI _mcgen_PASTE2(McTemplateK0mzzqqq_, MCGEN_EVENTWRITETRANSFER)
+#define _mcgen_TEMPLATE_FOR_RegistryCreateKey _mcgen_PASTE2(McTemplateU0yziiizqzqz_, MCGEN_EVENTWRITETRANSFER)
 
 //
-// Enablement check macro for event "TIWriteProcessMemory"
+// Enablement check macro for event "FileCreation"
 //
-#define EventEnabledTIWriteProcessMemory() _mcgen_EVENT_BIT_SET(JonMonEnableBits, 0)
-#define EventEnabledTIWriteProcessMemory_ForContext(pContext) _mcgen_EVENT_BIT_SET(_mcgen_CheckContextType_JonMon(pContext)->EnableBits, 0)
+#define EventEnabledFileCreation() _mcgen_EVENT_BIT_SET(JonMonEnableBits, 0)
+#define EventEnabledFileCreation_ForContext(pContext) _mcgen_EVENT_BIT_SET(_mcgen_CheckContextType_JonMon(pContext)->EnableBits, 0)
 
 //
-// Event write macros for event "TIWriteProcessMemory"
+// Event write macros for event "FileCreation"
 //
-#define EventWriteTIWriteProcessMemory(Activity, EventTime_, SourceProcessId, SourceThreadId, SourceProcessFilePath, TargetProcessId, TargetProcessFilePath, SourceProcessStartKey, TargetProcessStartKey, CallStack) \
-        MCGEN_EVENT_ENABLED(TIWriteProcessMemory) \
-        ? _mcgen_TEMPLATE_FOR_TIWriteProcessMemory(&JonMonProvider_Context, &TIWriteProcessMemory, Activity, EventTime_, SourceProcessId, SourceThreadId, SourceProcessFilePath, TargetProcessId, TargetProcessFilePath, SourceProcessStartKey, TargetProcessStartKey, CallStack) : 0
-#define EventWriteTIWriteProcessMemory_AssumeEnabled(EventTime_, SourceProcessId, SourceThreadId, SourceProcessFilePath, TargetProcessId, TargetProcessFilePath, SourceProcessStartKey, TargetProcessStartKey, CallStack) \
-        _mcgen_TEMPLATE_FOR_TIWriteProcessMemory(&JonMonProvider_Context, &TIWriteProcessMemory, NULL, EventTime_, SourceProcessId, SourceThreadId, SourceProcessFilePath, TargetProcessId, TargetProcessFilePath, SourceProcessStartKey, TargetProcessStartKey, CallStack)
-#define EventWriteTIWriteProcessMemory_ForContext(pContext, Activity, EventTime_, SourceProcessId, SourceThreadId, SourceProcessFilePath, TargetProcessId, TargetProcessFilePath, SourceProcessStartKey, TargetProcessStartKey, CallStack) \
-        MCGEN_EVENT_ENABLED_FORCONTEXT(pContext, TIWriteProcessMemory) \
-        ? _mcgen_TEMPLATE_FOR_TIWriteProcessMemory(&(pContext)->Context, &TIWriteProcessMemory, Activity, EventTime_, SourceProcessId, SourceThreadId, SourceProcessFilePath, TargetProcessId, TargetProcessFilePath, SourceProcessStartKey, TargetProcessStartKey, CallStack) : 0
-#define EventWriteTIWriteProcessMemory_ForContextAssumeEnabled(pContext, EventTime_, SourceProcessId, SourceThreadId, SourceProcessFilePath, TargetProcessId, TargetProcessFilePath, SourceProcessStartKey, TargetProcessStartKey, CallStack) \
-        _mcgen_TEMPLATE_FOR_TIWriteProcessMemory(&_mcgen_CheckContextType_JonMon(pContext)->Context, &TIWriteProcessMemory, NULL, EventTime_, SourceProcessId, SourceThreadId, SourceProcessFilePath, TargetProcessId, TargetProcessFilePath, SourceProcessStartKey, TargetProcessStartKey, CallStack)
-
-// This macro is for use by MC-generated code and should not be used directly.
-#define _mcgen_TEMPLATE_FOR_TIWriteProcessMemory _mcgen_PASTE2(McTemplateK0mqqzqzxxz_, MCGEN_EVENTWRITETRANSFER)
-
-//
-// Enablement check macro for event "TIReadProcessMemory"
-//
-#define EventEnabledTIReadProcessMemory() _mcgen_EVENT_BIT_SET(JonMonEnableBits, 0)
-#define EventEnabledTIReadProcessMemory_ForContext(pContext) _mcgen_EVENT_BIT_SET(_mcgen_CheckContextType_JonMon(pContext)->EnableBits, 0)
-
-//
-// Event write macros for event "TIReadProcessMemory"
-//
-#define EventWriteTIReadProcessMemory(Activity, EventTime_, SourceProcessId, SourceThreadId, SourceProcessFilePath, TargetProcessId, TargetProcessFilePath, SourceProcessStartKey, TargetProcessStartKey, CallStack) \
-        MCGEN_EVENT_ENABLED(TIReadProcessMemory) \
-        ? _mcgen_TEMPLATE_FOR_TIReadProcessMemory(&JonMonProvider_Context, &TIReadProcessMemory, Activity, EventTime_, SourceProcessId, SourceThreadId, SourceProcessFilePath, TargetProcessId, TargetProcessFilePath, SourceProcessStartKey, TargetProcessStartKey, CallStack) : 0
-#define EventWriteTIReadProcessMemory_AssumeEnabled(EventTime_, SourceProcessId, SourceThreadId, SourceProcessFilePath, TargetProcessId, TargetProcessFilePath, SourceProcessStartKey, TargetProcessStartKey, CallStack) \
-        _mcgen_TEMPLATE_FOR_TIReadProcessMemory(&JonMonProvider_Context, &TIReadProcessMemory, NULL, EventTime_, SourceProcessId, SourceThreadId, SourceProcessFilePath, TargetProcessId, TargetProcessFilePath, SourceProcessStartKey, TargetProcessStartKey, CallStack)
-#define EventWriteTIReadProcessMemory_ForContext(pContext, Activity, EventTime_, SourceProcessId, SourceThreadId, SourceProcessFilePath, TargetProcessId, TargetProcessFilePath, SourceProcessStartKey, TargetProcessStartKey, CallStack) \
-        MCGEN_EVENT_ENABLED_FORCONTEXT(pContext, TIReadProcessMemory) \
-        ? _mcgen_TEMPLATE_FOR_TIReadProcessMemory(&(pContext)->Context, &TIReadProcessMemory, Activity, EventTime_, SourceProcessId, SourceThreadId, SourceProcessFilePath, TargetProcessId, TargetProcessFilePath, SourceProcessStartKey, TargetProcessStartKey, CallStack) : 0
-#define EventWriteTIReadProcessMemory_ForContextAssumeEnabled(pContext, EventTime_, SourceProcessId, SourceThreadId, SourceProcessFilePath, TargetProcessId, TargetProcessFilePath, SourceProcessStartKey, TargetProcessStartKey, CallStack) \
-        _mcgen_TEMPLATE_FOR_TIReadProcessMemory(&_mcgen_CheckContextType_JonMon(pContext)->Context, &TIReadProcessMemory, NULL, EventTime_, SourceProcessId, SourceThreadId, SourceProcessFilePath, TargetProcessId, TargetProcessFilePath, SourceProcessStartKey, TargetProcessStartKey, CallStack)
+#define EventWriteFileCreation(EventTime, ProcessFilePath, ProcessId, ProcessThreadId, ProcessStartKey, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, FileName) \
+        MCGEN_EVENT_ENABLED(FileCreation) \
+        ? _mcgen_TEMPLATE_FOR_FileCreation(&JonMonProvider_Context, &FileCreation, EventTime, ProcessFilePath, ProcessId, ProcessThreadId, ProcessStartKey, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, FileName) : 0
+#define EventWriteFileCreation_AssumeEnabled(EventTime, ProcessFilePath, ProcessId, ProcessThreadId, ProcessStartKey, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, FileName) \
+        _mcgen_TEMPLATE_FOR_FileCreation(&JonMonProvider_Context, &FileCreation, EventTime, ProcessFilePath, ProcessId, ProcessThreadId, ProcessStartKey, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, FileName)
+#define EventWriteFileCreation_ForContext(pContext, EventTime, ProcessFilePath, ProcessId, ProcessThreadId, ProcessStartKey, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, FileName) \
+        MCGEN_EVENT_ENABLED_FORCONTEXT(pContext, FileCreation) \
+        ? _mcgen_TEMPLATE_FOR_FileCreation(&(pContext)->Context, &FileCreation, EventTime, ProcessFilePath, ProcessId, ProcessThreadId, ProcessStartKey, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, FileName) : 0
+#define EventWriteFileCreation_ForContextAssumeEnabled(pContext, EventTime, ProcessFilePath, ProcessId, ProcessThreadId, ProcessStartKey, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, FileName) \
+        _mcgen_TEMPLATE_FOR_FileCreation(&_mcgen_CheckContextType_JonMon(pContext)->Context, &FileCreation, EventTime, ProcessFilePath, ProcessId, ProcessThreadId, ProcessStartKey, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, FileName)
 
 // This macro is for use by MC-generated code and should not be used directly.
-#define _mcgen_TEMPLATE_FOR_TIReadProcessMemory _mcgen_PASTE2(McTemplateK0mqqzqzxxz_, MCGEN_EVENTWRITETRANSFER)
+#define _mcgen_TEMPLATE_FOR_FileCreation _mcgen_PASTE2(McTemplateU0yziiizqzqz_, MCGEN_EVENTWRITETRANSFER)
 
 //
-// Enablement check macro for event "ThreadTokenImpersonation"
+// Enablement check macro for event "NamedPipeCreation"
 //
-#define EventEnabledThreadTokenImpersonation() _mcgen_EVENT_BIT_SET(JonMonEnableBits, 0)
-#define EventEnabledThreadTokenImpersonation_ForContext(pContext) _mcgen_EVENT_BIT_SET(_mcgen_CheckContextType_JonMon(pContext)->EnableBits, 0)
+#define EventEnabledNamedPipeCreation() _mcgen_EVENT_BIT_SET(JonMonEnableBits, 0)
+#define EventEnabledNamedPipeCreation_ForContext(pContext) _mcgen_EVENT_BIT_SET(_mcgen_CheckContextType_JonMon(pContext)->EnableBits, 0)
 
 //
-// Event write macros for event "ThreadTokenImpersonation"
+// Event write macros for event "NamedPipeCreation"
 //
-#define EventWriteThreadTokenImpersonation(Activity, EventTime_, ProcessId, ImpersonatedThreadId, ThreadUserName, ThreadIntegrityLevel, ProcessUserName, ProcessIntegrityLevel) \
-        MCGEN_EVENT_ENABLED(ThreadTokenImpersonation) \
-        ? _mcgen_TEMPLATE_FOR_ThreadTokenImpersonation(&JonMonProvider_Context, &ThreadTokenImpersonation, Activity, EventTime_, ProcessId, ImpersonatedThreadId, ThreadUserName, ThreadIntegrityLevel, ProcessUserName, ProcessIntegrityLevel) : 0
-#define EventWriteThreadTokenImpersonation_AssumeEnabled(EventTime_, ProcessId, ImpersonatedThreadId, ThreadUserName, ThreadIntegrityLevel, ProcessUserName, ProcessIntegrityLevel) \
-        _mcgen_TEMPLATE_FOR_ThreadTokenImpersonation(&JonMonProvider_Context, &ThreadTokenImpersonation, NULL, EventTime_, ProcessId, ImpersonatedThreadId, ThreadUserName, ThreadIntegrityLevel, ProcessUserName, ProcessIntegrityLevel)
-#define EventWriteThreadTokenImpersonation_ForContext(pContext, Activity, EventTime_, ProcessId, ImpersonatedThreadId, ThreadUserName, ThreadIntegrityLevel, ProcessUserName, ProcessIntegrityLevel) \
-        MCGEN_EVENT_ENABLED_FORCONTEXT(pContext, ThreadTokenImpersonation) \
-        ? _mcgen_TEMPLATE_FOR_ThreadTokenImpersonation(&(pContext)->Context, &ThreadTokenImpersonation, Activity, EventTime_, ProcessId, ImpersonatedThreadId, ThreadUserName, ThreadIntegrityLevel, ProcessUserName, ProcessIntegrityLevel) : 0
-#define EventWriteThreadTokenImpersonation_ForContextAssumeEnabled(pContext, EventTime_, ProcessId, ImpersonatedThreadId, ThreadUserName, ThreadIntegrityLevel, ProcessUserName, ProcessIntegrityLevel) \
-        _mcgen_TEMPLATE_FOR_ThreadTokenImpersonation(&_mcgen_CheckContextType_JonMon(pContext)->Context, &ThreadTokenImpersonation, NULL, EventTime_, ProcessId, ImpersonatedThreadId, ThreadUserName, ThreadIntegrityLevel, ProcessUserName, ProcessIntegrityLevel)
-
-// This macro is for use by MC-generated code and should not be used directly.
-#define _mcgen_TEMPLATE_FOR_ThreadTokenImpersonation _mcgen_PASTE2(McTemplateK0mqqzzzz_, MCGEN_EVENTWRITETRANSFER)
-
-//
-// Enablement check macro for event "TIRemoteAllocateVirtualMemory"
-//
-#define EventEnabledTIRemoteAllocateVirtualMemory() _mcgen_EVENT_BIT_SET(JonMonEnableBits, 0)
-#define EventEnabledTIRemoteAllocateVirtualMemory_ForContext(pContext) _mcgen_EVENT_BIT_SET(_mcgen_CheckContextType_JonMon(pContext)->EnableBits, 0)
-
-//
-// Event write macros for event "TIRemoteAllocateVirtualMemory"
-//
-#define EventWriteTIRemoteAllocateVirtualMemory(Activity, EventTime_, SourceThreadId, SourceProcessId, TargetProcessId, SourceProcessStartKey, TargetProcessStartKey, OriginalProcessId, BaseAddress, SourceProcessFilePath, TargetProcessFilePath, CallStack) \
-        MCGEN_EVENT_ENABLED(TIRemoteAllocateVirtualMemory) \
-        ? _mcgen_TEMPLATE_FOR_TIRemoteAllocateVirtualMemory(&JonMonProvider_Context, &TIRemoteAllocateVirtualMemory, Activity, EventTime_, SourceThreadId, SourceProcessId, TargetProcessId, SourceProcessStartKey, TargetProcessStartKey, OriginalProcessId, BaseAddress, SourceProcessFilePath, TargetProcessFilePath, CallStack) : 0
-#define EventWriteTIRemoteAllocateVirtualMemory_AssumeEnabled(EventTime_, SourceThreadId, SourceProcessId, TargetProcessId, SourceProcessStartKey, TargetProcessStartKey, OriginalProcessId, BaseAddress, SourceProcessFilePath, TargetProcessFilePath, CallStack) \
-        _mcgen_TEMPLATE_FOR_TIRemoteAllocateVirtualMemory(&JonMonProvider_Context, &TIRemoteAllocateVirtualMemory, NULL, EventTime_, SourceThreadId, SourceProcessId, TargetProcessId, SourceProcessStartKey, TargetProcessStartKey, OriginalProcessId, BaseAddress, SourceProcessFilePath, TargetProcessFilePath, CallStack)
-#define EventWriteTIRemoteAllocateVirtualMemory_ForContext(pContext, Activity, EventTime_, SourceThreadId, SourceProcessId, TargetProcessId, SourceProcessStartKey, TargetProcessStartKey, OriginalProcessId, BaseAddress, SourceProcessFilePath, TargetProcessFilePath, CallStack) \
-        MCGEN_EVENT_ENABLED_FORCONTEXT(pContext, TIRemoteAllocateVirtualMemory) \
-        ? _mcgen_TEMPLATE_FOR_TIRemoteAllocateVirtualMemory(&(pContext)->Context, &TIRemoteAllocateVirtualMemory, Activity, EventTime_, SourceThreadId, SourceProcessId, TargetProcessId, SourceProcessStartKey, TargetProcessStartKey, OriginalProcessId, BaseAddress, SourceProcessFilePath, TargetProcessFilePath, CallStack) : 0
-#define EventWriteTIRemoteAllocateVirtualMemory_ForContextAssumeEnabled(pContext, EventTime_, SourceThreadId, SourceProcessId, TargetProcessId, SourceProcessStartKey, TargetProcessStartKey, OriginalProcessId, BaseAddress, SourceProcessFilePath, TargetProcessFilePath, CallStack) \
-        _mcgen_TEMPLATE_FOR_TIRemoteAllocateVirtualMemory(&_mcgen_CheckContextType_JonMon(pContext)->Context, &TIRemoteAllocateVirtualMemory, NULL, EventTime_, SourceThreadId, SourceProcessId, TargetProcessId, SourceProcessStartKey, TargetProcessStartKey, OriginalProcessId, BaseAddress, SourceProcessFilePath, TargetProcessFilePath, CallStack)
+#define EventWriteNamedPipeCreation(EventTime, ProcessFilePath, ProcessId, ProcessThreadId, ProcessStartKey, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, FileName, RequestedRights) \
+        MCGEN_EVENT_ENABLED(NamedPipeCreation) \
+        ? _mcgen_TEMPLATE_FOR_NamedPipeCreation(&JonMonProvider_Context, &NamedPipeCreation, EventTime, ProcessFilePath, ProcessId, ProcessThreadId, ProcessStartKey, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, FileName, RequestedRights) : 0
+#define EventWriteNamedPipeCreation_AssumeEnabled(EventTime, ProcessFilePath, ProcessId, ProcessThreadId, ProcessStartKey, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, FileName, RequestedRights) \
+        _mcgen_TEMPLATE_FOR_NamedPipeCreation(&JonMonProvider_Context, &NamedPipeCreation, EventTime, ProcessFilePath, ProcessId, ProcessThreadId, ProcessStartKey, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, FileName, RequestedRights)
+#define EventWriteNamedPipeCreation_ForContext(pContext, EventTime, ProcessFilePath, ProcessId, ProcessThreadId, ProcessStartKey, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, FileName, RequestedRights) \
+        MCGEN_EVENT_ENABLED_FORCONTEXT(pContext, NamedPipeCreation) \
+        ? _mcgen_TEMPLATE_FOR_NamedPipeCreation(&(pContext)->Context, &NamedPipeCreation, EventTime, ProcessFilePath, ProcessId, ProcessThreadId, ProcessStartKey, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, FileName, RequestedRights) : 0
+#define EventWriteNamedPipeCreation_ForContextAssumeEnabled(pContext, EventTime, ProcessFilePath, ProcessId, ProcessThreadId, ProcessStartKey, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, FileName, RequestedRights) \
+        _mcgen_TEMPLATE_FOR_NamedPipeCreation(&_mcgen_CheckContextType_JonMon(pContext)->Context, &NamedPipeCreation, EventTime, ProcessFilePath, ProcessId, ProcessThreadId, ProcessStartKey, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, FileName, RequestedRights)
 
 // This macro is for use by MC-generated code and should not be used directly.
-#define _mcgen_TEMPLATE_FOR_TIRemoteAllocateVirtualMemory _mcgen_PASTE2(McTemplateK0mqqqxxqpzzz_, MCGEN_EVENTWRITETRANSFER)
+#define _mcgen_TEMPLATE_FOR_NamedPipeCreation _mcgen_PASTE2(McTemplateU0yziiizqzqzd_, MCGEN_EVENTWRITETRANSFER)
+
+//
+// Enablement check macro for event "NamedPipeConnection"
+//
+#define EventEnabledNamedPipeConnection() _mcgen_EVENT_BIT_SET(JonMonEnableBits, 0)
+#define EventEnabledNamedPipeConnection_ForContext(pContext) _mcgen_EVENT_BIT_SET(_mcgen_CheckContextType_JonMon(pContext)->EnableBits, 0)
+
+//
+// Event write macros for event "NamedPipeConnection"
+//
+#define EventWriteNamedPipeConnection(EventTime, ProcessFilePath, ProcessId, ProcessThreadId, ProcessStartKey, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, FileName, RequestedRights) \
+        MCGEN_EVENT_ENABLED(NamedPipeConnection) \
+        ? _mcgen_TEMPLATE_FOR_NamedPipeConnection(&JonMonProvider_Context, &NamedPipeConnection, EventTime, ProcessFilePath, ProcessId, ProcessThreadId, ProcessStartKey, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, FileName, RequestedRights) : 0
+#define EventWriteNamedPipeConnection_AssumeEnabled(EventTime, ProcessFilePath, ProcessId, ProcessThreadId, ProcessStartKey, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, FileName, RequestedRights) \
+        _mcgen_TEMPLATE_FOR_NamedPipeConnection(&JonMonProvider_Context, &NamedPipeConnection, EventTime, ProcessFilePath, ProcessId, ProcessThreadId, ProcessStartKey, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, FileName, RequestedRights)
+#define EventWriteNamedPipeConnection_ForContext(pContext, EventTime, ProcessFilePath, ProcessId, ProcessThreadId, ProcessStartKey, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, FileName, RequestedRights) \
+        MCGEN_EVENT_ENABLED_FORCONTEXT(pContext, NamedPipeConnection) \
+        ? _mcgen_TEMPLATE_FOR_NamedPipeConnection(&(pContext)->Context, &NamedPipeConnection, EventTime, ProcessFilePath, ProcessId, ProcessThreadId, ProcessStartKey, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, FileName, RequestedRights) : 0
+#define EventWriteNamedPipeConnection_ForContextAssumeEnabled(pContext, EventTime, ProcessFilePath, ProcessId, ProcessThreadId, ProcessStartKey, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, FileName, RequestedRights) \
+        _mcgen_TEMPLATE_FOR_NamedPipeConnection(&_mcgen_CheckContextType_JonMon(pContext)->Context, &NamedPipeConnection, EventTime, ProcessFilePath, ProcessId, ProcessThreadId, ProcessStartKey, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, FileName, RequestedRights)
+
+// This macro is for use by MC-generated code and should not be used directly.
+#define _mcgen_TEMPLATE_FOR_NamedPipeConnection _mcgen_PASTE2(McTemplateU0yziiizqzqzd_, MCGEN_EVENTWRITETRANSFER)
+
+//
+// Enablement check macro for event "MailslotCreation"
+//
+#define EventEnabledMailslotCreation() _mcgen_EVENT_BIT_SET(JonMonEnableBits, 0)
+#define EventEnabledMailslotCreation_ForContext(pContext) _mcgen_EVENT_BIT_SET(_mcgen_CheckContextType_JonMon(pContext)->EnableBits, 0)
+
+//
+// Event write macros for event "MailslotCreation"
+//
+#define EventWriteMailslotCreation(EventTime, ProcessFilePath, ProcessId, ProcessThreadId, ProcessStartKey, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, FileName, RequestedRights) \
+        MCGEN_EVENT_ENABLED(MailslotCreation) \
+        ? _mcgen_TEMPLATE_FOR_MailslotCreation(&JonMonProvider_Context, &MailslotCreation, EventTime, ProcessFilePath, ProcessId, ProcessThreadId, ProcessStartKey, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, FileName, RequestedRights) : 0
+#define EventWriteMailslotCreation_AssumeEnabled(EventTime, ProcessFilePath, ProcessId, ProcessThreadId, ProcessStartKey, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, FileName, RequestedRights) \
+        _mcgen_TEMPLATE_FOR_MailslotCreation(&JonMonProvider_Context, &MailslotCreation, EventTime, ProcessFilePath, ProcessId, ProcessThreadId, ProcessStartKey, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, FileName, RequestedRights)
+#define EventWriteMailslotCreation_ForContext(pContext, EventTime, ProcessFilePath, ProcessId, ProcessThreadId, ProcessStartKey, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, FileName, RequestedRights) \
+        MCGEN_EVENT_ENABLED_FORCONTEXT(pContext, MailslotCreation) \
+        ? _mcgen_TEMPLATE_FOR_MailslotCreation(&(pContext)->Context, &MailslotCreation, EventTime, ProcessFilePath, ProcessId, ProcessThreadId, ProcessStartKey, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, FileName, RequestedRights) : 0
+#define EventWriteMailslotCreation_ForContextAssumeEnabled(pContext, EventTime, ProcessFilePath, ProcessId, ProcessThreadId, ProcessStartKey, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, FileName, RequestedRights) \
+        _mcgen_TEMPLATE_FOR_MailslotCreation(&_mcgen_CheckContextType_JonMon(pContext)->Context, &MailslotCreation, EventTime, ProcessFilePath, ProcessId, ProcessThreadId, ProcessStartKey, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, FileName, RequestedRights)
+
+// This macro is for use by MC-generated code and should not be used directly.
+#define _mcgen_TEMPLATE_FOR_MailslotCreation _mcgen_PASTE2(McTemplateU0yziiizqzqzd_, MCGEN_EVENTWRITETRANSFER)
+
+//
+// Enablement check macro for event "MailslotConnection"
+//
+#define EventEnabledMailslotConnection() _mcgen_EVENT_BIT_SET(JonMonEnableBits, 0)
+#define EventEnabledMailslotConnection_ForContext(pContext) _mcgen_EVENT_BIT_SET(_mcgen_CheckContextType_JonMon(pContext)->EnableBits, 0)
+
+//
+// Event write macros for event "MailslotConnection"
+//
+#define EventWriteMailslotConnection(EventTime, ProcessFilePath, ProcessId, ProcessThreadId, ProcessStartKey, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, FileName, RequestedRights) \
+        MCGEN_EVENT_ENABLED(MailslotConnection) \
+        ? _mcgen_TEMPLATE_FOR_MailslotConnection(&JonMonProvider_Context, &MailslotConnection, EventTime, ProcessFilePath, ProcessId, ProcessThreadId, ProcessStartKey, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, FileName, RequestedRights) : 0
+#define EventWriteMailslotConnection_AssumeEnabled(EventTime, ProcessFilePath, ProcessId, ProcessThreadId, ProcessStartKey, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, FileName, RequestedRights) \
+        _mcgen_TEMPLATE_FOR_MailslotConnection(&JonMonProvider_Context, &MailslotConnection, EventTime, ProcessFilePath, ProcessId, ProcessThreadId, ProcessStartKey, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, FileName, RequestedRights)
+#define EventWriteMailslotConnection_ForContext(pContext, EventTime, ProcessFilePath, ProcessId, ProcessThreadId, ProcessStartKey, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, FileName, RequestedRights) \
+        MCGEN_EVENT_ENABLED_FORCONTEXT(pContext, MailslotConnection) \
+        ? _mcgen_TEMPLATE_FOR_MailslotConnection(&(pContext)->Context, &MailslotConnection, EventTime, ProcessFilePath, ProcessId, ProcessThreadId, ProcessStartKey, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, FileName, RequestedRights) : 0
+#define EventWriteMailslotConnection_ForContextAssumeEnabled(pContext, EventTime, ProcessFilePath, ProcessId, ProcessThreadId, ProcessStartKey, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, FileName, RequestedRights) \
+        _mcgen_TEMPLATE_FOR_MailslotConnection(&_mcgen_CheckContextType_JonMon(pContext)->Context, &MailslotConnection, EventTime, ProcessFilePath, ProcessId, ProcessThreadId, ProcessStartKey, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, FileName, RequestedRights)
+
+// This macro is for use by MC-generated code and should not be used directly.
+#define _mcgen_TEMPLATE_FOR_MailslotConnection _mcgen_PASTE2(McTemplateU0yziiizqzqzd_, MCGEN_EVENTWRITETRANSFER)
+
+//
+// Enablement check macro for event "RemoteFileConnection"
+//
+#define EventEnabledRemoteFileConnection() _mcgen_EVENT_BIT_SET(JonMonEnableBits, 0)
+#define EventEnabledRemoteFileConnection_ForContext(pContext) _mcgen_EVENT_BIT_SET(_mcgen_CheckContextType_JonMon(pContext)->EnableBits, 0)
+
+//
+// Event write macros for event "RemoteFileConnection"
+//
+#define EventWriteRemoteFileConnection(EventTime, ProcessFilePath, ProcessId, ProcessThreadId, ProcessStartKey, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, FileName) \
+        MCGEN_EVENT_ENABLED(RemoteFileConnection) \
+        ? _mcgen_TEMPLATE_FOR_RemoteFileConnection(&JonMonProvider_Context, &RemoteFileConnection, EventTime, ProcessFilePath, ProcessId, ProcessThreadId, ProcessStartKey, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, FileName) : 0
+#define EventWriteRemoteFileConnection_AssumeEnabled(EventTime, ProcessFilePath, ProcessId, ProcessThreadId, ProcessStartKey, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, FileName) \
+        _mcgen_TEMPLATE_FOR_RemoteFileConnection(&JonMonProvider_Context, &RemoteFileConnection, EventTime, ProcessFilePath, ProcessId, ProcessThreadId, ProcessStartKey, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, FileName)
+#define EventWriteRemoteFileConnection_ForContext(pContext, EventTime, ProcessFilePath, ProcessId, ProcessThreadId, ProcessStartKey, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, FileName) \
+        MCGEN_EVENT_ENABLED_FORCONTEXT(pContext, RemoteFileConnection) \
+        ? _mcgen_TEMPLATE_FOR_RemoteFileConnection(&(pContext)->Context, &RemoteFileConnection, EventTime, ProcessFilePath, ProcessId, ProcessThreadId, ProcessStartKey, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, FileName) : 0
+#define EventWriteRemoteFileConnection_ForContextAssumeEnabled(pContext, EventTime, ProcessFilePath, ProcessId, ProcessThreadId, ProcessStartKey, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, FileName) \
+        _mcgen_TEMPLATE_FOR_RemoteFileConnection(&_mcgen_CheckContextType_JonMon(pContext)->Context, &RemoteFileConnection, EventTime, ProcessFilePath, ProcessId, ProcessThreadId, ProcessStartKey, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, FileName)
+
+// This macro is for use by MC-generated code and should not be used directly.
+#define _mcgen_TEMPLATE_FOR_RemoteFileConnection _mcgen_PASTE2(McTemplateU0yziiizqzqz_, MCGEN_EVENTWRITETRANSFER)
+
+//
+// Enablement check macro for event "DotNetLoad"
+//
+#define EventEnabledDotNetLoad() _mcgen_EVENT_BIT_SET(JonMonEnableBits, 0)
+#define EventEnabledDotNetLoad_ForContext(pContext) _mcgen_EVENT_BIT_SET(_mcgen_CheckContextType_JonMon(pContext)->EnableBits, 0)
+
+//
+// Event write macros for event "DotNetLoad"
+//
+#define EventWriteDotNetLoad(EventTime, ProcessFilePath, ProcessId, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, AssemblyName, ClrInstanceID) \
+        MCGEN_EVENT_ENABLED(DotNetLoad) \
+        ? _mcgen_TEMPLATE_FOR_DotNetLoad(&JonMonProvider_Context, &DotNetLoad, EventTime, ProcessFilePath, ProcessId, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, AssemblyName, ClrInstanceID) : 0
+#define EventWriteDotNetLoad_AssumeEnabled(EventTime, ProcessFilePath, ProcessId, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, AssemblyName, ClrInstanceID) \
+        _mcgen_TEMPLATE_FOR_DotNetLoad(&JonMonProvider_Context, &DotNetLoad, EventTime, ProcessFilePath, ProcessId, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, AssemblyName, ClrInstanceID)
+#define EventWriteDotNetLoad_ForContext(pContext, EventTime, ProcessFilePath, ProcessId, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, AssemblyName, ClrInstanceID) \
+        MCGEN_EVENT_ENABLED_FORCONTEXT(pContext, DotNetLoad) \
+        ? _mcgen_TEMPLATE_FOR_DotNetLoad(&(pContext)->Context, &DotNetLoad, EventTime, ProcessFilePath, ProcessId, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, AssemblyName, ClrInstanceID) : 0
+#define EventWriteDotNetLoad_ForContextAssumeEnabled(pContext, EventTime, ProcessFilePath, ProcessId, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, AssemblyName, ClrInstanceID) \
+        _mcgen_TEMPLATE_FOR_DotNetLoad(&_mcgen_CheckContextType_JonMon(pContext)->Context, &DotNetLoad, EventTime, ProcessFilePath, ProcessId, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, AssemblyName, ClrInstanceID)
+
+// This macro is for use by MC-generated code and should not be used directly.
+#define _mcgen_TEMPLATE_FOR_DotNetLoad _mcgen_PASTE2(McTemplateU0yzizqzqzh_, MCGEN_EVENTWRITETRANSFER)
+
+//
+// Enablement check macro for event "WMIEventFilter"
+//
+#define EventEnabledWMIEventFilter() _mcgen_EVENT_BIT_SET(JonMonEnableBits, 0)
+#define EventEnabledWMIEventFilter_ForContext(pContext) _mcgen_EVENT_BIT_SET(_mcgen_CheckContextType_JonMon(pContext)->EnableBits, 0)
+
+//
+// Event write macros for event "WMIEventFilter"
+//
+#define EventWriteWMIEventFilter(EventTime, ProcessFilePath, ProcessId, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, Namespace, ESS, Consumer, PossibleCause) \
+        MCGEN_EVENT_ENABLED(WMIEventFilter) \
+        ? _mcgen_TEMPLATE_FOR_WMIEventFilter(&JonMonProvider_Context, &WMIEventFilter, EventTime, ProcessFilePath, ProcessId, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, Namespace, ESS, Consumer, PossibleCause) : 0
+#define EventWriteWMIEventFilter_AssumeEnabled(EventTime, ProcessFilePath, ProcessId, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, Namespace, ESS, Consumer, PossibleCause) \
+        _mcgen_TEMPLATE_FOR_WMIEventFilter(&JonMonProvider_Context, &WMIEventFilter, EventTime, ProcessFilePath, ProcessId, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, Namespace, ESS, Consumer, PossibleCause)
+#define EventWriteWMIEventFilter_ForContext(pContext, EventTime, ProcessFilePath, ProcessId, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, Namespace, ESS, Consumer, PossibleCause) \
+        MCGEN_EVENT_ENABLED_FORCONTEXT(pContext, WMIEventFilter) \
+        ? _mcgen_TEMPLATE_FOR_WMIEventFilter(&(pContext)->Context, &WMIEventFilter, EventTime, ProcessFilePath, ProcessId, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, Namespace, ESS, Consumer, PossibleCause) : 0
+#define EventWriteWMIEventFilter_ForContextAssumeEnabled(pContext, EventTime, ProcessFilePath, ProcessId, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, Namespace, ESS, Consumer, PossibleCause) \
+        _mcgen_TEMPLATE_FOR_WMIEventFilter(&_mcgen_CheckContextType_JonMon(pContext)->Context, &WMIEventFilter, EventTime, ProcessFilePath, ProcessId, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, Namespace, ESS, Consumer, PossibleCause)
+
+// This macro is for use by MC-generated code and should not be used directly.
+#define _mcgen_TEMPLATE_FOR_WMIEventFilter _mcgen_PASTE2(McTemplateU0yzizqzqzzzz_, MCGEN_EVENTWRITETRANSFER)
+
+//
+// Enablement check macro for event "RPCClient"
+//
+#define EventEnabledRPCClient() _mcgen_EVENT_BIT_SET(JonMonEnableBits, 0)
+#define EventEnabledRPCClient_ForContext(pContext) _mcgen_EVENT_BIT_SET(_mcgen_CheckContextType_JonMon(pContext)->EnableBits, 0)
+
+//
+// Event write macros for event "RPCClient"
+//
+#define EventWriteRPCClient(EventTime, ProcessFilePath, ProcessId, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, InterfaceUUID, ProcNum, Protocol, NetworkAddress, Endpoint, InterfaceString, MethodString, CallStack) \
+        MCGEN_EVENT_ENABLED(RPCClient) \
+        ? _mcgen_TEMPLATE_FOR_RPCClient(&JonMonProvider_Context, &RPCClient, EventTime, ProcessFilePath, ProcessId, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, InterfaceUUID, ProcNum, Protocol, NetworkAddress, Endpoint, InterfaceString, MethodString, CallStack) : 0
+#define EventWriteRPCClient_AssumeEnabled(EventTime, ProcessFilePath, ProcessId, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, InterfaceUUID, ProcNum, Protocol, NetworkAddress, Endpoint, InterfaceString, MethodString, CallStack) \
+        _mcgen_TEMPLATE_FOR_RPCClient(&JonMonProvider_Context, &RPCClient, EventTime, ProcessFilePath, ProcessId, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, InterfaceUUID, ProcNum, Protocol, NetworkAddress, Endpoint, InterfaceString, MethodString, CallStack)
+#define EventWriteRPCClient_ForContext(pContext, EventTime, ProcessFilePath, ProcessId, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, InterfaceUUID, ProcNum, Protocol, NetworkAddress, Endpoint, InterfaceString, MethodString, CallStack) \
+        MCGEN_EVENT_ENABLED_FORCONTEXT(pContext, RPCClient) \
+        ? _mcgen_TEMPLATE_FOR_RPCClient(&(pContext)->Context, &RPCClient, EventTime, ProcessFilePath, ProcessId, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, InterfaceUUID, ProcNum, Protocol, NetworkAddress, Endpoint, InterfaceString, MethodString, CallStack) : 0
+#define EventWriteRPCClient_ForContextAssumeEnabled(pContext, EventTime, ProcessFilePath, ProcessId, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, InterfaceUUID, ProcNum, Protocol, NetworkAddress, Endpoint, InterfaceString, MethodString, CallStack) \
+        _mcgen_TEMPLATE_FOR_RPCClient(&_mcgen_CheckContextType_JonMon(pContext)->Context, &RPCClient, EventTime, ProcessFilePath, ProcessId, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, InterfaceUUID, ProcNum, Protocol, NetworkAddress, Endpoint, InterfaceString, MethodString, CallStack)
+
+// This macro is for use by MC-generated code and should not be used directly.
+#define _mcgen_TEMPLATE_FOR_RPCClient _mcgen_PASTE2(McTemplateU0yzizqzqzqqzzzzz_, MCGEN_EVENTWRITETRANSFER)
+
+//
+// Enablement check macro for event "RPCServer"
+//
+#define EventEnabledRPCServer() _mcgen_EVENT_BIT_SET(JonMonEnableBits, 0)
+#define EventEnabledRPCServer_ForContext(pContext) _mcgen_EVENT_BIT_SET(_mcgen_CheckContextType_JonMon(pContext)->EnableBits, 0)
+
+//
+// Event write macros for event "RPCServer"
+//
+#define EventWriteRPCServer(EventTime, ProcessFilePath, ProcessId, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, InterfaceUUID, ProcNum, Protocol, NetworkAddress, Endpoint, InterfaceString, MethodString, CallStack) \
+        MCGEN_EVENT_ENABLED(RPCServer) \
+        ? _mcgen_TEMPLATE_FOR_RPCServer(&JonMonProvider_Context, &RPCServer, EventTime, ProcessFilePath, ProcessId, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, InterfaceUUID, ProcNum, Protocol, NetworkAddress, Endpoint, InterfaceString, MethodString, CallStack) : 0
+#define EventWriteRPCServer_AssumeEnabled(EventTime, ProcessFilePath, ProcessId, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, InterfaceUUID, ProcNum, Protocol, NetworkAddress, Endpoint, InterfaceString, MethodString, CallStack) \
+        _mcgen_TEMPLATE_FOR_RPCServer(&JonMonProvider_Context, &RPCServer, EventTime, ProcessFilePath, ProcessId, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, InterfaceUUID, ProcNum, Protocol, NetworkAddress, Endpoint, InterfaceString, MethodString, CallStack)
+#define EventWriteRPCServer_ForContext(pContext, EventTime, ProcessFilePath, ProcessId, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, InterfaceUUID, ProcNum, Protocol, NetworkAddress, Endpoint, InterfaceString, MethodString, CallStack) \
+        MCGEN_EVENT_ENABLED_FORCONTEXT(pContext, RPCServer) \
+        ? _mcgen_TEMPLATE_FOR_RPCServer(&(pContext)->Context, &RPCServer, EventTime, ProcessFilePath, ProcessId, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, InterfaceUUID, ProcNum, Protocol, NetworkAddress, Endpoint, InterfaceString, MethodString, CallStack) : 0
+#define EventWriteRPCServer_ForContextAssumeEnabled(pContext, EventTime, ProcessFilePath, ProcessId, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, InterfaceUUID, ProcNum, Protocol, NetworkAddress, Endpoint, InterfaceString, MethodString, CallStack) \
+        _mcgen_TEMPLATE_FOR_RPCServer(&_mcgen_CheckContextType_JonMon(pContext)->Context, &RPCServer, EventTime, ProcessFilePath, ProcessId, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, InterfaceUUID, ProcNum, Protocol, NetworkAddress, Endpoint, InterfaceString, MethodString, CallStack)
+
+// This macro is for use by MC-generated code and should not be used directly.
+#define _mcgen_TEMPLATE_FOR_RPCServer _mcgen_PASTE2(McTemplateU0yzizqzqzqqzzzzz_, MCGEN_EVENTWRITETRANSFER)
+
+//
+// Enablement check macro for event "DPAPIUnprotect"
+//
+#define EventEnabledDPAPIUnprotect() _mcgen_EVENT_BIT_SET(JonMonEnableBits, 0)
+#define EventEnabledDPAPIUnprotect_ForContext(pContext) _mcgen_EVENT_BIT_SET(_mcgen_CheckContextType_JonMon(pContext)->EnableBits, 0)
+
+//
+// Event write macros for event "DPAPIUnprotect"
+//
+#define EventWriteDPAPIUnprotect(EventTime, ProcessFilePath, ProcessId, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, OperationType, DataDescription, Flags, ProtectionFlags) \
+        MCGEN_EVENT_ENABLED(DPAPIUnprotect) \
+        ? _mcgen_TEMPLATE_FOR_DPAPIUnprotect(&JonMonProvider_Context, &DPAPIUnprotect, EventTime, ProcessFilePath, ProcessId, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, OperationType, DataDescription, Flags, ProtectionFlags) : 0
+#define EventWriteDPAPIUnprotect_AssumeEnabled(EventTime, ProcessFilePath, ProcessId, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, OperationType, DataDescription, Flags, ProtectionFlags) \
+        _mcgen_TEMPLATE_FOR_DPAPIUnprotect(&JonMonProvider_Context, &DPAPIUnprotect, EventTime, ProcessFilePath, ProcessId, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, OperationType, DataDescription, Flags, ProtectionFlags)
+#define EventWriteDPAPIUnprotect_ForContext(pContext, EventTime, ProcessFilePath, ProcessId, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, OperationType, DataDescription, Flags, ProtectionFlags) \
+        MCGEN_EVENT_ENABLED_FORCONTEXT(pContext, DPAPIUnprotect) \
+        ? _mcgen_TEMPLATE_FOR_DPAPIUnprotect(&(pContext)->Context, &DPAPIUnprotect, EventTime, ProcessFilePath, ProcessId, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, OperationType, DataDescription, Flags, ProtectionFlags) : 0
+#define EventWriteDPAPIUnprotect_ForContextAssumeEnabled(pContext, EventTime, ProcessFilePath, ProcessId, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, OperationType, DataDescription, Flags, ProtectionFlags) \
+        _mcgen_TEMPLATE_FOR_DPAPIUnprotect(&_mcgen_CheckContextType_JonMon(pContext)->Context, &DPAPIUnprotect, EventTime, ProcessFilePath, ProcessId, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, OperationType, DataDescription, Flags, ProtectionFlags)
+
+// This macro is for use by MC-generated code and should not be used directly.
+#define _mcgen_TEMPLATE_FOR_DPAPIUnprotect _mcgen_PASTE2(McTemplateU0yzizqzqzzqq_, MCGEN_EVENTWRITETRANSFER)
+
+//
+// Enablement check macro for event "NetworkConnection"
+//
+#define EventEnabledNetworkConnection() _mcgen_EVENT_BIT_SET(JonMonEnableBits, 0)
+#define EventEnabledNetworkConnection_ForContext(pContext) _mcgen_EVENT_BIT_SET(_mcgen_CheckContextType_JonMon(pContext)->EnableBits, 0)
+
+//
+// Event write macros for event "NetworkConnection"
+//
+#define EventWriteNetworkConnection(EventTime, ProcessId, ProcessFilePath, SrcIpAddressIpv4, DestIpAddressIpv4, SrcPort, DestPort, Initiated, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId) \
+        MCGEN_EVENT_ENABLED(NetworkConnection) \
+        ? _mcgen_TEMPLATE_FOR_NetworkConnection(&JonMonProvider_Context, &NetworkConnection, EventTime, ProcessId, ProcessFilePath, SrcIpAddressIpv4, DestIpAddressIpv4, SrcPort, DestPort, Initiated, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId) : 0
+#define EventWriteNetworkConnection_AssumeEnabled(EventTime, ProcessId, ProcessFilePath, SrcIpAddressIpv4, DestIpAddressIpv4, SrcPort, DestPort, Initiated, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId) \
+        _mcgen_TEMPLATE_FOR_NetworkConnection(&JonMonProvider_Context, &NetworkConnection, EventTime, ProcessId, ProcessFilePath, SrcIpAddressIpv4, DestIpAddressIpv4, SrcPort, DestPort, Initiated, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId)
+#define EventWriteNetworkConnection_ForContext(pContext, EventTime, ProcessId, ProcessFilePath, SrcIpAddressIpv4, DestIpAddressIpv4, SrcPort, DestPort, Initiated, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId) \
+        MCGEN_EVENT_ENABLED_FORCONTEXT(pContext, NetworkConnection) \
+        ? _mcgen_TEMPLATE_FOR_NetworkConnection(&(pContext)->Context, &NetworkConnection, EventTime, ProcessId, ProcessFilePath, SrcIpAddressIpv4, DestIpAddressIpv4, SrcPort, DestPort, Initiated, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId) : 0
+#define EventWriteNetworkConnection_ForContextAssumeEnabled(pContext, EventTime, ProcessId, ProcessFilePath, SrcIpAddressIpv4, DestIpAddressIpv4, SrcPort, DestPort, Initiated, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId) \
+        _mcgen_TEMPLATE_FOR_NetworkConnection(&_mcgen_CheckContextType_JonMon(pContext)->Context, &NetworkConnection, EventTime, ProcessId, ProcessFilePath, SrcIpAddressIpv4, DestIpAddressIpv4, SrcPort, DestPort, Initiated, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId)
+
+// This macro is for use by MC-generated code and should not be used directly.
+#define _mcgen_TEMPLATE_FOR_NetworkConnection _mcgen_PASTE2(McTemplateU0yqzzzhhtzqzq_, MCGEN_EVENTWRITETRANSFER)
+
+//
+// Enablement check macro for event "AMSI"
+//
+#define EventEnabledAMSI() _mcgen_EVENT_BIT_SET(JonMonEnableBits, 0)
+#define EventEnabledAMSI_ForContext(pContext) _mcgen_EVENT_BIT_SET(_mcgen_CheckContextType_JonMon(pContext)->EnableBits, 0)
+
+//
+// Event write macros for event "AMSI"
+//
+#define EventWriteAMSI(EventTime, ProcessFilePath, ProcessId, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, AppName, ContentName, ScanStatus, ScanResult, ContentSize, Content, DecodedContent) \
+        MCGEN_EVENT_ENABLED(AMSI) \
+        ? _mcgen_TEMPLATE_FOR_AMSI(&JonMonProvider_Context, &AMSI, EventTime, ProcessFilePath, ProcessId, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, AppName, ContentName, ScanStatus, ScanResult, ContentSize, Content, DecodedContent) : 0
+#define EventWriteAMSI_AssumeEnabled(EventTime, ProcessFilePath, ProcessId, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, AppName, ContentName, ScanStatus, ScanResult, ContentSize, Content, DecodedContent) \
+        _mcgen_TEMPLATE_FOR_AMSI(&JonMonProvider_Context, &AMSI, EventTime, ProcessFilePath, ProcessId, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, AppName, ContentName, ScanStatus, ScanResult, ContentSize, Content, DecodedContent)
+#define EventWriteAMSI_ForContext(pContext, EventTime, ProcessFilePath, ProcessId, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, AppName, ContentName, ScanStatus, ScanResult, ContentSize, Content, DecodedContent) \
+        MCGEN_EVENT_ENABLED_FORCONTEXT(pContext, AMSI) \
+        ? _mcgen_TEMPLATE_FOR_AMSI(&(pContext)->Context, &AMSI, EventTime, ProcessFilePath, ProcessId, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, AppName, ContentName, ScanStatus, ScanResult, ContentSize, Content, DecodedContent) : 0
+#define EventWriteAMSI_ForContextAssumeEnabled(pContext, EventTime, ProcessFilePath, ProcessId, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, AppName, ContentName, ScanStatus, ScanResult, ContentSize, Content, DecodedContent) \
+        _mcgen_TEMPLATE_FOR_AMSI(&_mcgen_CheckContextType_JonMon(pContext)->Context, &AMSI, EventTime, ProcessFilePath, ProcessId, ProcessUser, ProcessUserLogonId, ProcessIntegrityLevel, ProcessSessionId, AppName, ContentName, ScanStatus, ScanResult, ContentSize, Content, DecodedContent)
+
+// This macro is for use by MC-generated code and should not be used directly.
+#define _mcgen_TEMPLATE_FOR_AMSI _mcgen_PASTE2(McTemplateU0yzizqzqzzuqqbr11z_, MCGEN_EVENTWRITETRANSFER)
+
+//
+// Enablement check macro for event "RemoteReadProcessMemory"
+//
+#define EventEnabledRemoteReadProcessMemory() _mcgen_EVENT_BIT_SET(JonMonEnableBits, 0)
+#define EventEnabledRemoteReadProcessMemory_ForContext(pContext) _mcgen_EVENT_BIT_SET(_mcgen_CheckContextType_JonMon(pContext)->EnableBits, 0)
+
+//
+// Event write macros for event "RemoteReadProcessMemory"
+//
+#define EventWriteRemoteReadProcessMemory(EventTime_, SourceProcessFilePath, SourceProcessId, SourceProcessUser, SourceProcessUserLogonId, SourceProcessIntegrityLevel, SourceProcessSessionId, SourceThreadId, TargetProcessFilePath, TargetProcessId, TargetProcessUser, TargetProcessUserLogonId, TargetProcessIntegrityLevel, TargetProcessSessionId, SourceProcessStartKey, TargetProcessStartKey) \
+        MCGEN_EVENT_ENABLED(RemoteReadProcessMemory) \
+        ? _mcgen_TEMPLATE_FOR_RemoteReadProcessMemory(&JonMonProvider_Context, &RemoteReadProcessMemory, EventTime_, SourceProcessFilePath, SourceProcessId, SourceProcessUser, SourceProcessUserLogonId, SourceProcessIntegrityLevel, SourceProcessSessionId, SourceThreadId, TargetProcessFilePath, TargetProcessId, TargetProcessUser, TargetProcessUserLogonId, TargetProcessIntegrityLevel, TargetProcessSessionId, SourceProcessStartKey, TargetProcessStartKey) : 0
+#define EventWriteRemoteReadProcessMemory_AssumeEnabled(EventTime_, SourceProcessFilePath, SourceProcessId, SourceProcessUser, SourceProcessUserLogonId, SourceProcessIntegrityLevel, SourceProcessSessionId, SourceThreadId, TargetProcessFilePath, TargetProcessId, TargetProcessUser, TargetProcessUserLogonId, TargetProcessIntegrityLevel, TargetProcessSessionId, SourceProcessStartKey, TargetProcessStartKey) \
+        _mcgen_TEMPLATE_FOR_RemoteReadProcessMemory(&JonMonProvider_Context, &RemoteReadProcessMemory, EventTime_, SourceProcessFilePath, SourceProcessId, SourceProcessUser, SourceProcessUserLogonId, SourceProcessIntegrityLevel, SourceProcessSessionId, SourceThreadId, TargetProcessFilePath, TargetProcessId, TargetProcessUser, TargetProcessUserLogonId, TargetProcessIntegrityLevel, TargetProcessSessionId, SourceProcessStartKey, TargetProcessStartKey)
+#define EventWriteRemoteReadProcessMemory_ForContext(pContext, EventTime_, SourceProcessFilePath, SourceProcessId, SourceProcessUser, SourceProcessUserLogonId, SourceProcessIntegrityLevel, SourceProcessSessionId, SourceThreadId, TargetProcessFilePath, TargetProcessId, TargetProcessUser, TargetProcessUserLogonId, TargetProcessIntegrityLevel, TargetProcessSessionId, SourceProcessStartKey, TargetProcessStartKey) \
+        MCGEN_EVENT_ENABLED_FORCONTEXT(pContext, RemoteReadProcessMemory) \
+        ? _mcgen_TEMPLATE_FOR_RemoteReadProcessMemory(&(pContext)->Context, &RemoteReadProcessMemory, EventTime_, SourceProcessFilePath, SourceProcessId, SourceProcessUser, SourceProcessUserLogonId, SourceProcessIntegrityLevel, SourceProcessSessionId, SourceThreadId, TargetProcessFilePath, TargetProcessId, TargetProcessUser, TargetProcessUserLogonId, TargetProcessIntegrityLevel, TargetProcessSessionId, SourceProcessStartKey, TargetProcessStartKey) : 0
+#define EventWriteRemoteReadProcessMemory_ForContextAssumeEnabled(pContext, EventTime_, SourceProcessFilePath, SourceProcessId, SourceProcessUser, SourceProcessUserLogonId, SourceProcessIntegrityLevel, SourceProcessSessionId, SourceThreadId, TargetProcessFilePath, TargetProcessId, TargetProcessUser, TargetProcessUserLogonId, TargetProcessIntegrityLevel, TargetProcessSessionId, SourceProcessStartKey, TargetProcessStartKey) \
+        _mcgen_TEMPLATE_FOR_RemoteReadProcessMemory(&_mcgen_CheckContextType_JonMon(pContext)->Context, &RemoteReadProcessMemory, EventTime_, SourceProcessFilePath, SourceProcessId, SourceProcessUser, SourceProcessUserLogonId, SourceProcessIntegrityLevel, SourceProcessSessionId, SourceThreadId, TargetProcessFilePath, TargetProcessId, TargetProcessUser, TargetProcessUserLogonId, TargetProcessIntegrityLevel, TargetProcessSessionId, SourceProcessStartKey, TargetProcessStartKey)
+
+// This macro is for use by MC-generated code and should not be used directly.
+#define _mcgen_TEMPLATE_FOR_RemoteReadProcessMemory _mcgen_PASTE2(McTemplateU0yzizqzqqzizqzqxx_, MCGEN_EVENTWRITETRANSFER)
+
+//
+// Enablement check macro for event "RemoteWriteProcessMemory"
+//
+#define EventEnabledRemoteWriteProcessMemory() _mcgen_EVENT_BIT_SET(JonMonEnableBits, 0)
+#define EventEnabledRemoteWriteProcessMemory_ForContext(pContext) _mcgen_EVENT_BIT_SET(_mcgen_CheckContextType_JonMon(pContext)->EnableBits, 0)
+
+//
+// Event write macros for event "RemoteWriteProcessMemory"
+//
+#define EventWriteRemoteWriteProcessMemory(EventTime_, SourceProcessFilePath, SourceProcessId, SourceProcessUser, SourceProcessUserLogonId, SourceProcessIntegrityLevel, SourceProcessSessionId, SourceThreadId, TargetProcessFilePath, TargetProcessId, TargetProcessUser, TargetProcessUserLogonId, TargetProcessIntegrityLevel, TargetProcessSessionId, SourceProcessStartKey, TargetProcessStartKey) \
+        MCGEN_EVENT_ENABLED(RemoteWriteProcessMemory) \
+        ? _mcgen_TEMPLATE_FOR_RemoteWriteProcessMemory(&JonMonProvider_Context, &RemoteWriteProcessMemory, EventTime_, SourceProcessFilePath, SourceProcessId, SourceProcessUser, SourceProcessUserLogonId, SourceProcessIntegrityLevel, SourceProcessSessionId, SourceThreadId, TargetProcessFilePath, TargetProcessId, TargetProcessUser, TargetProcessUserLogonId, TargetProcessIntegrityLevel, TargetProcessSessionId, SourceProcessStartKey, TargetProcessStartKey) : 0
+#define EventWriteRemoteWriteProcessMemory_AssumeEnabled(EventTime_, SourceProcessFilePath, SourceProcessId, SourceProcessUser, SourceProcessUserLogonId, SourceProcessIntegrityLevel, SourceProcessSessionId, SourceThreadId, TargetProcessFilePath, TargetProcessId, TargetProcessUser, TargetProcessUserLogonId, TargetProcessIntegrityLevel, TargetProcessSessionId, SourceProcessStartKey, TargetProcessStartKey) \
+        _mcgen_TEMPLATE_FOR_RemoteWriteProcessMemory(&JonMonProvider_Context, &RemoteWriteProcessMemory, EventTime_, SourceProcessFilePath, SourceProcessId, SourceProcessUser, SourceProcessUserLogonId, SourceProcessIntegrityLevel, SourceProcessSessionId, SourceThreadId, TargetProcessFilePath, TargetProcessId, TargetProcessUser, TargetProcessUserLogonId, TargetProcessIntegrityLevel, TargetProcessSessionId, SourceProcessStartKey, TargetProcessStartKey)
+#define EventWriteRemoteWriteProcessMemory_ForContext(pContext, EventTime_, SourceProcessFilePath, SourceProcessId, SourceProcessUser, SourceProcessUserLogonId, SourceProcessIntegrityLevel, SourceProcessSessionId, SourceThreadId, TargetProcessFilePath, TargetProcessId, TargetProcessUser, TargetProcessUserLogonId, TargetProcessIntegrityLevel, TargetProcessSessionId, SourceProcessStartKey, TargetProcessStartKey) \
+        MCGEN_EVENT_ENABLED_FORCONTEXT(pContext, RemoteWriteProcessMemory) \
+        ? _mcgen_TEMPLATE_FOR_RemoteWriteProcessMemory(&(pContext)->Context, &RemoteWriteProcessMemory, EventTime_, SourceProcessFilePath, SourceProcessId, SourceProcessUser, SourceProcessUserLogonId, SourceProcessIntegrityLevel, SourceProcessSessionId, SourceThreadId, TargetProcessFilePath, TargetProcessId, TargetProcessUser, TargetProcessUserLogonId, TargetProcessIntegrityLevel, TargetProcessSessionId, SourceProcessStartKey, TargetProcessStartKey) : 0
+#define EventWriteRemoteWriteProcessMemory_ForContextAssumeEnabled(pContext, EventTime_, SourceProcessFilePath, SourceProcessId, SourceProcessUser, SourceProcessUserLogonId, SourceProcessIntegrityLevel, SourceProcessSessionId, SourceThreadId, TargetProcessFilePath, TargetProcessId, TargetProcessUser, TargetProcessUserLogonId, TargetProcessIntegrityLevel, TargetProcessSessionId, SourceProcessStartKey, TargetProcessStartKey) \
+        _mcgen_TEMPLATE_FOR_RemoteWriteProcessMemory(&_mcgen_CheckContextType_JonMon(pContext)->Context, &RemoteWriteProcessMemory, EventTime_, SourceProcessFilePath, SourceProcessId, SourceProcessUser, SourceProcessUserLogonId, SourceProcessIntegrityLevel, SourceProcessSessionId, SourceThreadId, TargetProcessFilePath, TargetProcessId, TargetProcessUser, TargetProcessUserLogonId, TargetProcessIntegrityLevel, TargetProcessSessionId, SourceProcessStartKey, TargetProcessStartKey)
+
+// This macro is for use by MC-generated code and should not be used directly.
+#define _mcgen_TEMPLATE_FOR_RemoteWriteProcessMemory _mcgen_PASTE2(McTemplateU0yzizqzqqzizqzqxx_, MCGEN_EVENTWRITETRANSFER)
+
+//
+// Enablement check macro for event "RemoteVirtualAllocation"
+//
+#define EventEnabledRemoteVirtualAllocation() _mcgen_EVENT_BIT_SET(JonMonEnableBits, 0)
+#define EventEnabledRemoteVirtualAllocation_ForContext(pContext) _mcgen_EVENT_BIT_SET(_mcgen_CheckContextType_JonMon(pContext)->EnableBits, 0)
+
+//
+// Event write macros for event "RemoteVirtualAllocation"
+//
+#define EventWriteRemoteVirtualAllocation(EventTime_, SourceProcessFilePath, SourceProcessId, SourceProcessUser, SourceProcessUserLogonId, SourceProcessIntegrityLevel, SourceProcessSessionId, SourceThreadId, TargetProcessFilePath, TargetProcessId, TargetProcessUser, TargetProcessUserLogonId, TargetProcessIntegrityLevel, TargetProcessSessionId, SourceProcessStartKey, TargetProcessStartKey, BaseAddress) \
+        MCGEN_EVENT_ENABLED(RemoteVirtualAllocation) \
+        ? _mcgen_TEMPLATE_FOR_RemoteVirtualAllocation(&JonMonProvider_Context, &RemoteVirtualAllocation, EventTime_, SourceProcessFilePath, SourceProcessId, SourceProcessUser, SourceProcessUserLogonId, SourceProcessIntegrityLevel, SourceProcessSessionId, SourceThreadId, TargetProcessFilePath, TargetProcessId, TargetProcessUser, TargetProcessUserLogonId, TargetProcessIntegrityLevel, TargetProcessSessionId, SourceProcessStartKey, TargetProcessStartKey, BaseAddress) : 0
+#define EventWriteRemoteVirtualAllocation_AssumeEnabled(EventTime_, SourceProcessFilePath, SourceProcessId, SourceProcessUser, SourceProcessUserLogonId, SourceProcessIntegrityLevel, SourceProcessSessionId, SourceThreadId, TargetProcessFilePath, TargetProcessId, TargetProcessUser, TargetProcessUserLogonId, TargetProcessIntegrityLevel, TargetProcessSessionId, SourceProcessStartKey, TargetProcessStartKey, BaseAddress) \
+        _mcgen_TEMPLATE_FOR_RemoteVirtualAllocation(&JonMonProvider_Context, &RemoteVirtualAllocation, EventTime_, SourceProcessFilePath, SourceProcessId, SourceProcessUser, SourceProcessUserLogonId, SourceProcessIntegrityLevel, SourceProcessSessionId, SourceThreadId, TargetProcessFilePath, TargetProcessId, TargetProcessUser, TargetProcessUserLogonId, TargetProcessIntegrityLevel, TargetProcessSessionId, SourceProcessStartKey, TargetProcessStartKey, BaseAddress)
+#define EventWriteRemoteVirtualAllocation_ForContext(pContext, EventTime_, SourceProcessFilePath, SourceProcessId, SourceProcessUser, SourceProcessUserLogonId, SourceProcessIntegrityLevel, SourceProcessSessionId, SourceThreadId, TargetProcessFilePath, TargetProcessId, TargetProcessUser, TargetProcessUserLogonId, TargetProcessIntegrityLevel, TargetProcessSessionId, SourceProcessStartKey, TargetProcessStartKey, BaseAddress) \
+        MCGEN_EVENT_ENABLED_FORCONTEXT(pContext, RemoteVirtualAllocation) \
+        ? _mcgen_TEMPLATE_FOR_RemoteVirtualAllocation(&(pContext)->Context, &RemoteVirtualAllocation, EventTime_, SourceProcessFilePath, SourceProcessId, SourceProcessUser, SourceProcessUserLogonId, SourceProcessIntegrityLevel, SourceProcessSessionId, SourceThreadId, TargetProcessFilePath, TargetProcessId, TargetProcessUser, TargetProcessUserLogonId, TargetProcessIntegrityLevel, TargetProcessSessionId, SourceProcessStartKey, TargetProcessStartKey, BaseAddress) : 0
+#define EventWriteRemoteVirtualAllocation_ForContextAssumeEnabled(pContext, EventTime_, SourceProcessFilePath, SourceProcessId, SourceProcessUser, SourceProcessUserLogonId, SourceProcessIntegrityLevel, SourceProcessSessionId, SourceThreadId, TargetProcessFilePath, TargetProcessId, TargetProcessUser, TargetProcessUserLogonId, TargetProcessIntegrityLevel, TargetProcessSessionId, SourceProcessStartKey, TargetProcessStartKey, BaseAddress) \
+        _mcgen_TEMPLATE_FOR_RemoteVirtualAllocation(&_mcgen_CheckContextType_JonMon(pContext)->Context, &RemoteVirtualAllocation, EventTime_, SourceProcessFilePath, SourceProcessId, SourceProcessUser, SourceProcessUserLogonId, SourceProcessIntegrityLevel, SourceProcessSessionId, SourceThreadId, TargetProcessFilePath, TargetProcessId, TargetProcessUser, TargetProcessUserLogonId, TargetProcessIntegrityLevel, TargetProcessSessionId, SourceProcessStartKey, TargetProcessStartKey, BaseAddress)
+
+// This macro is for use by MC-generated code and should not be used directly.
+#define _mcgen_TEMPLATE_FOR_RemoteVirtualAllocation _mcgen_PASTE2(McTemplateU0yzizqzqqzizqzqxxx_, MCGEN_EVENTWRITETRANSFER)
+
+//
+// Enablement check macro for event "RemoteQueueUserAPC"
+//
+#define EventEnabledRemoteQueueUserAPC() _mcgen_EVENT_BIT_SET(JonMonEnableBits, 0)
+#define EventEnabledRemoteQueueUserAPC_ForContext(pContext) _mcgen_EVENT_BIT_SET(_mcgen_CheckContextType_JonMon(pContext)->EnableBits, 0)
+
+//
+// Event write macros for event "RemoteQueueUserAPC"
+//
+#define EventWriteRemoteQueueUserAPC(EventTime_, SourceProcessFilePath, SourceProcessId, SourceProcessUser, SourceProcessUserLogonId, SourceProcessIntegrityLevel, SourceProcessSessionId, SourceThreadId, TargetProcessFilePath, TargetProcessId, TargetProcessUser, TargetProcessUserLogonId, TargetProcessIntegrityLevel, TargetProcessSessionId, SourceProcessStartKey, TargetProcessStartKey, ApcRoutine, ApcArgument1, ApcArgument2, ApcArgument3) \
+        MCGEN_EVENT_ENABLED(RemoteQueueUserAPC) \
+        ? _mcgen_TEMPLATE_FOR_RemoteQueueUserAPC(&JonMonProvider_Context, &RemoteQueueUserAPC, EventTime_, SourceProcessFilePath, SourceProcessId, SourceProcessUser, SourceProcessUserLogonId, SourceProcessIntegrityLevel, SourceProcessSessionId, SourceThreadId, TargetProcessFilePath, TargetProcessId, TargetProcessUser, TargetProcessUserLogonId, TargetProcessIntegrityLevel, TargetProcessSessionId, SourceProcessStartKey, TargetProcessStartKey, ApcRoutine, ApcArgument1, ApcArgument2, ApcArgument3) : 0
+#define EventWriteRemoteQueueUserAPC_AssumeEnabled(EventTime_, SourceProcessFilePath, SourceProcessId, SourceProcessUser, SourceProcessUserLogonId, SourceProcessIntegrityLevel, SourceProcessSessionId, SourceThreadId, TargetProcessFilePath, TargetProcessId, TargetProcessUser, TargetProcessUserLogonId, TargetProcessIntegrityLevel, TargetProcessSessionId, SourceProcessStartKey, TargetProcessStartKey, ApcRoutine, ApcArgument1, ApcArgument2, ApcArgument3) \
+        _mcgen_TEMPLATE_FOR_RemoteQueueUserAPC(&JonMonProvider_Context, &RemoteQueueUserAPC, EventTime_, SourceProcessFilePath, SourceProcessId, SourceProcessUser, SourceProcessUserLogonId, SourceProcessIntegrityLevel, SourceProcessSessionId, SourceThreadId, TargetProcessFilePath, TargetProcessId, TargetProcessUser, TargetProcessUserLogonId, TargetProcessIntegrityLevel, TargetProcessSessionId, SourceProcessStartKey, TargetProcessStartKey, ApcRoutine, ApcArgument1, ApcArgument2, ApcArgument3)
+#define EventWriteRemoteQueueUserAPC_ForContext(pContext, EventTime_, SourceProcessFilePath, SourceProcessId, SourceProcessUser, SourceProcessUserLogonId, SourceProcessIntegrityLevel, SourceProcessSessionId, SourceThreadId, TargetProcessFilePath, TargetProcessId, TargetProcessUser, TargetProcessUserLogonId, TargetProcessIntegrityLevel, TargetProcessSessionId, SourceProcessStartKey, TargetProcessStartKey, ApcRoutine, ApcArgument1, ApcArgument2, ApcArgument3) \
+        MCGEN_EVENT_ENABLED_FORCONTEXT(pContext, RemoteQueueUserAPC) \
+        ? _mcgen_TEMPLATE_FOR_RemoteQueueUserAPC(&(pContext)->Context, &RemoteQueueUserAPC, EventTime_, SourceProcessFilePath, SourceProcessId, SourceProcessUser, SourceProcessUserLogonId, SourceProcessIntegrityLevel, SourceProcessSessionId, SourceThreadId, TargetProcessFilePath, TargetProcessId, TargetProcessUser, TargetProcessUserLogonId, TargetProcessIntegrityLevel, TargetProcessSessionId, SourceProcessStartKey, TargetProcessStartKey, ApcRoutine, ApcArgument1, ApcArgument2, ApcArgument3) : 0
+#define EventWriteRemoteQueueUserAPC_ForContextAssumeEnabled(pContext, EventTime_, SourceProcessFilePath, SourceProcessId, SourceProcessUser, SourceProcessUserLogonId, SourceProcessIntegrityLevel, SourceProcessSessionId, SourceThreadId, TargetProcessFilePath, TargetProcessId, TargetProcessUser, TargetProcessUserLogonId, TargetProcessIntegrityLevel, TargetProcessSessionId, SourceProcessStartKey, TargetProcessStartKey, ApcRoutine, ApcArgument1, ApcArgument2, ApcArgument3) \
+        _mcgen_TEMPLATE_FOR_RemoteQueueUserAPC(&_mcgen_CheckContextType_JonMon(pContext)->Context, &RemoteQueueUserAPC, EventTime_, SourceProcessFilePath, SourceProcessId, SourceProcessUser, SourceProcessUserLogonId, SourceProcessIntegrityLevel, SourceProcessSessionId, SourceThreadId, TargetProcessFilePath, TargetProcessId, TargetProcessUser, TargetProcessUserLogonId, TargetProcessIntegrityLevel, TargetProcessSessionId, SourceProcessStartKey, TargetProcessStartKey, ApcRoutine, ApcArgument1, ApcArgument2, ApcArgument3)
+
+// This macro is for use by MC-generated code and should not be used directly.
+#define _mcgen_TEMPLATE_FOR_RemoteQueueUserAPC _mcgen_PASTE2(McTemplateU0yzizqzqqzizqzqxxxxxx_, MCGEN_EVENTWRITETRANSFER)
+
+//
+// Enablement check macro for event "QueryTokenImpersonation"
+//
+#define EventEnabledQueryTokenImpersonation() _mcgen_EVENT_BIT_SET(JonMonEnableBits, 0)
+#define EventEnabledQueryTokenImpersonation_ForContext(pContext) _mcgen_EVENT_BIT_SET(_mcgen_CheckContextType_JonMon(pContext)->EnableBits, 0)
+
+//
+// Event write macros for event "QueryTokenImpersonation"
+//
+#define EventWriteQueryTokenImpersonation(EventTime_, ProcessFilePath, ProcessId, ProcessUserName, ProcessUserLogonId, ProcessIntegrityLevel, TargetThreadId, TargetThreadIntegrityLevel, TargetThreadUserName) \
+        MCGEN_EVENT_ENABLED(QueryTokenImpersonation) \
+        ? _mcgen_TEMPLATE_FOR_QueryTokenImpersonation(&JonMonProvider_Context, &QueryTokenImpersonation, EventTime_, ProcessFilePath, ProcessId, ProcessUserName, ProcessUserLogonId, ProcessIntegrityLevel, TargetThreadId, TargetThreadIntegrityLevel, TargetThreadUserName) : 0
+#define EventWriteQueryTokenImpersonation_AssumeEnabled(EventTime_, ProcessFilePath, ProcessId, ProcessUserName, ProcessUserLogonId, ProcessIntegrityLevel, TargetThreadId, TargetThreadIntegrityLevel, TargetThreadUserName) \
+        _mcgen_TEMPLATE_FOR_QueryTokenImpersonation(&JonMonProvider_Context, &QueryTokenImpersonation, EventTime_, ProcessFilePath, ProcessId, ProcessUserName, ProcessUserLogonId, ProcessIntegrityLevel, TargetThreadId, TargetThreadIntegrityLevel, TargetThreadUserName)
+#define EventWriteQueryTokenImpersonation_ForContext(pContext, EventTime_, ProcessFilePath, ProcessId, ProcessUserName, ProcessUserLogonId, ProcessIntegrityLevel, TargetThreadId, TargetThreadIntegrityLevel, TargetThreadUserName) \
+        MCGEN_EVENT_ENABLED_FORCONTEXT(pContext, QueryTokenImpersonation) \
+        ? _mcgen_TEMPLATE_FOR_QueryTokenImpersonation(&(pContext)->Context, &QueryTokenImpersonation, EventTime_, ProcessFilePath, ProcessId, ProcessUserName, ProcessUserLogonId, ProcessIntegrityLevel, TargetThreadId, TargetThreadIntegrityLevel, TargetThreadUserName) : 0
+#define EventWriteQueryTokenImpersonation_ForContextAssumeEnabled(pContext, EventTime_, ProcessFilePath, ProcessId, ProcessUserName, ProcessUserLogonId, ProcessIntegrityLevel, TargetThreadId, TargetThreadIntegrityLevel, TargetThreadUserName) \
+        _mcgen_TEMPLATE_FOR_QueryTokenImpersonation(&_mcgen_CheckContextType_JonMon(pContext)->Context, &QueryTokenImpersonation, EventTime_, ProcessFilePath, ProcessId, ProcessUserName, ProcessUserLogonId, ProcessIntegrityLevel, TargetThreadId, TargetThreadIntegrityLevel, TargetThreadUserName)
+
+// This macro is for use by MC-generated code and should not be used directly.
+#define _mcgen_TEMPLATE_FOR_QueryTokenImpersonation _mcgen_PASTE2(McTemplateU0yzqzqzqzz_, MCGEN_EVENTWRITETRANSFER)
+
+//
+// Enablement check macro for event "DebugLog102"
+//
+#define EventEnabledDebugLog102() _mcgen_EVENT_BIT_SET(JonMonEnableBits, 0)
+#define EventEnabledDebugLog102_ForContext(pContext) _mcgen_EVENT_BIT_SET(_mcgen_CheckContextType_JonMon(pContext)->EnableBits, 0)
+
+//
+// Event write macros for event "DebugLog102"
+//
+#define EventWriteDebugLog102(EventId, ProtectionLevel) \
+        MCGEN_EVENT_ENABLED(DebugLog102) \
+        ? _mcgen_TEMPLATE_FOR_DebugLog102(&JonMonProvider_Context, &DebugLog102, EventId, ProtectionLevel) : 0
+#define EventWriteDebugLog102_AssumeEnabled(EventId, ProtectionLevel) \
+        _mcgen_TEMPLATE_FOR_DebugLog102(&JonMonProvider_Context, &DebugLog102, EventId, ProtectionLevel)
+#define EventWriteDebugLog102_ForContext(pContext, EventId, ProtectionLevel) \
+        MCGEN_EVENT_ENABLED_FORCONTEXT(pContext, DebugLog102) \
+        ? _mcgen_TEMPLATE_FOR_DebugLog102(&(pContext)->Context, &DebugLog102, EventId, ProtectionLevel) : 0
+#define EventWriteDebugLog102_ForContextAssumeEnabled(pContext, EventId, ProtectionLevel) \
+        _mcgen_TEMPLATE_FOR_DebugLog102(&_mcgen_CheckContextType_JonMon(pContext)->Context, &DebugLog102, EventId, ProtectionLevel)
+
+// This macro is for use by MC-generated code and should not be used directly.
+#define _mcgen_TEMPLATE_FOR_DebugLog102 _mcgen_PASTE2(McTemplateU0dt_, MCGEN_EVENTWRITETRANSFER)
 
 #endif // MCGEN_DISABLE_PROVIDER_CODE_GENERATION
 
@@ -1629,120 +1503,98 @@ _mcgen_CheckContextType_JonMon(_In_ McGenContext_JonMon* pContext)
 //
 
 //
-// Function for template "EID2" (and possibly others).
+// Function for template "EID102" (and possibly others).
 // This function is for use by MC-generated code and should not be used directly.
 //
-#ifndef McTemplateK0mdxxzxxxzzq_def
-#define McTemplateK0mdxxzxxxzzq_def
+#ifndef McTemplateU0dt_def
+#define McTemplateU0dt_def
 ETW_INLINE
 ULONG
-_mcgen_PASTE2(McTemplateK0mdxxzxxxzzq_, MCGEN_EVENTWRITETRANSFER)(
+_mcgen_PASTE2(McTemplateU0dt_, MCGEN_EVENTWRITETRANSFER)(
     _In_ PMCGEN_TRACE_CONTEXT Context,
     _In_ PCEVENT_DESCRIPTOR Descriptor,
-    _In_opt_ const GUID* Activity,
-    _In_ const FILETIME*  _Arg0,
-    _In_ const signed int  _Arg1,
-    _In_ const unsigned __int64  _Arg2,
-    _In_ const unsigned __int64  _Arg3,
-    _In_opt_ PCWSTR  _Arg4,
-    _In_ const unsigned __int64  _Arg5,
-    _In_ const unsigned __int64  _Arg6,
-    _In_ const unsigned __int64  _Arg7,
-    _In_opt_ PCWSTR  _Arg8,
-    _In_opt_ PCWSTR  _Arg9,
-    _In_ const unsigned int  _Arg10
+    _In_ const signed int  _Arg0,
+    _In_ const signed int  _Arg1
     )
 {
-#define McTemplateK0mdxxzxxxzzq_ARGCOUNT 11
+#define McTemplateU0dt_ARGCOUNT 2
 
-    EVENT_DATA_DESCRIPTOR EventData[McTemplateK0mdxxzxxxzzq_ARGCOUNT + 1];
+    EVENT_DATA_DESCRIPTOR EventData[McTemplateU0dt_ARGCOUNT + 1];
 
-    EventDataDescCreate(&EventData[1],_Arg0, sizeof(FILETIME)  );
+    EventDataDescCreate(&EventData[1],&_Arg0, sizeof(const signed int)  );
 
     EventDataDescCreate(&EventData[2],&_Arg1, sizeof(const signed int)  );
 
-    EventDataDescCreate(&EventData[3],&_Arg2, sizeof(const unsigned __int64)  );
+    return McGenEventWrite(Context, Descriptor, NULL, McTemplateU0dt_ARGCOUNT + 1, EventData);
+}
+#endif // McTemplateU0dt_def
 
-    EventDataDescCreate(&EventData[4],&_Arg3, sizeof(const unsigned __int64)  );
+//
+// Function for template "EID1" (and possibly others).
+// This function is for use by MC-generated code and should not be used directly.
+//
+#ifndef McTemplateU0yiiiizzqzqqzziizqqzqqt_def
+#define McTemplateU0yiiiizzqzqqzziizqqzqqt_def
+ETW_INLINE
+ULONG
+_mcgen_PASTE2(McTemplateU0yiiiizzqzqqzziizqqzqqt_, MCGEN_EVENTWRITETRANSFER)(
+    _In_ PMCGEN_TRACE_CONTEXT Context,
+    _In_ PCEVENT_DESCRIPTOR Descriptor,
+    _In_ const SYSTEMTIME*  _Arg0,
+    _In_ const signed __int64  _Arg1,
+    _In_ const signed __int64  _Arg2,
+    _In_ const signed __int64  _Arg3,
+    _In_ const signed __int64  _Arg4,
+    _In_opt_ PCWSTR  _Arg5,
+    _In_opt_ PCWSTR  _Arg6,
+    _In_ const unsigned int  _Arg7,
+    _In_opt_ PCWSTR  _Arg8,
+    _In_ const unsigned int  _Arg9,
+    _In_ const unsigned int  _Arg10,
+    _In_opt_ PCWSTR  _Arg11,
+    _In_opt_ PCWSTR  _Arg12,
+    _In_ const signed __int64  _Arg13,
+    _In_ const signed __int64  _Arg14,
+    _In_opt_ PCWSTR  _Arg15,
+    _In_ const unsigned int  _Arg16,
+    _In_ const unsigned int  _Arg17,
+    _In_opt_ PCWSTR  _Arg18,
+    _In_ const unsigned int  _Arg19,
+    _In_ const unsigned int  _Arg20,
+    _In_ const signed int  _Arg21
+    )
+{
+#define McTemplateU0yiiiizzqzqqzziizqqzqqt_ARGCOUNT 22
 
-    EventDataDescCreate(&EventData[5],
-                        (_Arg4 != NULL) ? _Arg4 : L"NULL",
-                        (_Arg4 != NULL) ? (ULONG)((wcslen(_Arg4) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
+    EVENT_DATA_DESCRIPTOR EventData[McTemplateU0yiiiizzqzqqzziizqqzqqt_ARGCOUNT + 1];
 
-    EventDataDescCreate(&EventData[6],&_Arg5, sizeof(const unsigned __int64)  );
+    EventDataDescCreate(&EventData[1],_Arg0, sizeof(SYSTEMTIME)  );
 
-    EventDataDescCreate(&EventData[7],&_Arg6, sizeof(const unsigned __int64)  );
+    EventDataDescCreate(&EventData[2],&_Arg1, sizeof(const signed __int64)  );
 
-    EventDataDescCreate(&EventData[8],&_Arg7, sizeof(const unsigned __int64)  );
+    EventDataDescCreate(&EventData[3],&_Arg2, sizeof(const signed __int64)  );
+
+    EventDataDescCreate(&EventData[4],&_Arg3, sizeof(const signed __int64)  );
+
+    EventDataDescCreate(&EventData[5],&_Arg4, sizeof(const signed __int64)  );
+
+    EventDataDescCreate(&EventData[6],
+                        (_Arg5 != NULL) ? _Arg5 : L"NULL",
+                        (_Arg5 != NULL) ? (ULONG)((wcslen(_Arg5) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
+
+    EventDataDescCreate(&EventData[7],
+                        (_Arg6 != NULL) ? _Arg6 : L"NULL",
+                        (_Arg6 != NULL) ? (ULONG)((wcslen(_Arg6) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
+
+    EventDataDescCreate(&EventData[8],&_Arg7, sizeof(const unsigned int)  );
 
     EventDataDescCreate(&EventData[9],
                         (_Arg8 != NULL) ? _Arg8 : L"NULL",
                         (_Arg8 != NULL) ? (ULONG)((wcslen(_Arg8) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
 
-    EventDataDescCreate(&EventData[10],
-                        (_Arg9 != NULL) ? _Arg9 : L"NULL",
-                        (_Arg9 != NULL) ? (ULONG)((wcslen(_Arg9) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
+    EventDataDescCreate(&EventData[10],&_Arg9, sizeof(const unsigned int)  );
 
     EventDataDescCreate(&EventData[11],&_Arg10, sizeof(const unsigned int)  );
-
-    return McGenEventWrite(Context, Descriptor, Activity, McTemplateK0mdxxzxxxzzq_ARGCOUNT + 1, EventData);
-}
-#endif // McTemplateK0mdxxzxxxzzq_def
-
-//
-// Function for template "EID26" (and possibly others).
-// This function is for use by MC-generated code and should not be used directly.
-//
-#ifndef McTemplateK0mqqqqxxqppzzz_def
-#define McTemplateK0mqqqqxxqppzzz_def
-ETW_INLINE
-ULONG
-_mcgen_PASTE2(McTemplateK0mqqqqxxqppzzz_, MCGEN_EVENTWRITETRANSFER)(
-    _In_ PMCGEN_TRACE_CONTEXT Context,
-    _In_ PCEVENT_DESCRIPTOR Descriptor,
-    _In_opt_ const GUID* Activity,
-    _In_ const FILETIME*  _Arg0,
-    _In_ const unsigned int  _Arg1,
-    _In_ const unsigned int  _Arg2,
-    _In_ const unsigned int  _Arg3,
-    _In_ const unsigned int  _Arg4,
-    _In_ const unsigned __int64  _Arg5,
-    _In_ const unsigned __int64  _Arg6,
-    _In_ const unsigned int  _Arg7,
-    _In_opt_ const void*  _Arg8,
-    _In_opt_ const void*  _Arg9,
-    _In_opt_ PCWSTR  _Arg10,
-    _In_opt_ PCWSTR  _Arg11,
-    _In_opt_ PCWSTR  _Arg12
-    )
-{
-#define McTemplateK0mqqqqxxqppzzz_ARGCOUNT 13
-
-    EVENT_DATA_DESCRIPTOR EventData[McTemplateK0mqqqqxxqppzzz_ARGCOUNT + 1];
-
-    EventDataDescCreate(&EventData[1],_Arg0, sizeof(FILETIME)  );
-
-    EventDataDescCreate(&EventData[2],&_Arg1, sizeof(const unsigned int)  );
-
-    EventDataDescCreate(&EventData[3],&_Arg2, sizeof(const unsigned int)  );
-
-    EventDataDescCreate(&EventData[4],&_Arg3, sizeof(const unsigned int)  );
-
-    EventDataDescCreate(&EventData[5],&_Arg4, sizeof(const unsigned int)  );
-
-    EventDataDescCreate(&EventData[6],&_Arg5, sizeof(const unsigned __int64)  );
-
-    EventDataDescCreate(&EventData[7],&_Arg6, sizeof(const unsigned __int64)  );
-
-    EventDataDescCreate(&EventData[8],&_Arg7, sizeof(const unsigned int)  );
-
-    EventDataDescCreate(&EventData[9],&_Arg8, sizeof(const void*)  );
-
-    EventDataDescCreate(&EventData[10],&_Arg9, sizeof(const void*)  );
-
-    EventDataDescCreate(&EventData[11],
-                        (_Arg10 != NULL) ? _Arg10 : L"NULL",
-                        (_Arg10 != NULL) ? (ULONG)((wcslen(_Arg10) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
 
     EventDataDescCreate(&EventData[12],
                         (_Arg11 != NULL) ? _Arg11 : L"NULL",
@@ -1752,469 +1604,87 @@ _mcgen_PASTE2(McTemplateK0mqqqqxxqppzzz_, MCGEN_EVENTWRITETRANSFER)(
                         (_Arg12 != NULL) ? _Arg12 : L"NULL",
                         (_Arg12 != NULL) ? (ULONG)((wcslen(_Arg12) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
 
-    return McGenEventWrite(Context, Descriptor, Activity, McTemplateK0mqqqqxxqppzzz_ARGCOUNT + 1, EventData);
+    EventDataDescCreate(&EventData[14],&_Arg13, sizeof(const signed __int64)  );
+
+    EventDataDescCreate(&EventData[15],&_Arg14, sizeof(const signed __int64)  );
+
+    EventDataDescCreate(&EventData[16],
+                        (_Arg15 != NULL) ? _Arg15 : L"NULL",
+                        (_Arg15 != NULL) ? (ULONG)((wcslen(_Arg15) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
+
+    EventDataDescCreate(&EventData[17],&_Arg16, sizeof(const unsigned int)  );
+
+    EventDataDescCreate(&EventData[18],&_Arg17, sizeof(const unsigned int)  );
+
+    EventDataDescCreate(&EventData[19],
+                        (_Arg18 != NULL) ? _Arg18 : L"NULL",
+                        (_Arg18 != NULL) ? (ULONG)((wcslen(_Arg18) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
+
+    EventDataDescCreate(&EventData[20],&_Arg19, sizeof(const unsigned int)  );
+
+    EventDataDescCreate(&EventData[21],&_Arg20, sizeof(const unsigned int)  );
+
+    EventDataDescCreate(&EventData[22],&_Arg21, sizeof(const signed int)  );
+
+    return McGenEventWrite(Context, Descriptor, NULL, McTemplateU0yiiiizzqzqqzziizqqzqqt_ARGCOUNT + 1, EventData);
 }
-#endif // McTemplateK0mqqqqxxqppzzz_def
-
-//
-// Function for template "EID32" (and possibly others).
-// This function is for use by MC-generated code and should not be used directly.
-//
-#ifndef McTemplateK0mqqqxxqpzzz_def
-#define McTemplateK0mqqqxxqpzzz_def
-ETW_INLINE
-ULONG
-_mcgen_PASTE2(McTemplateK0mqqqxxqpzzz_, MCGEN_EVENTWRITETRANSFER)(
-    _In_ PMCGEN_TRACE_CONTEXT Context,
-    _In_ PCEVENT_DESCRIPTOR Descriptor,
-    _In_opt_ const GUID* Activity,
-    _In_ const FILETIME*  _Arg0,
-    _In_ const unsigned int  _Arg1,
-    _In_ const unsigned int  _Arg2,
-    _In_ const unsigned int  _Arg3,
-    _In_ const unsigned __int64  _Arg4,
-    _In_ const unsigned __int64  _Arg5,
-    _In_ const unsigned int  _Arg6,
-    _In_opt_ const void*  _Arg7,
-    _In_opt_ PCWSTR  _Arg8,
-    _In_opt_ PCWSTR  _Arg9,
-    _In_opt_ PCWSTR  _Arg10
-    )
-{
-#define McTemplateK0mqqqxxqpzzz_ARGCOUNT 11
-
-    EVENT_DATA_DESCRIPTOR EventData[McTemplateK0mqqqxxqpzzz_ARGCOUNT + 1];
-
-    EventDataDescCreate(&EventData[1],_Arg0, sizeof(FILETIME)  );
-
-    EventDataDescCreate(&EventData[2],&_Arg1, sizeof(const unsigned int)  );
-
-    EventDataDescCreate(&EventData[3],&_Arg2, sizeof(const unsigned int)  );
-
-    EventDataDescCreate(&EventData[4],&_Arg3, sizeof(const unsigned int)  );
-
-    EventDataDescCreate(&EventData[5],&_Arg4, sizeof(const unsigned __int64)  );
-
-    EventDataDescCreate(&EventData[6],&_Arg5, sizeof(const unsigned __int64)  );
-
-    EventDataDescCreate(&EventData[7],&_Arg6, sizeof(const unsigned int)  );
-
-    EventDataDescCreate(&EventData[8],&_Arg7, sizeof(const void*)  );
-
-    EventDataDescCreate(&EventData[9],
-                        (_Arg8 != NULL) ? _Arg8 : L"NULL",
-                        (_Arg8 != NULL) ? (ULONG)((wcslen(_Arg8) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
-
-    EventDataDescCreate(&EventData[10],
-                        (_Arg9 != NULL) ? _Arg9 : L"NULL",
-                        (_Arg9 != NULL) ? (ULONG)((wcslen(_Arg9) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
-
-    EventDataDescCreate(&EventData[11],
-                        (_Arg10 != NULL) ? _Arg10 : L"NULL",
-                        (_Arg10 != NULL) ? (ULONG)((wcslen(_Arg10) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
-
-    return McGenEventWrite(Context, Descriptor, Activity, McTemplateK0mqqqxxqpzzz_ARGCOUNT + 1, EventData);
-}
-#endif // McTemplateK0mqqqxxqpzzz_def
-
-//
-// Function for template "EID29" (and possibly others).
-// This function is for use by MC-generated code and should not be used directly.
-//
-#ifndef McTemplateK0mqqzqzxxz_def
-#define McTemplateK0mqqzqzxxz_def
-ETW_INLINE
-ULONG
-_mcgen_PASTE2(McTemplateK0mqqzqzxxz_, MCGEN_EVENTWRITETRANSFER)(
-    _In_ PMCGEN_TRACE_CONTEXT Context,
-    _In_ PCEVENT_DESCRIPTOR Descriptor,
-    _In_opt_ const GUID* Activity,
-    _In_ const FILETIME*  _Arg0,
-    _In_ const unsigned int  _Arg1,
-    _In_ const unsigned int  _Arg2,
-    _In_opt_ PCWSTR  _Arg3,
-    _In_ const unsigned int  _Arg4,
-    _In_opt_ PCWSTR  _Arg5,
-    _In_ const unsigned __int64  _Arg6,
-    _In_ const unsigned __int64  _Arg7,
-    _In_opt_ PCWSTR  _Arg8
-    )
-{
-#define McTemplateK0mqqzqzxxz_ARGCOUNT 9
-
-    EVENT_DATA_DESCRIPTOR EventData[McTemplateK0mqqzqzxxz_ARGCOUNT + 1];
-
-    EventDataDescCreate(&EventData[1],_Arg0, sizeof(FILETIME)  );
-
-    EventDataDescCreate(&EventData[2],&_Arg1, sizeof(const unsigned int)  );
-
-    EventDataDescCreate(&EventData[3],&_Arg2, sizeof(const unsigned int)  );
-
-    EventDataDescCreate(&EventData[4],
-                        (_Arg3 != NULL) ? _Arg3 : L"NULL",
-                        (_Arg3 != NULL) ? (ULONG)((wcslen(_Arg3) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
-
-    EventDataDescCreate(&EventData[5],&_Arg4, sizeof(const unsigned int)  );
-
-    EventDataDescCreate(&EventData[6],
-                        (_Arg5 != NULL) ? _Arg5 : L"NULL",
-                        (_Arg5 != NULL) ? (ULONG)((wcslen(_Arg5) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
-
-    EventDataDescCreate(&EventData[7],&_Arg6, sizeof(const unsigned __int64)  );
-
-    EventDataDescCreate(&EventData[8],&_Arg7, sizeof(const unsigned __int64)  );
-
-    EventDataDescCreate(&EventData[9],
-                        (_Arg8 != NULL) ? _Arg8 : L"NULL",
-                        (_Arg8 != NULL) ? (ULONG)((wcslen(_Arg8) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
-
-    return McGenEventWrite(Context, Descriptor, Activity, McTemplateK0mqqzqzxxz_ARGCOUNT + 1, EventData);
-}
-#endif // McTemplateK0mqqzqzxxz_def
-
-//
-// Function for template "EID31" (and possibly others).
-// This function is for use by MC-generated code and should not be used directly.
-//
-#ifndef McTemplateK0mqqzzzz_def
-#define McTemplateK0mqqzzzz_def
-ETW_INLINE
-ULONG
-_mcgen_PASTE2(McTemplateK0mqqzzzz_, MCGEN_EVENTWRITETRANSFER)(
-    _In_ PMCGEN_TRACE_CONTEXT Context,
-    _In_ PCEVENT_DESCRIPTOR Descriptor,
-    _In_opt_ const GUID* Activity,
-    _In_ const FILETIME*  _Arg0,
-    _In_ const unsigned int  _Arg1,
-    _In_ const unsigned int  _Arg2,
-    _In_opt_ PCWSTR  _Arg3,
-    _In_opt_ PCWSTR  _Arg4,
-    _In_opt_ PCWSTR  _Arg5,
-    _In_opt_ PCWSTR  _Arg6
-    )
-{
-#define McTemplateK0mqqzzzz_ARGCOUNT 7
-
-    EVENT_DATA_DESCRIPTOR EventData[McTemplateK0mqqzzzz_ARGCOUNT + 1];
-
-    EventDataDescCreate(&EventData[1],_Arg0, sizeof(FILETIME)  );
-
-    EventDataDescCreate(&EventData[2],&_Arg1, sizeof(const unsigned int)  );
-
-    EventDataDescCreate(&EventData[3],&_Arg2, sizeof(const unsigned int)  );
-
-    EventDataDescCreate(&EventData[4],
-                        (_Arg3 != NULL) ? _Arg3 : L"NULL",
-                        (_Arg3 != NULL) ? (ULONG)((wcslen(_Arg3) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
-
-    EventDataDescCreate(&EventData[5],
-                        (_Arg4 != NULL) ? _Arg4 : L"NULL",
-                        (_Arg4 != NULL) ? (ULONG)((wcslen(_Arg4) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
-
-    EventDataDescCreate(&EventData[6],
-                        (_Arg5 != NULL) ? _Arg5 : L"NULL",
-                        (_Arg5 != NULL) ? (ULONG)((wcslen(_Arg5) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
-
-    EventDataDescCreate(&EventData[7],
-                        (_Arg6 != NULL) ? _Arg6 : L"NULL",
-                        (_Arg6 != NULL) ? (ULONG)((wcslen(_Arg6) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
-
-    return McGenEventWrite(Context, Descriptor, Activity, McTemplateK0mqqzzzz_ARGCOUNT + 1, EventData);
-}
-#endif // McTemplateK0mqqzzzz_def
-
-//
-// Function for template "EID16" (and possibly others).
-// This function is for use by MC-generated code and should not be used directly.
-//
-#ifndef McTemplateK0mqzqq_def
-#define McTemplateK0mqzqq_def
-ETW_INLINE
-ULONG
-_mcgen_PASTE2(McTemplateK0mqzqq_, MCGEN_EVENTWRITETRANSFER)(
-    _In_ PMCGEN_TRACE_CONTEXT Context,
-    _In_ PCEVENT_DESCRIPTOR Descriptor,
-    _In_opt_ const GUID* Activity,
-    _In_ const FILETIME*  _Arg0,
-    _In_ const unsigned int  _Arg1,
-    _In_opt_ PCWSTR  _Arg2,
-    _In_ const unsigned int  _Arg3,
-    _In_ const unsigned int  _Arg4
-    )
-{
-#define McTemplateK0mqzqq_ARGCOUNT 5
-
-    EVENT_DATA_DESCRIPTOR EventData[McTemplateK0mqzqq_ARGCOUNT + 1];
-
-    EventDataDescCreate(&EventData[1],_Arg0, sizeof(FILETIME)  );
-
-    EventDataDescCreate(&EventData[2],&_Arg1, sizeof(const unsigned int)  );
-
-    EventDataDescCreate(&EventData[3],
-                        (_Arg2 != NULL) ? _Arg2 : L"NULL",
-                        (_Arg2 != NULL) ? (ULONG)((wcslen(_Arg2) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
-
-    EventDataDescCreate(&EventData[4],&_Arg3, sizeof(const unsigned int)  );
-
-    EventDataDescCreate(&EventData[5],&_Arg4, sizeof(const unsigned int)  );
-
-    return McGenEventWrite(Context, Descriptor, Activity, McTemplateK0mqzqq_ARGCOUNT + 1, EventData);
-}
-#endif // McTemplateK0mqzqq_def
-
-//
-// Function for template "EID13" (and possibly others).
-// This function is for use by MC-generated code and should not be used directly.
-//
-#ifndef McTemplateK0mqzzhhzzz_def
-#define McTemplateK0mqzzhhzzz_def
-ETW_INLINE
-ULONG
-_mcgen_PASTE2(McTemplateK0mqzzhhzzz_, MCGEN_EVENTWRITETRANSFER)(
-    _In_ PMCGEN_TRACE_CONTEXT Context,
-    _In_ PCEVENT_DESCRIPTOR Descriptor,
-    _In_opt_ const GUID* Activity,
-    _In_ const FILETIME*  _Arg0,
-    _In_ const unsigned int  _Arg1,
-    _In_opt_ PCWSTR  _Arg2,
-    _In_opt_ PCWSTR  _Arg3,
-    _In_ const unsigned short  _Arg4,
-    _In_ const unsigned short  _Arg5,
-    _In_opt_ PCWSTR  _Arg6,
-    _In_opt_ PCWSTR  _Arg7,
-    _In_opt_ PCWSTR  _Arg8
-    )
-{
-#define McTemplateK0mqzzhhzzz_ARGCOUNT 9
-
-    EVENT_DATA_DESCRIPTOR EventData[McTemplateK0mqzzhhzzz_ARGCOUNT + 1];
-
-    EventDataDescCreate(&EventData[1],_Arg0, sizeof(FILETIME)  );
-
-    EventDataDescCreate(&EventData[2],&_Arg1, sizeof(const unsigned int)  );
-
-    EventDataDescCreate(&EventData[3],
-                        (_Arg2 != NULL) ? _Arg2 : L"NULL",
-                        (_Arg2 != NULL) ? (ULONG)((wcslen(_Arg2) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
-
-    EventDataDescCreate(&EventData[4],
-                        (_Arg3 != NULL) ? _Arg3 : L"NULL",
-                        (_Arg3 != NULL) ? (ULONG)((wcslen(_Arg3) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
-
-    EventDataDescCreate(&EventData[5],&_Arg4, sizeof(const unsigned short)  );
-
-    EventDataDescCreate(&EventData[6],&_Arg5, sizeof(const unsigned short)  );
-
-    EventDataDescCreate(&EventData[7],
-                        (_Arg6 != NULL) ? _Arg6 : L"NULL",
-                        (_Arg6 != NULL) ? (ULONG)((wcslen(_Arg6) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
-
-    EventDataDescCreate(&EventData[8],
-                        (_Arg7 != NULL) ? _Arg7 : L"NULL",
-                        (_Arg7 != NULL) ? (ULONG)((wcslen(_Arg7) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
-
-    EventDataDescCreate(&EventData[9],
-                        (_Arg8 != NULL) ? _Arg8 : L"NULL",
-                        (_Arg8 != NULL) ? (ULONG)((wcslen(_Arg8) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
-
-    return McGenEventWrite(Context, Descriptor, Activity, McTemplateK0mqzzhhzzz_ARGCOUNT + 1, EventData);
-}
-#endif // McTemplateK0mqzzhhzzz_def
-
-//
-// Function for template "EID15" (and possibly others).
-// This function is for use by MC-generated code and should not be used directly.
-//
-#ifndef McTemplateK0mqzzzh_def
-#define McTemplateK0mqzzzh_def
-ETW_INLINE
-ULONG
-_mcgen_PASTE2(McTemplateK0mqzzzh_, MCGEN_EVENTWRITETRANSFER)(
-    _In_ PMCGEN_TRACE_CONTEXT Context,
-    _In_ PCEVENT_DESCRIPTOR Descriptor,
-    _In_opt_ const GUID* Activity,
-    _In_ const FILETIME*  _Arg0,
-    _In_ const unsigned int  _Arg1,
-    _In_opt_ PCWSTR  _Arg2,
-    _In_opt_ PCWSTR  _Arg3,
-    _In_opt_ PCWSTR  _Arg4,
-    _In_ const unsigned short  _Arg5
-    )
-{
-#define McTemplateK0mqzzzh_ARGCOUNT 6
-
-    EVENT_DATA_DESCRIPTOR EventData[McTemplateK0mqzzzh_ARGCOUNT + 1];
-
-    EventDataDescCreate(&EventData[1],_Arg0, sizeof(FILETIME)  );
-
-    EventDataDescCreate(&EventData[2],&_Arg1, sizeof(const unsigned int)  );
-
-    EventDataDescCreate(&EventData[3],
-                        (_Arg2 != NULL) ? _Arg2 : L"NULL",
-                        (_Arg2 != NULL) ? (ULONG)((wcslen(_Arg2) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
-
-    EventDataDescCreate(&EventData[4],
-                        (_Arg3 != NULL) ? _Arg3 : L"NULL",
-                        (_Arg3 != NULL) ? (ULONG)((wcslen(_Arg3) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
-
-    EventDataDescCreate(&EventData[5],
-                        (_Arg4 != NULL) ? _Arg4 : L"NULL",
-                        (_Arg4 != NULL) ? (ULONG)((wcslen(_Arg4) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
-
-    EventDataDescCreate(&EventData[6],&_Arg5, sizeof(const unsigned short)  );
-
-    return McGenEventWrite(Context, Descriptor, Activity, McTemplateK0mqzzzh_ARGCOUNT + 1, EventData);
-}
-#endif // McTemplateK0mqzzzh_def
-
-//
-// Function for template "EID27" (and possibly others).
-// This function is for use by MC-generated code and should not be used directly.
-//
-#ifndef McTemplateK0mz_def
-#define McTemplateK0mz_def
-ETW_INLINE
-ULONG
-_mcgen_PASTE2(McTemplateK0mz_, MCGEN_EVENTWRITETRANSFER)(
-    _In_ PMCGEN_TRACE_CONTEXT Context,
-    _In_ PCEVENT_DESCRIPTOR Descriptor,
-    _In_opt_ const GUID* Activity,
-    _In_ const FILETIME*  _Arg0,
-    _In_opt_ PCWSTR  _Arg1
-    )
-{
-#define McTemplateK0mz_ARGCOUNT 2
-
-    EVENT_DATA_DESCRIPTOR EventData[McTemplateK0mz_ARGCOUNT + 1];
-
-    EventDataDescCreate(&EventData[1],_Arg0, sizeof(FILETIME)  );
-
-    EventDataDescCreate(&EventData[2],
-                        (_Arg1 != NULL) ? _Arg1 : L"NULL",
-                        (_Arg1 != NULL) ? (ULONG)((wcslen(_Arg1) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
-
-    return McGenEventWrite(Context, Descriptor, Activity, McTemplateK0mz_ARGCOUNT + 1, EventData);
-}
-#endif // McTemplateK0mz_def
-
-//
-// Function for template "EID11" (and possibly others).
-// This function is for use by MC-generated code and should not be used directly.
-//
-#ifndef McTemplateK0mzqqqzzzzzzz_def
-#define McTemplateK0mzqqqzzzzzzz_def
-ETW_INLINE
-ULONG
-_mcgen_PASTE2(McTemplateK0mzqqqzzzzzzz_, MCGEN_EVENTWRITETRANSFER)(
-    _In_ PMCGEN_TRACE_CONTEXT Context,
-    _In_ PCEVENT_DESCRIPTOR Descriptor,
-    _In_opt_ const GUID* Activity,
-    _In_ const FILETIME*  _Arg0,
-    _In_opt_ PCWSTR  _Arg1,
-    _In_ const unsigned int  _Arg2,
-    _In_ const unsigned int  _Arg3,
-    _In_ const unsigned int  _Arg4,
-    _In_opt_ PCWSTR  _Arg5,
-    _In_opt_ PCWSTR  _Arg6,
-    _In_opt_ PCWSTR  _Arg7,
-    _In_opt_ PCWSTR  _Arg8,
-    _In_opt_ PCWSTR  _Arg9,
-    _In_opt_ PCWSTR  _Arg10,
-    _In_opt_ PCWSTR  _Arg11
-    )
-{
-#define McTemplateK0mzqqqzzzzzzz_ARGCOUNT 12
-
-    EVENT_DATA_DESCRIPTOR EventData[McTemplateK0mzqqqzzzzzzz_ARGCOUNT + 1];
-
-    EventDataDescCreate(&EventData[1],_Arg0, sizeof(FILETIME)  );
-
-    EventDataDescCreate(&EventData[2],
-                        (_Arg1 != NULL) ? _Arg1 : L"NULL",
-                        (_Arg1 != NULL) ? (ULONG)((wcslen(_Arg1) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
-
-    EventDataDescCreate(&EventData[3],&_Arg2, sizeof(const unsigned int)  );
-
-    EventDataDescCreate(&EventData[4],&_Arg3, sizeof(const unsigned int)  );
-
-    EventDataDescCreate(&EventData[5],&_Arg4, sizeof(const unsigned int)  );
-
-    EventDataDescCreate(&EventData[6],
-                        (_Arg5 != NULL) ? _Arg5 : L"NULL",
-                        (_Arg5 != NULL) ? (ULONG)((wcslen(_Arg5) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
-
-    EventDataDescCreate(&EventData[7],
-                        (_Arg6 != NULL) ? _Arg6 : L"NULL",
-                        (_Arg6 != NULL) ? (ULONG)((wcslen(_Arg6) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
-
-    EventDataDescCreate(&EventData[8],
-                        (_Arg7 != NULL) ? _Arg7 : L"NULL",
-                        (_Arg7 != NULL) ? (ULONG)((wcslen(_Arg7) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
-
-    EventDataDescCreate(&EventData[9],
-                        (_Arg8 != NULL) ? _Arg8 : L"NULL",
-                        (_Arg8 != NULL) ? (ULONG)((wcslen(_Arg8) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
-
-    EventDataDescCreate(&EventData[10],
-                        (_Arg9 != NULL) ? _Arg9 : L"NULL",
-                        (_Arg9 != NULL) ? (ULONG)((wcslen(_Arg9) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
-
-    EventDataDescCreate(&EventData[11],
-                        (_Arg10 != NULL) ? _Arg10 : L"NULL",
-                        (_Arg10 != NULL) ? (ULONG)((wcslen(_Arg10) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
-
-    EventDataDescCreate(&EventData[12],
-                        (_Arg11 != NULL) ? _Arg11 : L"NULL",
-                        (_Arg11 != NULL) ? (ULONG)((wcslen(_Arg11) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
-
-    return McGenEventWrite(Context, Descriptor, Activity, McTemplateK0mzqqqzzzzzzz_ARGCOUNT + 1, EventData);
-}
-#endif // McTemplateK0mzqqqzzzzzzz_def
+#endif // McTemplateU0yiiiizzqzqqzziizqqzqqt_def
 
 //
 // Function for template "EID5" (and possibly others).
 // This function is for use by MC-generated code and should not be used directly.
 //
-#ifndef McTemplateK0mzxxxzdzq_def
-#define McTemplateK0mzxxxzdzq_def
+#ifndef McTemplateU0yiiizzqzqqiizzqqzqqdd_def
+#define McTemplateU0yiiizzqzqqiizzqqzqqdd_def
 ETW_INLINE
 ULONG
-_mcgen_PASTE2(McTemplateK0mzxxxzdzq_, MCGEN_EVENTWRITETRANSFER)(
+_mcgen_PASTE2(McTemplateU0yiiizzqzqqiizzqqzqqdd_, MCGEN_EVENTWRITETRANSFER)(
     _In_ PMCGEN_TRACE_CONTEXT Context,
     _In_ PCEVENT_DESCRIPTOR Descriptor,
-    _In_opt_ const GUID* Activity,
-    _In_ const FILETIME*  _Arg0,
-    _In_opt_ PCWSTR  _Arg1,
-    _In_ const unsigned __int64  _Arg2,
-    _In_ const unsigned __int64  _Arg3,
-    _In_ const unsigned __int64  _Arg4,
+    _In_ const SYSTEMTIME*  _Arg0,
+    _In_ const signed __int64  _Arg1,
+    _In_ const signed __int64  _Arg2,
+    _In_ const signed __int64  _Arg3,
+    _In_opt_ PCWSTR  _Arg4,
     _In_opt_ PCWSTR  _Arg5,
-    _In_ const signed int  _Arg6,
+    _In_ const unsigned int  _Arg6,
     _In_opt_ PCWSTR  _Arg7,
-    _In_ const unsigned int  _Arg8
+    _In_ const unsigned int  _Arg8,
+    _In_ const unsigned int  _Arg9,
+    _In_ const signed __int64  _Arg10,
+    _In_ const signed __int64  _Arg11,
+    _In_opt_ PCWSTR  _Arg12,
+    _In_opt_ PCWSTR  _Arg13,
+    _In_ const unsigned int  _Arg14,
+    _In_ const unsigned int  _Arg15,
+    _In_opt_ PCWSTR  _Arg16,
+    _In_ const unsigned int  _Arg17,
+    _In_ const unsigned int  _Arg18,
+    _In_ const signed int  _Arg19,
+    _In_ const signed int  _Arg20
     )
 {
-#define McTemplateK0mzxxxzdzq_ARGCOUNT 9
+#define McTemplateU0yiiizzqzqqiizzqqzqqdd_ARGCOUNT 21
 
-    EVENT_DATA_DESCRIPTOR EventData[McTemplateK0mzxxxzdzq_ARGCOUNT + 1];
+    EVENT_DATA_DESCRIPTOR EventData[McTemplateU0yiiizzqzqqiizzqqzqqdd_ARGCOUNT + 1];
 
-    EventDataDescCreate(&EventData[1],_Arg0, sizeof(FILETIME)  );
+    EventDataDescCreate(&EventData[1],_Arg0, sizeof(SYSTEMTIME)  );
 
-    EventDataDescCreate(&EventData[2],
-                        (_Arg1 != NULL) ? _Arg1 : L"NULL",
-                        (_Arg1 != NULL) ? (ULONG)((wcslen(_Arg1) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
+    EventDataDescCreate(&EventData[2],&_Arg1, sizeof(const signed __int64)  );
 
-    EventDataDescCreate(&EventData[3],&_Arg2, sizeof(const unsigned __int64)  );
+    EventDataDescCreate(&EventData[3],&_Arg2, sizeof(const signed __int64)  );
 
-    EventDataDescCreate(&EventData[4],&_Arg3, sizeof(const unsigned __int64)  );
+    EventDataDescCreate(&EventData[4],&_Arg3, sizeof(const signed __int64)  );
 
-    EventDataDescCreate(&EventData[5],&_Arg4, sizeof(const unsigned __int64)  );
+    EventDataDescCreate(&EventData[5],
+                        (_Arg4 != NULL) ? _Arg4 : L"NULL",
+                        (_Arg4 != NULL) ? (ULONG)((wcslen(_Arg4) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
 
     EventDataDescCreate(&EventData[6],
                         (_Arg5 != NULL) ? _Arg5 : L"NULL",
                         (_Arg5 != NULL) ? (ULONG)((wcslen(_Arg5) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
 
-    EventDataDescCreate(&EventData[7],&_Arg6, sizeof(const signed int)  );
+    EventDataDescCreate(&EventData[7],&_Arg6, sizeof(const unsigned int)  );
 
     EventDataDescCreate(&EventData[8],
                         (_Arg7 != NULL) ? _Arg7 : L"NULL",
@@ -2222,484 +1692,216 @@ _mcgen_PASTE2(McTemplateK0mzxxxzdzq_, MCGEN_EVENTWRITETRANSFER)(
 
     EventDataDescCreate(&EventData[9],&_Arg8, sizeof(const unsigned int)  );
 
-    return McGenEventWrite(Context, Descriptor, Activity, McTemplateK0mzxxxzdzq_ARGCOUNT + 1, EventData);
-}
-#endif // McTemplateK0mzxxxzdzq_def
+    EventDataDescCreate(&EventData[10],&_Arg9, sizeof(const unsigned int)  );
 
-//
-// Function for template "EID10" (and possibly others).
-// This function is for use by MC-generated code and should not be used directly.
-//
-#ifndef McTemplateK0mzxxxzqzz_def
-#define McTemplateK0mzxxxzqzz_def
-ETW_INLINE
-ULONG
-_mcgen_PASTE2(McTemplateK0mzxxxzqzz_, MCGEN_EVENTWRITETRANSFER)(
-    _In_ PMCGEN_TRACE_CONTEXT Context,
-    _In_ PCEVENT_DESCRIPTOR Descriptor,
-    _In_opt_ const GUID* Activity,
-    _In_ const FILETIME*  _Arg0,
-    _In_opt_ PCWSTR  _Arg1,
-    _In_ const unsigned __int64  _Arg2,
-    _In_ const unsigned __int64  _Arg3,
-    _In_ const unsigned __int64  _Arg4,
-    _In_opt_ PCWSTR  _Arg5,
-    _In_ const unsigned int  _Arg6,
-    _In_opt_ PCWSTR  _Arg7,
-    _In_opt_ PCWSTR  _Arg8
-    )
-{
-#define McTemplateK0mzxxxzqzz_ARGCOUNT 9
+    EventDataDescCreate(&EventData[11],&_Arg10, sizeof(const signed __int64)  );
 
-    EVENT_DATA_DESCRIPTOR EventData[McTemplateK0mzxxxzqzz_ARGCOUNT + 1];
-
-    EventDataDescCreate(&EventData[1],_Arg0, sizeof(FILETIME)  );
-
-    EventDataDescCreate(&EventData[2],
-                        (_Arg1 != NULL) ? _Arg1 : L"NULL",
-                        (_Arg1 != NULL) ? (ULONG)((wcslen(_Arg1) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
-
-    EventDataDescCreate(&EventData[3],&_Arg2, sizeof(const unsigned __int64)  );
-
-    EventDataDescCreate(&EventData[4],&_Arg3, sizeof(const unsigned __int64)  );
-
-    EventDataDescCreate(&EventData[5],&_Arg4, sizeof(const unsigned __int64)  );
-
-    EventDataDescCreate(&EventData[6],
-                        (_Arg5 != NULL) ? _Arg5 : L"NULL",
-                        (_Arg5 != NULL) ? (ULONG)((wcslen(_Arg5) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
-
-    EventDataDescCreate(&EventData[7],&_Arg6, sizeof(const unsigned int)  );
-
-    EventDataDescCreate(&EventData[8],
-                        (_Arg7 != NULL) ? _Arg7 : L"NULL",
-                        (_Arg7 != NULL) ? (ULONG)((wcslen(_Arg7) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
-
-    EventDataDescCreate(&EventData[9],
-                        (_Arg8 != NULL) ? _Arg8 : L"NULL",
-                        (_Arg8 != NULL) ? (ULONG)((wcslen(_Arg8) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
-
-    return McGenEventWrite(Context, Descriptor, Activity, McTemplateK0mzxxxzqzz_ARGCOUNT + 1, EventData);
-}
-#endif // McTemplateK0mzxxxzqzz_def
-
-//
-// Function for template "EID24" (and possibly others).
-// This function is for use by MC-generated code and should not be used directly.
-//
-#ifndef McTemplateK0mzxxxzqzzdd_def
-#define McTemplateK0mzxxxzqzzdd_def
-ETW_INLINE
-ULONG
-_mcgen_PASTE2(McTemplateK0mzxxxzqzzdd_, MCGEN_EVENTWRITETRANSFER)(
-    _In_ PMCGEN_TRACE_CONTEXT Context,
-    _In_ PCEVENT_DESCRIPTOR Descriptor,
-    _In_opt_ const GUID* Activity,
-    _In_ const FILETIME*  _Arg0,
-    _In_opt_ PCWSTR  _Arg1,
-    _In_ const unsigned __int64  _Arg2,
-    _In_ const unsigned __int64  _Arg3,
-    _In_ const unsigned __int64  _Arg4,
-    _In_opt_ PCWSTR  _Arg5,
-    _In_ const unsigned int  _Arg6,
-    _In_opt_ PCWSTR  _Arg7,
-    _In_opt_ PCWSTR  _Arg8,
-    _In_ const signed int  _Arg9,
-    _In_ const signed int  _Arg10
-    )
-{
-#define McTemplateK0mzxxxzqzzdd_ARGCOUNT 11
-
-    EVENT_DATA_DESCRIPTOR EventData[McTemplateK0mzxxxzqzzdd_ARGCOUNT + 1];
-
-    EventDataDescCreate(&EventData[1],_Arg0, sizeof(FILETIME)  );
-
-    EventDataDescCreate(&EventData[2],
-                        (_Arg1 != NULL) ? _Arg1 : L"NULL",
-                        (_Arg1 != NULL) ? (ULONG)((wcslen(_Arg1) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
-
-    EventDataDescCreate(&EventData[3],&_Arg2, sizeof(const unsigned __int64)  );
-
-    EventDataDescCreate(&EventData[4],&_Arg3, sizeof(const unsigned __int64)  );
-
-    EventDataDescCreate(&EventData[5],&_Arg4, sizeof(const unsigned __int64)  );
-
-    EventDataDescCreate(&EventData[6],
-                        (_Arg5 != NULL) ? _Arg5 : L"NULL",
-                        (_Arg5 != NULL) ? (ULONG)((wcslen(_Arg5) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
-
-    EventDataDescCreate(&EventData[7],&_Arg6, sizeof(const unsigned int)  );
-
-    EventDataDescCreate(&EventData[8],
-                        (_Arg7 != NULL) ? _Arg7 : L"NULL",
-                        (_Arg7 != NULL) ? (ULONG)((wcslen(_Arg7) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
-
-    EventDataDescCreate(&EventData[9],
-                        (_Arg8 != NULL) ? _Arg8 : L"NULL",
-                        (_Arg8 != NULL) ? (ULONG)((wcslen(_Arg8) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
-
-    EventDataDescCreate(&EventData[10],&_Arg9, sizeof(const signed int)  );
-
-    EventDataDescCreate(&EventData[11],&_Arg10, sizeof(const signed int)  );
-
-    return McGenEventWrite(Context, Descriptor, Activity, McTemplateK0mzxxxzqzzdd_ARGCOUNT + 1, EventData);
-}
-#endif // McTemplateK0mzxxxzqzzdd_def
-
-//
-// Function for template "EID23" (and possibly others).
-// This function is for use by MC-generated code and should not be used directly.
-//
-#ifndef McTemplateK0mzxxxzqzztd_def
-#define McTemplateK0mzxxxzqzztd_def
-ETW_INLINE
-ULONG
-_mcgen_PASTE2(McTemplateK0mzxxxzqzztd_, MCGEN_EVENTWRITETRANSFER)(
-    _In_ PMCGEN_TRACE_CONTEXT Context,
-    _In_ PCEVENT_DESCRIPTOR Descriptor,
-    _In_opt_ const GUID* Activity,
-    _In_ const FILETIME*  _Arg0,
-    _In_opt_ PCWSTR  _Arg1,
-    _In_ const unsigned __int64  _Arg2,
-    _In_ const unsigned __int64  _Arg3,
-    _In_ const unsigned __int64  _Arg4,
-    _In_opt_ PCWSTR  _Arg5,
-    _In_ const unsigned int  _Arg6,
-    _In_opt_ PCWSTR  _Arg7,
-    _In_opt_ PCWSTR  _Arg8,
-    _In_ const signed int  _Arg9,
-    _In_ const signed int  _Arg10
-    )
-{
-#define McTemplateK0mzxxxzqzztd_ARGCOUNT 11
-
-    EVENT_DATA_DESCRIPTOR EventData[McTemplateK0mzxxxzqzztd_ARGCOUNT + 1];
-
-    EventDataDescCreate(&EventData[1],_Arg0, sizeof(FILETIME)  );
-
-    EventDataDescCreate(&EventData[2],
-                        (_Arg1 != NULL) ? _Arg1 : L"NULL",
-                        (_Arg1 != NULL) ? (ULONG)((wcslen(_Arg1) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
-
-    EventDataDescCreate(&EventData[3],&_Arg2, sizeof(const unsigned __int64)  );
-
-    EventDataDescCreate(&EventData[4],&_Arg3, sizeof(const unsigned __int64)  );
-
-    EventDataDescCreate(&EventData[5],&_Arg4, sizeof(const unsigned __int64)  );
-
-    EventDataDescCreate(&EventData[6],
-                        (_Arg5 != NULL) ? _Arg5 : L"NULL",
-                        (_Arg5 != NULL) ? (ULONG)((wcslen(_Arg5) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
-
-    EventDataDescCreate(&EventData[7],&_Arg6, sizeof(const unsigned int)  );
-
-    EventDataDescCreate(&EventData[8],
-                        (_Arg7 != NULL) ? _Arg7 : L"NULL",
-                        (_Arg7 != NULL) ? (ULONG)((wcslen(_Arg7) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
-
-    EventDataDescCreate(&EventData[9],
-                        (_Arg8 != NULL) ? _Arg8 : L"NULL",
-                        (_Arg8 != NULL) ? (ULONG)((wcslen(_Arg8) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
-
-    EventDataDescCreate(&EventData[10],&_Arg9, sizeof(const signed int)  );
-
-    EventDataDescCreate(&EventData[11],&_Arg10, sizeof(const signed int)  );
-
-    return McGenEventWrite(Context, Descriptor, Activity, McTemplateK0mzxxxzqzztd_ARGCOUNT + 1, EventData);
-}
-#endif // McTemplateK0mzxxxzqzztd_def
-
-//
-// Function for template "EID18" (and possibly others).
-// This function is for use by MC-generated code and should not be used directly.
-//
-#ifndef McTemplateK0mzxxxzqzzxxxzqz_def
-#define McTemplateK0mzxxxzqzzxxxzqz_def
-ETW_INLINE
-ULONG
-_mcgen_PASTE2(McTemplateK0mzxxxzqzzxxxzqz_, MCGEN_EVENTWRITETRANSFER)(
-    _In_ PMCGEN_TRACE_CONTEXT Context,
-    _In_ PCEVENT_DESCRIPTOR Descriptor,
-    _In_opt_ const GUID* Activity,
-    _In_ const FILETIME*  _Arg0,
-    _In_opt_ PCWSTR  _Arg1,
-    _In_ const unsigned __int64  _Arg2,
-    _In_ const unsigned __int64  _Arg3,
-    _In_ const unsigned __int64  _Arg4,
-    _In_opt_ PCWSTR  _Arg5,
-    _In_ const unsigned int  _Arg6,
-    _In_opt_ PCWSTR  _Arg7,
-    _In_opt_ PCWSTR  _Arg8,
-    _In_ const unsigned __int64  _Arg9,
-    _In_ const unsigned __int64  _Arg10,
-    _In_ const unsigned __int64  _Arg11,
-    _In_opt_ PCWSTR  _Arg12,
-    _In_ const unsigned int  _Arg13,
-    _In_opt_ PCWSTR  _Arg14
-    )
-{
-#define McTemplateK0mzxxxzqzzxxxzqz_ARGCOUNT 15
-
-    EVENT_DATA_DESCRIPTOR EventData[McTemplateK0mzxxxzqzzxxxzqz_ARGCOUNT + 1];
-
-    EventDataDescCreate(&EventData[1],_Arg0, sizeof(FILETIME)  );
-
-    EventDataDescCreate(&EventData[2],
-                        (_Arg1 != NULL) ? _Arg1 : L"NULL",
-                        (_Arg1 != NULL) ? (ULONG)((wcslen(_Arg1) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
-
-    EventDataDescCreate(&EventData[3],&_Arg2, sizeof(const unsigned __int64)  );
-
-    EventDataDescCreate(&EventData[4],&_Arg3, sizeof(const unsigned __int64)  );
-
-    EventDataDescCreate(&EventData[5],&_Arg4, sizeof(const unsigned __int64)  );
-
-    EventDataDescCreate(&EventData[6],
-                        (_Arg5 != NULL) ? _Arg5 : L"NULL",
-                        (_Arg5 != NULL) ? (ULONG)((wcslen(_Arg5) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
-
-    EventDataDescCreate(&EventData[7],&_Arg6, sizeof(const unsigned int)  );
-
-    EventDataDescCreate(&EventData[8],
-                        (_Arg7 != NULL) ? _Arg7 : L"NULL",
-                        (_Arg7 != NULL) ? (ULONG)((wcslen(_Arg7) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
-
-    EventDataDescCreate(&EventData[9],
-                        (_Arg8 != NULL) ? _Arg8 : L"NULL",
-                        (_Arg8 != NULL) ? (ULONG)((wcslen(_Arg8) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
-
-    EventDataDescCreate(&EventData[10],&_Arg9, sizeof(const unsigned __int64)  );
-
-    EventDataDescCreate(&EventData[11],&_Arg10, sizeof(const unsigned __int64)  );
-
-    EventDataDescCreate(&EventData[12],&_Arg11, sizeof(const unsigned __int64)  );
+    EventDataDescCreate(&EventData[12],&_Arg11, sizeof(const signed __int64)  );
 
     EventDataDescCreate(&EventData[13],
                         (_Arg12 != NULL) ? _Arg12 : L"NULL",
                         (_Arg12 != NULL) ? (ULONG)((wcslen(_Arg12) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
 
-    EventDataDescCreate(&EventData[14],&_Arg13, sizeof(const unsigned int)  );
+    EventDataDescCreate(&EventData[14],
+                        (_Arg13 != NULL) ? _Arg13 : L"NULL",
+                        (_Arg13 != NULL) ? (ULONG)((wcslen(_Arg13) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
 
-    EventDataDescCreate(&EventData[15],
-                        (_Arg14 != NULL) ? _Arg14 : L"NULL",
-                        (_Arg14 != NULL) ? (ULONG)((wcslen(_Arg14) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
+    EventDataDescCreate(&EventData[15],&_Arg14, sizeof(const unsigned int)  );
 
-    return McGenEventWrite(Context, Descriptor, Activity, McTemplateK0mzxxxzqzzxxxzqz_ARGCOUNT + 1, EventData);
+    EventDataDescCreate(&EventData[16],&_Arg15, sizeof(const unsigned int)  );
+
+    EventDataDescCreate(&EventData[17],
+                        (_Arg16 != NULL) ? _Arg16 : L"NULL",
+                        (_Arg16 != NULL) ? (ULONG)((wcslen(_Arg16) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
+
+    EventDataDescCreate(&EventData[18],&_Arg17, sizeof(const unsigned int)  );
+
+    EventDataDescCreate(&EventData[19],&_Arg18, sizeof(const unsigned int)  );
+
+    EventDataDescCreate(&EventData[20],&_Arg19, sizeof(const signed int)  );
+
+    EventDataDescCreate(&EventData[21],&_Arg20, sizeof(const signed int)  );
+
+    return McGenEventWrite(Context, Descriptor, NULL, McTemplateU0yiiizzqzqqiizzqqzqqdd_ARGCOUNT + 1, EventData);
 }
-#endif // McTemplateK0mzxxxzqzzxxxzqz_def
+#endif // McTemplateU0yiiizzqzqqiizzqqzqqdd_def
 
 //
-// Function for template "EID4" (and possibly others).
+// Function for template "EID3" (and possibly others).
 // This function is for use by MC-generated code and should not be used directly.
 //
-#ifndef McTemplateK0mzxxxzzq_def
-#define McTemplateK0mzxxxzzq_def
+#ifndef McTemplateU0yiiizzqzqqziiizqqzq_def
+#define McTemplateU0yiiizzqzqqziiizqqzq_def
 ETW_INLINE
 ULONG
-_mcgen_PASTE2(McTemplateK0mzxxxzzq_, MCGEN_EVENTWRITETRANSFER)(
+_mcgen_PASTE2(McTemplateU0yiiizzqzqqziiizqqzq_, MCGEN_EVENTWRITETRANSFER)(
     _In_ PMCGEN_TRACE_CONTEXT Context,
     _In_ PCEVENT_DESCRIPTOR Descriptor,
-    _In_opt_ const GUID* Activity,
-    _In_ const FILETIME*  _Arg0,
-    _In_opt_ PCWSTR  _Arg1,
-    _In_ const unsigned __int64  _Arg2,
-    _In_ const unsigned __int64  _Arg3,
-    _In_ const unsigned __int64  _Arg4,
+    _In_ const SYSTEMTIME*  _Arg0,
+    _In_ const signed __int64  _Arg1,
+    _In_ const signed __int64  _Arg2,
+    _In_ const signed __int64  _Arg3,
+    _In_opt_ PCWSTR  _Arg4,
     _In_opt_ PCWSTR  _Arg5,
-    _In_opt_ PCWSTR  _Arg6,
-    _In_ const unsigned int  _Arg7
-    )
-{
-#define McTemplateK0mzxxxzzq_ARGCOUNT 8
-
-    EVENT_DATA_DESCRIPTOR EventData[McTemplateK0mzxxxzzq_ARGCOUNT + 1];
-
-    EventDataDescCreate(&EventData[1],_Arg0, sizeof(FILETIME)  );
-
-    EventDataDescCreate(&EventData[2],
-                        (_Arg1 != NULL) ? _Arg1 : L"NULL",
-                        (_Arg1 != NULL) ? (ULONG)((wcslen(_Arg1) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
-
-    EventDataDescCreate(&EventData[3],&_Arg2, sizeof(const unsigned __int64)  );
-
-    EventDataDescCreate(&EventData[4],&_Arg3, sizeof(const unsigned __int64)  );
-
-    EventDataDescCreate(&EventData[5],&_Arg4, sizeof(const unsigned __int64)  );
-
-    EventDataDescCreate(&EventData[6],
-                        (_Arg5 != NULL) ? _Arg5 : L"NULL",
-                        (_Arg5 != NULL) ? (ULONG)((wcslen(_Arg5) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
-
-    EventDataDescCreate(&EventData[7],
-                        (_Arg6 != NULL) ? _Arg6 : L"NULL",
-                        (_Arg6 != NULL) ? (ULONG)((wcslen(_Arg6) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
-
-    EventDataDescCreate(&EventData[8],&_Arg7, sizeof(const unsigned int)  );
-
-    return McGenEventWrite(Context, Descriptor, Activity, McTemplateK0mzxxxzzq_ARGCOUNT + 1, EventData);
-}
-#endif // McTemplateK0mzxxxzzq_def
-
-//
-// Function for template "EID7" (and possibly others).
-// This function is for use by MC-generated code and should not be used directly.
-//
-#ifndef McTemplateK0mzxxxzzzzzq_def
-#define McTemplateK0mzxxxzzzzzq_def
-ETW_INLINE
-ULONG
-_mcgen_PASTE2(McTemplateK0mzxxxzzzzzq_, MCGEN_EVENTWRITETRANSFER)(
-    _In_ PMCGEN_TRACE_CONTEXT Context,
-    _In_ PCEVENT_DESCRIPTOR Descriptor,
-    _In_opt_ const GUID* Activity,
-    _In_ const FILETIME*  _Arg0,
-    _In_opt_ PCWSTR  _Arg1,
-    _In_ const unsigned __int64  _Arg2,
-    _In_ const unsigned __int64  _Arg3,
-    _In_ const unsigned __int64  _Arg4,
-    _In_opt_ PCWSTR  _Arg5,
-    _In_opt_ PCWSTR  _Arg6,
+    _In_ const unsigned int  _Arg6,
     _In_opt_ PCWSTR  _Arg7,
-    _In_opt_ PCWSTR  _Arg8,
-    _In_opt_ PCWSTR  _Arg9,
-    _In_ const unsigned int  _Arg10
+    _In_ const unsigned int  _Arg8,
+    _In_ const unsigned int  _Arg9,
+    _In_opt_ PCWSTR  _Arg10,
+    _In_ const signed __int64  _Arg11,
+    _In_ const signed __int64  _Arg12,
+    _In_ const signed __int64  _Arg13,
+    _In_opt_ PCWSTR  _Arg14,
+    _In_ const unsigned int  _Arg15,
+    _In_ const unsigned int  _Arg16,
+    _In_opt_ PCWSTR  _Arg17,
+    _In_ const unsigned int  _Arg18
     )
 {
-#define McTemplateK0mzxxxzzzzzq_ARGCOUNT 11
+#define McTemplateU0yiiizzqzqqziiizqqzq_ARGCOUNT 19
 
-    EVENT_DATA_DESCRIPTOR EventData[McTemplateK0mzxxxzzzzzq_ARGCOUNT + 1];
+    EVENT_DATA_DESCRIPTOR EventData[McTemplateU0yiiizzqzqqziiizqqzq_ARGCOUNT + 1];
 
-    EventDataDescCreate(&EventData[1],_Arg0, sizeof(FILETIME)  );
+    EventDataDescCreate(&EventData[1],_Arg0, sizeof(SYSTEMTIME)  );
 
-    EventDataDescCreate(&EventData[2],
-                        (_Arg1 != NULL) ? _Arg1 : L"NULL",
-                        (_Arg1 != NULL) ? (ULONG)((wcslen(_Arg1) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
+    EventDataDescCreate(&EventData[2],&_Arg1, sizeof(const signed __int64)  );
 
-    EventDataDescCreate(&EventData[3],&_Arg2, sizeof(const unsigned __int64)  );
+    EventDataDescCreate(&EventData[3],&_Arg2, sizeof(const signed __int64)  );
 
-    EventDataDescCreate(&EventData[4],&_Arg3, sizeof(const unsigned __int64)  );
+    EventDataDescCreate(&EventData[4],&_Arg3, sizeof(const signed __int64)  );
 
-    EventDataDescCreate(&EventData[5],&_Arg4, sizeof(const unsigned __int64)  );
+    EventDataDescCreate(&EventData[5],
+                        (_Arg4 != NULL) ? _Arg4 : L"NULL",
+                        (_Arg4 != NULL) ? (ULONG)((wcslen(_Arg4) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
 
     EventDataDescCreate(&EventData[6],
                         (_Arg5 != NULL) ? _Arg5 : L"NULL",
                         (_Arg5 != NULL) ? (ULONG)((wcslen(_Arg5) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
 
-    EventDataDescCreate(&EventData[7],
-                        (_Arg6 != NULL) ? _Arg6 : L"NULL",
-                        (_Arg6 != NULL) ? (ULONG)((wcslen(_Arg6) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
+    EventDataDescCreate(&EventData[7],&_Arg6, sizeof(const unsigned int)  );
 
     EventDataDescCreate(&EventData[8],
                         (_Arg7 != NULL) ? _Arg7 : L"NULL",
                         (_Arg7 != NULL) ? (ULONG)((wcslen(_Arg7) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
 
-    EventDataDescCreate(&EventData[9],
-                        (_Arg8 != NULL) ? _Arg8 : L"NULL",
-                        (_Arg8 != NULL) ? (ULONG)((wcslen(_Arg8) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
+    EventDataDescCreate(&EventData[9],&_Arg8, sizeof(const unsigned int)  );
 
-    EventDataDescCreate(&EventData[10],
-                        (_Arg9 != NULL) ? _Arg9 : L"NULL",
-                        (_Arg9 != NULL) ? (ULONG)((wcslen(_Arg9) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
+    EventDataDescCreate(&EventData[10],&_Arg9, sizeof(const unsigned int)  );
 
-    EventDataDescCreate(&EventData[11],&_Arg10, sizeof(const unsigned int)  );
+    EventDataDescCreate(&EventData[11],
+                        (_Arg10 != NULL) ? _Arg10 : L"NULL",
+                        (_Arg10 != NULL) ? (ULONG)((wcslen(_Arg10) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
 
-    return McGenEventWrite(Context, Descriptor, Activity, McTemplateK0mzxxxzzzzzq_ARGCOUNT + 1, EventData);
+    EventDataDescCreate(&EventData[12],&_Arg11, sizeof(const signed __int64)  );
+
+    EventDataDescCreate(&EventData[13],&_Arg12, sizeof(const signed __int64)  );
+
+    EventDataDescCreate(&EventData[14],&_Arg13, sizeof(const signed __int64)  );
+
+    EventDataDescCreate(&EventData[15],
+                        (_Arg14 != NULL) ? _Arg14 : L"NULL",
+                        (_Arg14 != NULL) ? (ULONG)((wcslen(_Arg14) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
+
+    EventDataDescCreate(&EventData[16],&_Arg15, sizeof(const unsigned int)  );
+
+    EventDataDescCreate(&EventData[17],&_Arg16, sizeof(const unsigned int)  );
+
+    EventDataDescCreate(&EventData[18],
+                        (_Arg17 != NULL) ? _Arg17 : L"NULL",
+                        (_Arg17 != NULL) ? (ULONG)((wcslen(_Arg17) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
+
+    EventDataDescCreate(&EventData[19],&_Arg18, sizeof(const unsigned int)  );
+
+    return McGenEventWrite(Context, Descriptor, NULL, McTemplateU0yiiizzqzqqziiizqqzq_ARGCOUNT + 1, EventData);
 }
-#endif // McTemplateK0mzxxxzzzzzq_def
+#endif // McTemplateU0yiiizzqzqqziiizqqzq_def
 
 //
-// Function for template "EID9" (and possibly others).
+// Function for template "EID2" (and possibly others).
 // This function is for use by MC-generated code and should not be used directly.
 //
-#ifndef McTemplateK0mzxxzx_def
-#define McTemplateK0mzxxzx_def
+#ifndef McTemplateU0yiizi_def
+#define McTemplateU0yiizi_def
 ETW_INLINE
 ULONG
-_mcgen_PASTE2(McTemplateK0mzxxzx_, MCGEN_EVENTWRITETRANSFER)(
+_mcgen_PASTE2(McTemplateU0yiizi_, MCGEN_EVENTWRITETRANSFER)(
     _In_ PMCGEN_TRACE_CONTEXT Context,
     _In_ PCEVENT_DESCRIPTOR Descriptor,
-    _In_opt_ const GUID* Activity,
-    _In_ const FILETIME*  _Arg0,
-    _In_opt_ PCWSTR  _Arg1,
-    _In_ const unsigned __int64  _Arg2,
-    _In_ const unsigned __int64  _Arg3,
-    _In_opt_ PCWSTR  _Arg4,
-    _In_ const unsigned __int64  _Arg5
+    _In_ const SYSTEMTIME*  _Arg0,
+    _In_ const signed __int64  _Arg1,
+    _In_ const signed __int64  _Arg2,
+    _In_opt_ PCWSTR  _Arg3,
+    _In_ const signed __int64  _Arg4
     )
 {
-#define McTemplateK0mzxxzx_ARGCOUNT 6
+#define McTemplateU0yiizi_ARGCOUNT 5
 
-    EVENT_DATA_DESCRIPTOR EventData[McTemplateK0mzxxzx_ARGCOUNT + 1];
+    EVENT_DATA_DESCRIPTOR EventData[McTemplateU0yiizi_ARGCOUNT + 1];
 
-    EventDataDescCreate(&EventData[1],_Arg0, sizeof(FILETIME)  );
+    EventDataDescCreate(&EventData[1],_Arg0, sizeof(SYSTEMTIME)  );
 
-    EventDataDescCreate(&EventData[2],
-                        (_Arg1 != NULL) ? _Arg1 : L"NULL",
-                        (_Arg1 != NULL) ? (ULONG)((wcslen(_Arg1) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
+    EventDataDescCreate(&EventData[2],&_Arg1, sizeof(const signed __int64)  );
 
-    EventDataDescCreate(&EventData[3],&_Arg2, sizeof(const unsigned __int64)  );
+    EventDataDescCreate(&EventData[3],&_Arg2, sizeof(const signed __int64)  );
 
-    EventDataDescCreate(&EventData[4],&_Arg3, sizeof(const unsigned __int64)  );
+    EventDataDescCreate(&EventData[4],
+                        (_Arg3 != NULL) ? _Arg3 : L"NULL",
+                        (_Arg3 != NULL) ? (ULONG)((wcslen(_Arg3) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
 
-    EventDataDescCreate(&EventData[5],
-                        (_Arg4 != NULL) ? _Arg4 : L"NULL",
-                        (_Arg4 != NULL) ? (ULONG)((wcslen(_Arg4) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
+    EventDataDescCreate(&EventData[5],&_Arg4, sizeof(const signed __int64)  );
 
-    EventDataDescCreate(&EventData[6],&_Arg5, sizeof(const unsigned __int64)  );
-
-    return McGenEventWrite(Context, Descriptor, Activity, McTemplateK0mzxxzx_ARGCOUNT + 1, EventData);
+    return McGenEventWrite(Context, Descriptor, NULL, McTemplateU0yiizi_ARGCOUNT + 1, EventData);
 }
-#endif // McTemplateK0mzxxzx_def
+#endif // McTemplateU0yiizi_def
 
 //
-// Function for template "EID17" (and possibly others).
+// Function for template "EID21" (and possibly others).
 // This function is for use by MC-generated code and should not be used directly.
 //
-#ifndef McTemplateK0mzxxzzxdzzzz_def
-#define McTemplateK0mzxxzzxdzzzz_def
+#ifndef McTemplateU0yqzzzhhtzqzq_def
+#define McTemplateU0yqzzzhhtzqzq_def
 ETW_INLINE
 ULONG
-_mcgen_PASTE2(McTemplateK0mzxxzzxdzzzz_, MCGEN_EVENTWRITETRANSFER)(
+_mcgen_PASTE2(McTemplateU0yqzzzhhtzqzq_, MCGEN_EVENTWRITETRANSFER)(
     _In_ PMCGEN_TRACE_CONTEXT Context,
     _In_ PCEVENT_DESCRIPTOR Descriptor,
-    _In_opt_ const GUID* Activity,
-    _In_ const FILETIME*  _Arg0,
-    _In_opt_ PCWSTR  _Arg1,
-    _In_ const unsigned __int64  _Arg2,
-    _In_ const unsigned __int64  _Arg3,
+    _In_ const SYSTEMTIME*  _Arg0,
+    _In_ const unsigned int  _Arg1,
+    _In_opt_ PCWSTR  _Arg2,
+    _In_opt_ PCWSTR  _Arg3,
     _In_opt_ PCWSTR  _Arg4,
-    _In_opt_ PCWSTR  _Arg5,
-    _In_ const unsigned __int64  _Arg6,
+    _In_ const unsigned short  _Arg5,
+    _In_ const unsigned short  _Arg6,
     _In_ const signed int  _Arg7,
     _In_opt_ PCWSTR  _Arg8,
-    _In_opt_ PCWSTR  _Arg9,
+    _In_ const unsigned int  _Arg9,
     _In_opt_ PCWSTR  _Arg10,
-    _In_opt_ PCWSTR  _Arg11
+    _In_ const unsigned int  _Arg11
     )
 {
-#define McTemplateK0mzxxzzxdzzzz_ARGCOUNT 12
+#define McTemplateU0yqzzzhhtzqzq_ARGCOUNT 12
 
-    EVENT_DATA_DESCRIPTOR EventData[McTemplateK0mzxxzzxdzzzz_ARGCOUNT + 1];
+    EVENT_DATA_DESCRIPTOR EventData[McTemplateU0yqzzzhhtzqzq_ARGCOUNT + 1];
 
-    EventDataDescCreate(&EventData[1],_Arg0, sizeof(FILETIME)  );
+    EventDataDescCreate(&EventData[1],_Arg0, sizeof(SYSTEMTIME)  );
 
-    EventDataDescCreate(&EventData[2],
-                        (_Arg1 != NULL) ? _Arg1 : L"NULL",
-                        (_Arg1 != NULL) ? (ULONG)((wcslen(_Arg1) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
+    EventDataDescCreate(&EventData[2],&_Arg1, sizeof(const unsigned int)  );
 
-    EventDataDescCreate(&EventData[3],&_Arg2, sizeof(const unsigned __int64)  );
+    EventDataDescCreate(&EventData[3],
+                        (_Arg2 != NULL) ? _Arg2 : L"NULL",
+                        (_Arg2 != NULL) ? (ULONG)((wcslen(_Arg2) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
 
-    EventDataDescCreate(&EventData[4],&_Arg3, sizeof(const unsigned __int64)  );
+    EventDataDescCreate(&EventData[4],
+                        (_Arg3 != NULL) ? _Arg3 : L"NULL",
+                        (_Arg3 != NULL) ? (ULONG)((wcslen(_Arg3) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
 
     EventDataDescCreate(&EventData[5],
                         (_Arg4 != NULL) ? _Arg4 : L"NULL",
                         (_Arg4 != NULL) ? (ULONG)((wcslen(_Arg4) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
 
-    EventDataDescCreate(&EventData[6],
-                        (_Arg5 != NULL) ? _Arg5 : L"NULL",
-                        (_Arg5 != NULL) ? (ULONG)((wcslen(_Arg5) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
+    EventDataDescCreate(&EventData[6],&_Arg5, sizeof(const unsigned short)  );
 
-    EventDataDescCreate(&EventData[7],&_Arg6, sizeof(const unsigned __int64)  );
+    EventDataDescCreate(&EventData[7],&_Arg6, sizeof(const unsigned short)  );
 
     EventDataDescCreate(&EventData[8],&_Arg7, sizeof(const signed int)  );
 
@@ -2707,164 +1909,652 @@ _mcgen_PASTE2(McTemplateK0mzxxzzxdzzzz_, MCGEN_EVENTWRITETRANSFER)(
                         (_Arg8 != NULL) ? _Arg8 : L"NULL",
                         (_Arg8 != NULL) ? (ULONG)((wcslen(_Arg8) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
 
-    EventDataDescCreate(&EventData[10],
-                        (_Arg9 != NULL) ? _Arg9 : L"NULL",
-                        (_Arg9 != NULL) ? (ULONG)((wcslen(_Arg9) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
+    EventDataDescCreate(&EventData[10],&_Arg9, sizeof(const unsigned int)  );
 
     EventDataDescCreate(&EventData[11],
                         (_Arg10 != NULL) ? _Arg10 : L"NULL",
                         (_Arg10 != NULL) ? (ULONG)((wcslen(_Arg10) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
 
-    EventDataDescCreate(&EventData[12],
-                        (_Arg11 != NULL) ? _Arg11 : L"NULL",
-                        (_Arg11 != NULL) ? (ULONG)((wcslen(_Arg11) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
+    EventDataDescCreate(&EventData[12],&_Arg11, sizeof(const unsigned int)  );
 
-    return McGenEventWrite(Context, Descriptor, Activity, McTemplateK0mzxxzzxdzzzz_ARGCOUNT + 1, EventData);
+    return McGenEventWrite(Context, Descriptor, NULL, McTemplateU0yqzzzhhtzqzq_ARGCOUNT + 1, EventData);
 }
-#endif // McTemplateK0mzxxzzxdzzzz_def
+#endif // McTemplateU0yqzzzhhtzqzq_def
 
 //
-// Function for template "EID19" (and possibly others).
+// Function for template "EID4" (and possibly others).
 // This function is for use by MC-generated code and should not be used directly.
 //
-#ifndef McTemplateK0mzzq_def
-#define McTemplateK0mzzq_def
+#ifndef McTemplateU0yziiizqqzqqzi_def
+#define McTemplateU0yziiizqqzqqzi_def
 ETW_INLINE
 ULONG
-_mcgen_PASTE2(McTemplateK0mzzq_, MCGEN_EVENTWRITETRANSFER)(
+_mcgen_PASTE2(McTemplateU0yziiizqqzqqzi_, MCGEN_EVENTWRITETRANSFER)(
     _In_ PMCGEN_TRACE_CONTEXT Context,
     _In_ PCEVENT_DESCRIPTOR Descriptor,
-    _In_opt_ const GUID* Activity,
-    _In_ const FILETIME*  _Arg0,
+    _In_ const SYSTEMTIME*  _Arg0,
     _In_opt_ PCWSTR  _Arg1,
-    _In_opt_ PCWSTR  _Arg2,
-    _In_ const unsigned int  _Arg3
-    )
-{
-#define McTemplateK0mzzq_ARGCOUNT 4
-
-    EVENT_DATA_DESCRIPTOR EventData[McTemplateK0mzzq_ARGCOUNT + 1];
-
-    EventDataDescCreate(&EventData[1],_Arg0, sizeof(FILETIME)  );
-
-    EventDataDescCreate(&EventData[2],
-                        (_Arg1 != NULL) ? _Arg1 : L"NULL",
-                        (_Arg1 != NULL) ? (ULONG)((wcslen(_Arg1) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
-
-    EventDataDescCreate(&EventData[3],
-                        (_Arg2 != NULL) ? _Arg2 : L"NULL",
-                        (_Arg2 != NULL) ? (ULONG)((wcslen(_Arg2) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
-
-    EventDataDescCreate(&EventData[4],&_Arg3, sizeof(const unsigned int)  );
-
-    return McGenEventWrite(Context, Descriptor, Activity, McTemplateK0mzzq_ARGCOUNT + 1, EventData);
-}
-#endif // McTemplateK0mzzq_def
-
-//
-// Function for template "EID28" (and possibly others).
-// This function is for use by MC-generated code and should not be used directly.
-//
-#ifndef McTemplateK0mzzqqq_def
-#define McTemplateK0mzzqqq_def
-ETW_INLINE
-ULONG
-_mcgen_PASTE2(McTemplateK0mzzqqq_, MCGEN_EVENTWRITETRANSFER)(
-    _In_ PMCGEN_TRACE_CONTEXT Context,
-    _In_ PCEVENT_DESCRIPTOR Descriptor,
-    _In_opt_ const GUID* Activity,
-    _In_ const FILETIME*  _Arg0,
-    _In_opt_ PCWSTR  _Arg1,
-    _In_opt_ PCWSTR  _Arg2,
-    _In_ const unsigned int  _Arg3,
-    _In_ const unsigned int  _Arg4,
-    _In_ const unsigned int  _Arg5
-    )
-{
-#define McTemplateK0mzzqqq_ARGCOUNT 6
-
-    EVENT_DATA_DESCRIPTOR EventData[McTemplateK0mzzqqq_ARGCOUNT + 1];
-
-    EventDataDescCreate(&EventData[1],_Arg0, sizeof(FILETIME)  );
-
-    EventDataDescCreate(&EventData[2],
-                        (_Arg1 != NULL) ? _Arg1 : L"NULL",
-                        (_Arg1 != NULL) ? (ULONG)((wcslen(_Arg1) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
-
-    EventDataDescCreate(&EventData[3],
-                        (_Arg2 != NULL) ? _Arg2 : L"NULL",
-                        (_Arg2 != NULL) ? (ULONG)((wcslen(_Arg2) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
-
-    EventDataDescCreate(&EventData[4],&_Arg3, sizeof(const unsigned int)  );
-
-    EventDataDescCreate(&EventData[5],&_Arg4, sizeof(const unsigned int)  );
-
-    EventDataDescCreate(&EventData[6],&_Arg5, sizeof(const unsigned int)  );
-
-    return McGenEventWrite(Context, Descriptor, Activity, McTemplateK0mzzqqq_ARGCOUNT + 1, EventData);
-}
-#endif // McTemplateK0mzzqqq_def
-
-//
-// Function for template "EID8" (and possibly others).
-// This function is for use by MC-generated code and should not be used directly.
-//
-#ifndef McTemplateK0mzzxxxxxzxzzzzqqq_def
-#define McTemplateK0mzzxxxxxzxzzzzqqq_def
-ETW_INLINE
-ULONG
-_mcgen_PASTE2(McTemplateK0mzzxxxxxzxzzzzqqq_, MCGEN_EVENTWRITETRANSFER)(
-    _In_ PMCGEN_TRACE_CONTEXT Context,
-    _In_ PCEVENT_DESCRIPTOR Descriptor,
-    _In_opt_ const GUID* Activity,
-    _In_ const FILETIME*  _Arg0,
-    _In_opt_ PCWSTR  _Arg1,
-    _In_opt_ PCWSTR  _Arg2,
-    _In_ const unsigned __int64  _Arg3,
-    _In_ const unsigned __int64  _Arg4,
-    _In_ const unsigned __int64  _Arg5,
-    _In_ const unsigned __int64  _Arg6,
-    _In_ const unsigned __int64  _Arg7,
+    _In_ const signed __int64  _Arg2,
+    _In_ const signed __int64  _Arg3,
+    _In_ const signed __int64  _Arg4,
+    _In_opt_ PCWSTR  _Arg5,
+    _In_ const unsigned int  _Arg6,
+    _In_ const unsigned int  _Arg7,
     _In_opt_ PCWSTR  _Arg8,
-    _In_ const unsigned __int64  _Arg9,
-    _In_opt_ PCWSTR  _Arg10,
+    _In_ const unsigned int  _Arg9,
+    _In_ const unsigned int  _Arg10,
     _In_opt_ PCWSTR  _Arg11,
-    _In_opt_ PCWSTR  _Arg12,
-    _In_opt_ PCWSTR  _Arg13,
-    _In_ const unsigned int  _Arg14,
-    _In_ const unsigned int  _Arg15,
-    _In_ const unsigned int  _Arg16
+    _In_ const signed __int64  _Arg12
     )
 {
-#define McTemplateK0mzzxxxxxzxzzzzqqq_ARGCOUNT 17
+#define McTemplateU0yziiizqqzqqzi_ARGCOUNT 13
 
-    EVENT_DATA_DESCRIPTOR EventData[McTemplateK0mzzxxxxxzxzzzzqqq_ARGCOUNT + 1];
+    EVENT_DATA_DESCRIPTOR EventData[McTemplateU0yziiizqqzqqzi_ARGCOUNT + 1];
 
-    EventDataDescCreate(&EventData[1],_Arg0, sizeof(FILETIME)  );
+    EventDataDescCreate(&EventData[1],_Arg0, sizeof(SYSTEMTIME)  );
 
     EventDataDescCreate(&EventData[2],
                         (_Arg1 != NULL) ? _Arg1 : L"NULL",
                         (_Arg1 != NULL) ? (ULONG)((wcslen(_Arg1) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
 
-    EventDataDescCreate(&EventData[3],
-                        (_Arg2 != NULL) ? _Arg2 : L"NULL",
-                        (_Arg2 != NULL) ? (ULONG)((wcslen(_Arg2) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
+    EventDataDescCreate(&EventData[3],&_Arg2, sizeof(const signed __int64)  );
 
-    EventDataDescCreate(&EventData[4],&_Arg3, sizeof(const unsigned __int64)  );
+    EventDataDescCreate(&EventData[4],&_Arg3, sizeof(const signed __int64)  );
 
-    EventDataDescCreate(&EventData[5],&_Arg4, sizeof(const unsigned __int64)  );
+    EventDataDescCreate(&EventData[5],&_Arg4, sizeof(const signed __int64)  );
 
-    EventDataDescCreate(&EventData[6],&_Arg5, sizeof(const unsigned __int64)  );
+    EventDataDescCreate(&EventData[6],
+                        (_Arg5 != NULL) ? _Arg5 : L"NULL",
+                        (_Arg5 != NULL) ? (ULONG)((wcslen(_Arg5) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
 
-    EventDataDescCreate(&EventData[7],&_Arg6, sizeof(const unsigned __int64)  );
+    EventDataDescCreate(&EventData[7],&_Arg6, sizeof(const unsigned int)  );
 
-    EventDataDescCreate(&EventData[8],&_Arg7, sizeof(const unsigned __int64)  );
+    EventDataDescCreate(&EventData[8],&_Arg7, sizeof(const unsigned int)  );
 
     EventDataDescCreate(&EventData[9],
                         (_Arg8 != NULL) ? _Arg8 : L"NULL",
                         (_Arg8 != NULL) ? (ULONG)((wcslen(_Arg8) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
 
-    EventDataDescCreate(&EventData[10],&_Arg9, sizeof(const unsigned __int64)  );
+    EventDataDescCreate(&EventData[10],&_Arg9, sizeof(const unsigned int)  );
+
+    EventDataDescCreate(&EventData[11],&_Arg10, sizeof(const unsigned int)  );
+
+    EventDataDescCreate(&EventData[12],
+                        (_Arg11 != NULL) ? _Arg11 : L"NULL",
+                        (_Arg11 != NULL) ? (ULONG)((wcslen(_Arg11) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
+
+    EventDataDescCreate(&EventData[13],&_Arg12, sizeof(const signed __int64)  );
+
+    return McGenEventWrite(Context, Descriptor, NULL, McTemplateU0yziiizqqzqqzi_ARGCOUNT + 1, EventData);
+}
+#endif // McTemplateU0yziiizqqzqqzi_def
+
+//
+// Function for template "EID6" (and possibly others).
+// This function is for use by MC-generated code and should not be used directly.
+//
+#ifndef McTemplateU0yziiizqzqz_def
+#define McTemplateU0yziiizqzqz_def
+ETW_INLINE
+ULONG
+_mcgen_PASTE2(McTemplateU0yziiizqzqz_, MCGEN_EVENTWRITETRANSFER)(
+    _In_ PMCGEN_TRACE_CONTEXT Context,
+    _In_ PCEVENT_DESCRIPTOR Descriptor,
+    _In_ const SYSTEMTIME*  _Arg0,
+    _In_opt_ PCWSTR  _Arg1,
+    _In_ const signed __int64  _Arg2,
+    _In_ const signed __int64  _Arg3,
+    _In_ const signed __int64  _Arg4,
+    _In_opt_ PCWSTR  _Arg5,
+    _In_ const unsigned int  _Arg6,
+    _In_opt_ PCWSTR  _Arg7,
+    _In_ const unsigned int  _Arg8,
+    _In_opt_ PCWSTR  _Arg9
+    )
+{
+#define McTemplateU0yziiizqzqz_ARGCOUNT 10
+
+    EVENT_DATA_DESCRIPTOR EventData[McTemplateU0yziiizqzqz_ARGCOUNT + 1];
+
+    EventDataDescCreate(&EventData[1],_Arg0, sizeof(SYSTEMTIME)  );
+
+    EventDataDescCreate(&EventData[2],
+                        (_Arg1 != NULL) ? _Arg1 : L"NULL",
+                        (_Arg1 != NULL) ? (ULONG)((wcslen(_Arg1) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
+
+    EventDataDescCreate(&EventData[3],&_Arg2, sizeof(const signed __int64)  );
+
+    EventDataDescCreate(&EventData[4],&_Arg3, sizeof(const signed __int64)  );
+
+    EventDataDescCreate(&EventData[5],&_Arg4, sizeof(const signed __int64)  );
+
+    EventDataDescCreate(&EventData[6],
+                        (_Arg5 != NULL) ? _Arg5 : L"NULL",
+                        (_Arg5 != NULL) ? (ULONG)((wcslen(_Arg5) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
+
+    EventDataDescCreate(&EventData[7],&_Arg6, sizeof(const unsigned int)  );
+
+    EventDataDescCreate(&EventData[8],
+                        (_Arg7 != NULL) ? _Arg7 : L"NULL",
+                        (_Arg7 != NULL) ? (ULONG)((wcslen(_Arg7) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
+
+    EventDataDescCreate(&EventData[9],&_Arg8, sizeof(const unsigned int)  );
+
+    EventDataDescCreate(&EventData[10],
+                        (_Arg9 != NULL) ? _Arg9 : L"NULL",
+                        (_Arg9 != NULL) ? (ULONG)((wcslen(_Arg9) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
+
+    return McGenEventWrite(Context, Descriptor, NULL, McTemplateU0yziiizqzqz_ARGCOUNT + 1, EventData);
+}
+#endif // McTemplateU0yziiizqzqz_def
+
+//
+// Function for template "EID11" (and possibly others).
+// This function is for use by MC-generated code and should not be used directly.
+//
+#ifndef McTemplateU0yziiizqzqzd_def
+#define McTemplateU0yziiizqzqzd_def
+ETW_INLINE
+ULONG
+_mcgen_PASTE2(McTemplateU0yziiizqzqzd_, MCGEN_EVENTWRITETRANSFER)(
+    _In_ PMCGEN_TRACE_CONTEXT Context,
+    _In_ PCEVENT_DESCRIPTOR Descriptor,
+    _In_ const SYSTEMTIME*  _Arg0,
+    _In_opt_ PCWSTR  _Arg1,
+    _In_ const signed __int64  _Arg2,
+    _In_ const signed __int64  _Arg3,
+    _In_ const signed __int64  _Arg4,
+    _In_opt_ PCWSTR  _Arg5,
+    _In_ const unsigned int  _Arg6,
+    _In_opt_ PCWSTR  _Arg7,
+    _In_ const unsigned int  _Arg8,
+    _In_opt_ PCWSTR  _Arg9,
+    _In_ const signed int  _Arg10
+    )
+{
+#define McTemplateU0yziiizqzqzd_ARGCOUNT 11
+
+    EVENT_DATA_DESCRIPTOR EventData[McTemplateU0yziiizqzqzd_ARGCOUNT + 1];
+
+    EventDataDescCreate(&EventData[1],_Arg0, sizeof(SYSTEMTIME)  );
+
+    EventDataDescCreate(&EventData[2],
+                        (_Arg1 != NULL) ? _Arg1 : L"NULL",
+                        (_Arg1 != NULL) ? (ULONG)((wcslen(_Arg1) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
+
+    EventDataDescCreate(&EventData[3],&_Arg2, sizeof(const signed __int64)  );
+
+    EventDataDescCreate(&EventData[4],&_Arg3, sizeof(const signed __int64)  );
+
+    EventDataDescCreate(&EventData[5],&_Arg4, sizeof(const signed __int64)  );
+
+    EventDataDescCreate(&EventData[6],
+                        (_Arg5 != NULL) ? _Arg5 : L"NULL",
+                        (_Arg5 != NULL) ? (ULONG)((wcslen(_Arg5) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
+
+    EventDataDescCreate(&EventData[7],&_Arg6, sizeof(const unsigned int)  );
+
+    EventDataDescCreate(&EventData[8],
+                        (_Arg7 != NULL) ? _Arg7 : L"NULL",
+                        (_Arg7 != NULL) ? (ULONG)((wcslen(_Arg7) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
+
+    EventDataDescCreate(&EventData[9],&_Arg8, sizeof(const unsigned int)  );
+
+    EventDataDescCreate(&EventData[10],
+                        (_Arg9 != NULL) ? _Arg9 : L"NULL",
+                        (_Arg9 != NULL) ? (ULONG)((wcslen(_Arg9) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
+
+    EventDataDescCreate(&EventData[11],&_Arg10, sizeof(const signed int)  );
+
+    return McGenEventWrite(Context, Descriptor, NULL, McTemplateU0yziiizqzqzd_ARGCOUNT + 1, EventData);
+}
+#endif // McTemplateU0yziiizqzqzd_def
+
+//
+// Function for template "EID8" (and possibly others).
+// This function is for use by MC-generated code and should not be used directly.
+//
+#ifndef McTemplateU0yziiizqzqzdzz_def
+#define McTemplateU0yziiizqzqzdzz_def
+ETW_INLINE
+ULONG
+_mcgen_PASTE2(McTemplateU0yziiizqzqzdzz_, MCGEN_EVENTWRITETRANSFER)(
+    _In_ PMCGEN_TRACE_CONTEXT Context,
+    _In_ PCEVENT_DESCRIPTOR Descriptor,
+    _In_ const SYSTEMTIME*  _Arg0,
+    _In_opt_ PCWSTR  _Arg1,
+    _In_ const signed __int64  _Arg2,
+    _In_ const signed __int64  _Arg3,
+    _In_ const signed __int64  _Arg4,
+    _In_opt_ PCWSTR  _Arg5,
+    _In_ const unsigned int  _Arg6,
+    _In_opt_ PCWSTR  _Arg7,
+    _In_ const unsigned int  _Arg8,
+    _In_opt_ PCWSTR  _Arg9,
+    _In_ const signed int  _Arg10,
+    _In_opt_ PCWSTR  _Arg11,
+    _In_opt_ PCWSTR  _Arg12
+    )
+{
+#define McTemplateU0yziiizqzqzdzz_ARGCOUNT 13
+
+    EVENT_DATA_DESCRIPTOR EventData[McTemplateU0yziiizqzqzdzz_ARGCOUNT + 1];
+
+    EventDataDescCreate(&EventData[1],_Arg0, sizeof(SYSTEMTIME)  );
+
+    EventDataDescCreate(&EventData[2],
+                        (_Arg1 != NULL) ? _Arg1 : L"NULL",
+                        (_Arg1 != NULL) ? (ULONG)((wcslen(_Arg1) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
+
+    EventDataDescCreate(&EventData[3],&_Arg2, sizeof(const signed __int64)  );
+
+    EventDataDescCreate(&EventData[4],&_Arg3, sizeof(const signed __int64)  );
+
+    EventDataDescCreate(&EventData[5],&_Arg4, sizeof(const signed __int64)  );
+
+    EventDataDescCreate(&EventData[6],
+                        (_Arg5 != NULL) ? _Arg5 : L"NULL",
+                        (_Arg5 != NULL) ? (ULONG)((wcslen(_Arg5) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
+
+    EventDataDescCreate(&EventData[7],&_Arg6, sizeof(const unsigned int)  );
+
+    EventDataDescCreate(&EventData[8],
+                        (_Arg7 != NULL) ? _Arg7 : L"NULL",
+                        (_Arg7 != NULL) ? (ULONG)((wcslen(_Arg7) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
+
+    EventDataDescCreate(&EventData[9],&_Arg8, sizeof(const unsigned int)  );
+
+    EventDataDescCreate(&EventData[10],
+                        (_Arg9 != NULL) ? _Arg9 : L"NULL",
+                        (_Arg9 != NULL) ? (ULONG)((wcslen(_Arg9) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
+
+    EventDataDescCreate(&EventData[11],&_Arg10, sizeof(const signed int)  );
+
+    EventDataDescCreate(&EventData[12],
+                        (_Arg11 != NULL) ? _Arg11 : L"NULL",
+                        (_Arg11 != NULL) ? (ULONG)((wcslen(_Arg11) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
+
+    EventDataDescCreate(&EventData[13],
+                        (_Arg12 != NULL) ? _Arg12 : L"NULL",
+                        (_Arg12 != NULL) ? (ULONG)((wcslen(_Arg12) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
+
+    return McGenEventWrite(Context, Descriptor, NULL, McTemplateU0yziiizqzqzdzz_ARGCOUNT + 1, EventData);
+}
+#endif // McTemplateU0yziiizqzqzdzz_def
+
+//
+// Function for template "EID23" (and possibly others).
+// This function is for use by MC-generated code and should not be used directly.
+//
+#ifndef McTemplateU0yzizqzqqzizqzqxx_def
+#define McTemplateU0yzizqzqqzizqzqxx_def
+ETW_INLINE
+ULONG
+_mcgen_PASTE2(McTemplateU0yzizqzqqzizqzqxx_, MCGEN_EVENTWRITETRANSFER)(
+    _In_ PMCGEN_TRACE_CONTEXT Context,
+    _In_ PCEVENT_DESCRIPTOR Descriptor,
+    _In_ const SYSTEMTIME*  _Arg0,
+    _In_opt_ PCWSTR  _Arg1,
+    _In_ const signed __int64  _Arg2,
+    _In_opt_ PCWSTR  _Arg3,
+    _In_ const unsigned int  _Arg4,
+    _In_opt_ PCWSTR  _Arg5,
+    _In_ const unsigned int  _Arg6,
+    _In_ const unsigned int  _Arg7,
+    _In_opt_ PCWSTR  _Arg8,
+    _In_ const signed __int64  _Arg9,
+    _In_opt_ PCWSTR  _Arg10,
+    _In_ const unsigned int  _Arg11,
+    _In_opt_ PCWSTR  _Arg12,
+    _In_ const unsigned int  _Arg13,
+    _In_ const unsigned __int64  _Arg14,
+    _In_ const unsigned __int64  _Arg15
+    )
+{
+#define McTemplateU0yzizqzqqzizqzqxx_ARGCOUNT 16
+
+    EVENT_DATA_DESCRIPTOR EventData[McTemplateU0yzizqzqqzizqzqxx_ARGCOUNT + 1];
+
+    EventDataDescCreate(&EventData[1],_Arg0, sizeof(SYSTEMTIME)  );
+
+    EventDataDescCreate(&EventData[2],
+                        (_Arg1 != NULL) ? _Arg1 : L"NULL",
+                        (_Arg1 != NULL) ? (ULONG)((wcslen(_Arg1) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
+
+    EventDataDescCreate(&EventData[3],&_Arg2, sizeof(const signed __int64)  );
+
+    EventDataDescCreate(&EventData[4],
+                        (_Arg3 != NULL) ? _Arg3 : L"NULL",
+                        (_Arg3 != NULL) ? (ULONG)((wcslen(_Arg3) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
+
+    EventDataDescCreate(&EventData[5],&_Arg4, sizeof(const unsigned int)  );
+
+    EventDataDescCreate(&EventData[6],
+                        (_Arg5 != NULL) ? _Arg5 : L"NULL",
+                        (_Arg5 != NULL) ? (ULONG)((wcslen(_Arg5) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
+
+    EventDataDescCreate(&EventData[7],&_Arg6, sizeof(const unsigned int)  );
+
+    EventDataDescCreate(&EventData[8],&_Arg7, sizeof(const unsigned int)  );
+
+    EventDataDescCreate(&EventData[9],
+                        (_Arg8 != NULL) ? _Arg8 : L"NULL",
+                        (_Arg8 != NULL) ? (ULONG)((wcslen(_Arg8) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
+
+    EventDataDescCreate(&EventData[10],&_Arg9, sizeof(const signed __int64)  );
+
+    EventDataDescCreate(&EventData[11],
+                        (_Arg10 != NULL) ? _Arg10 : L"NULL",
+                        (_Arg10 != NULL) ? (ULONG)((wcslen(_Arg10) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
+
+    EventDataDescCreate(&EventData[12],&_Arg11, sizeof(const unsigned int)  );
+
+    EventDataDescCreate(&EventData[13],
+                        (_Arg12 != NULL) ? _Arg12 : L"NULL",
+                        (_Arg12 != NULL) ? (ULONG)((wcslen(_Arg12) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
+
+    EventDataDescCreate(&EventData[14],&_Arg13, sizeof(const unsigned int)  );
+
+    EventDataDescCreate(&EventData[15],&_Arg14, sizeof(const unsigned __int64)  );
+
+    EventDataDescCreate(&EventData[16],&_Arg15, sizeof(const unsigned __int64)  );
+
+    return McGenEventWrite(Context, Descriptor, NULL, McTemplateU0yzizqzqqzizqzqxx_ARGCOUNT + 1, EventData);
+}
+#endif // McTemplateU0yzizqzqqzizqzqxx_def
+
+//
+// Function for template "EID25" (and possibly others).
+// This function is for use by MC-generated code and should not be used directly.
+//
+#ifndef McTemplateU0yzizqzqqzizqzqxxx_def
+#define McTemplateU0yzizqzqqzizqzqxxx_def
+ETW_INLINE
+ULONG
+_mcgen_PASTE2(McTemplateU0yzizqzqqzizqzqxxx_, MCGEN_EVENTWRITETRANSFER)(
+    _In_ PMCGEN_TRACE_CONTEXT Context,
+    _In_ PCEVENT_DESCRIPTOR Descriptor,
+    _In_ const SYSTEMTIME*  _Arg0,
+    _In_opt_ PCWSTR  _Arg1,
+    _In_ const signed __int64  _Arg2,
+    _In_opt_ PCWSTR  _Arg3,
+    _In_ const unsigned int  _Arg4,
+    _In_opt_ PCWSTR  _Arg5,
+    _In_ const unsigned int  _Arg6,
+    _In_ const unsigned int  _Arg7,
+    _In_opt_ PCWSTR  _Arg8,
+    _In_ const signed __int64  _Arg9,
+    _In_opt_ PCWSTR  _Arg10,
+    _In_ const unsigned int  _Arg11,
+    _In_opt_ PCWSTR  _Arg12,
+    _In_ const unsigned int  _Arg13,
+    _In_ const unsigned __int64  _Arg14,
+    _In_ const unsigned __int64  _Arg15,
+    _In_ const unsigned __int64  _Arg16
+    )
+{
+#define McTemplateU0yzizqzqqzizqzqxxx_ARGCOUNT 17
+
+    EVENT_DATA_DESCRIPTOR EventData[McTemplateU0yzizqzqqzizqzqxxx_ARGCOUNT + 1];
+
+    EventDataDescCreate(&EventData[1],_Arg0, sizeof(SYSTEMTIME)  );
+
+    EventDataDescCreate(&EventData[2],
+                        (_Arg1 != NULL) ? _Arg1 : L"NULL",
+                        (_Arg1 != NULL) ? (ULONG)((wcslen(_Arg1) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
+
+    EventDataDescCreate(&EventData[3],&_Arg2, sizeof(const signed __int64)  );
+
+    EventDataDescCreate(&EventData[4],
+                        (_Arg3 != NULL) ? _Arg3 : L"NULL",
+                        (_Arg3 != NULL) ? (ULONG)((wcslen(_Arg3) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
+
+    EventDataDescCreate(&EventData[5],&_Arg4, sizeof(const unsigned int)  );
+
+    EventDataDescCreate(&EventData[6],
+                        (_Arg5 != NULL) ? _Arg5 : L"NULL",
+                        (_Arg5 != NULL) ? (ULONG)((wcslen(_Arg5) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
+
+    EventDataDescCreate(&EventData[7],&_Arg6, sizeof(const unsigned int)  );
+
+    EventDataDescCreate(&EventData[8],&_Arg7, sizeof(const unsigned int)  );
+
+    EventDataDescCreate(&EventData[9],
+                        (_Arg8 != NULL) ? _Arg8 : L"NULL",
+                        (_Arg8 != NULL) ? (ULONG)((wcslen(_Arg8) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
+
+    EventDataDescCreate(&EventData[10],&_Arg9, sizeof(const signed __int64)  );
+
+    EventDataDescCreate(&EventData[11],
+                        (_Arg10 != NULL) ? _Arg10 : L"NULL",
+                        (_Arg10 != NULL) ? (ULONG)((wcslen(_Arg10) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
+
+    EventDataDescCreate(&EventData[12],&_Arg11, sizeof(const unsigned int)  );
+
+    EventDataDescCreate(&EventData[13],
+                        (_Arg12 != NULL) ? _Arg12 : L"NULL",
+                        (_Arg12 != NULL) ? (ULONG)((wcslen(_Arg12) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
+
+    EventDataDescCreate(&EventData[14],&_Arg13, sizeof(const unsigned int)  );
+
+    EventDataDescCreate(&EventData[15],&_Arg14, sizeof(const unsigned __int64)  );
+
+    EventDataDescCreate(&EventData[16],&_Arg15, sizeof(const unsigned __int64)  );
+
+    EventDataDescCreate(&EventData[17],&_Arg16, sizeof(const unsigned __int64)  );
+
+    return McGenEventWrite(Context, Descriptor, NULL, McTemplateU0yzizqzqqzizqzqxxx_ARGCOUNT + 1, EventData);
+}
+#endif // McTemplateU0yzizqzqqzizqzqxxx_def
+
+//
+// Function for template "EID26" (and possibly others).
+// This function is for use by MC-generated code and should not be used directly.
+//
+#ifndef McTemplateU0yzizqzqqzizqzqxxxxxx_def
+#define McTemplateU0yzizqzqqzizqzqxxxxxx_def
+ETW_INLINE
+ULONG
+_mcgen_PASTE2(McTemplateU0yzizqzqqzizqzqxxxxxx_, MCGEN_EVENTWRITETRANSFER)(
+    _In_ PMCGEN_TRACE_CONTEXT Context,
+    _In_ PCEVENT_DESCRIPTOR Descriptor,
+    _In_ const SYSTEMTIME*  _Arg0,
+    _In_opt_ PCWSTR  _Arg1,
+    _In_ const signed __int64  _Arg2,
+    _In_opt_ PCWSTR  _Arg3,
+    _In_ const unsigned int  _Arg4,
+    _In_opt_ PCWSTR  _Arg5,
+    _In_ const unsigned int  _Arg6,
+    _In_ const unsigned int  _Arg7,
+    _In_opt_ PCWSTR  _Arg8,
+    _In_ const signed __int64  _Arg9,
+    _In_opt_ PCWSTR  _Arg10,
+    _In_ const unsigned int  _Arg11,
+    _In_opt_ PCWSTR  _Arg12,
+    _In_ const unsigned int  _Arg13,
+    _In_ const unsigned __int64  _Arg14,
+    _In_ const unsigned __int64  _Arg15,
+    _In_ const unsigned __int64  _Arg16,
+    _In_ const unsigned __int64  _Arg17,
+    _In_ const unsigned __int64  _Arg18,
+    _In_ const unsigned __int64  _Arg19
+    )
+{
+#define McTemplateU0yzizqzqqzizqzqxxxxxx_ARGCOUNT 20
+
+    EVENT_DATA_DESCRIPTOR EventData[McTemplateU0yzizqzqqzizqzqxxxxxx_ARGCOUNT + 1];
+
+    EventDataDescCreate(&EventData[1],_Arg0, sizeof(SYSTEMTIME)  );
+
+    EventDataDescCreate(&EventData[2],
+                        (_Arg1 != NULL) ? _Arg1 : L"NULL",
+                        (_Arg1 != NULL) ? (ULONG)((wcslen(_Arg1) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
+
+    EventDataDescCreate(&EventData[3],&_Arg2, sizeof(const signed __int64)  );
+
+    EventDataDescCreate(&EventData[4],
+                        (_Arg3 != NULL) ? _Arg3 : L"NULL",
+                        (_Arg3 != NULL) ? (ULONG)((wcslen(_Arg3) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
+
+    EventDataDescCreate(&EventData[5],&_Arg4, sizeof(const unsigned int)  );
+
+    EventDataDescCreate(&EventData[6],
+                        (_Arg5 != NULL) ? _Arg5 : L"NULL",
+                        (_Arg5 != NULL) ? (ULONG)((wcslen(_Arg5) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
+
+    EventDataDescCreate(&EventData[7],&_Arg6, sizeof(const unsigned int)  );
+
+    EventDataDescCreate(&EventData[8],&_Arg7, sizeof(const unsigned int)  );
+
+    EventDataDescCreate(&EventData[9],
+                        (_Arg8 != NULL) ? _Arg8 : L"NULL",
+                        (_Arg8 != NULL) ? (ULONG)((wcslen(_Arg8) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
+
+    EventDataDescCreate(&EventData[10],&_Arg9, sizeof(const signed __int64)  );
+
+    EventDataDescCreate(&EventData[11],
+                        (_Arg10 != NULL) ? _Arg10 : L"NULL",
+                        (_Arg10 != NULL) ? (ULONG)((wcslen(_Arg10) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
+
+    EventDataDescCreate(&EventData[12],&_Arg11, sizeof(const unsigned int)  );
+
+    EventDataDescCreate(&EventData[13],
+                        (_Arg12 != NULL) ? _Arg12 : L"NULL",
+                        (_Arg12 != NULL) ? (ULONG)((wcslen(_Arg12) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
+
+    EventDataDescCreate(&EventData[14],&_Arg13, sizeof(const unsigned int)  );
+
+    EventDataDescCreate(&EventData[15],&_Arg14, sizeof(const unsigned __int64)  );
+
+    EventDataDescCreate(&EventData[16],&_Arg15, sizeof(const unsigned __int64)  );
+
+    EventDataDescCreate(&EventData[17],&_Arg16, sizeof(const unsigned __int64)  );
+
+    EventDataDescCreate(&EventData[18],&_Arg17, sizeof(const unsigned __int64)  );
+
+    EventDataDescCreate(&EventData[19],&_Arg18, sizeof(const unsigned __int64)  );
+
+    EventDataDescCreate(&EventData[20],&_Arg19, sizeof(const unsigned __int64)  );
+
+    return McGenEventWrite(Context, Descriptor, NULL, McTemplateU0yzizqzqqzizqzqxxxxxx_ARGCOUNT + 1, EventData);
+}
+#endif // McTemplateU0yzizqzqqzizqzqxxxxxx_def
+
+//
+// Function for template "EID16" (and possibly others).
+// This function is for use by MC-generated code and should not be used directly.
+//
+#ifndef McTemplateU0yzizqzqzh_def
+#define McTemplateU0yzizqzqzh_def
+ETW_INLINE
+ULONG
+_mcgen_PASTE2(McTemplateU0yzizqzqzh_, MCGEN_EVENTWRITETRANSFER)(
+    _In_ PMCGEN_TRACE_CONTEXT Context,
+    _In_ PCEVENT_DESCRIPTOR Descriptor,
+    _In_ const SYSTEMTIME*  _Arg0,
+    _In_opt_ PCWSTR  _Arg1,
+    _In_ const signed __int64  _Arg2,
+    _In_opt_ PCWSTR  _Arg3,
+    _In_ const unsigned int  _Arg4,
+    _In_opt_ PCWSTR  _Arg5,
+    _In_ const unsigned int  _Arg6,
+    _In_opt_ PCWSTR  _Arg7,
+    _In_ const unsigned short  _Arg8
+    )
+{
+#define McTemplateU0yzizqzqzh_ARGCOUNT 9
+
+    EVENT_DATA_DESCRIPTOR EventData[McTemplateU0yzizqzqzh_ARGCOUNT + 1];
+
+    EventDataDescCreate(&EventData[1],_Arg0, sizeof(SYSTEMTIME)  );
+
+    EventDataDescCreate(&EventData[2],
+                        (_Arg1 != NULL) ? _Arg1 : L"NULL",
+                        (_Arg1 != NULL) ? (ULONG)((wcslen(_Arg1) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
+
+    EventDataDescCreate(&EventData[3],&_Arg2, sizeof(const signed __int64)  );
+
+    EventDataDescCreate(&EventData[4],
+                        (_Arg3 != NULL) ? _Arg3 : L"NULL",
+                        (_Arg3 != NULL) ? (ULONG)((wcslen(_Arg3) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
+
+    EventDataDescCreate(&EventData[5],&_Arg4, sizeof(const unsigned int)  );
+
+    EventDataDescCreate(&EventData[6],
+                        (_Arg5 != NULL) ? _Arg5 : L"NULL",
+                        (_Arg5 != NULL) ? (ULONG)((wcslen(_Arg5) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
+
+    EventDataDescCreate(&EventData[7],&_Arg6, sizeof(const unsigned int)  );
+
+    EventDataDescCreate(&EventData[8],
+                        (_Arg7 != NULL) ? _Arg7 : L"NULL",
+                        (_Arg7 != NULL) ? (ULONG)((wcslen(_Arg7) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
+
+    EventDataDescCreate(&EventData[9],&_Arg8, sizeof(const unsigned short)  );
+
+    return McGenEventWrite(Context, Descriptor, NULL, McTemplateU0yzizqzqzh_ARGCOUNT + 1, EventData);
+}
+#endif // McTemplateU0yzizqzqzh_def
+
+//
+// Function for template "EID18" (and possibly others).
+// This function is for use by MC-generated code and should not be used directly.
+//
+#ifndef McTemplateU0yzizqzqzqqzzzzz_def
+#define McTemplateU0yzizqzqzqqzzzzz_def
+ETW_INLINE
+ULONG
+_mcgen_PASTE2(McTemplateU0yzizqzqzqqzzzzz_, MCGEN_EVENTWRITETRANSFER)(
+    _In_ PMCGEN_TRACE_CONTEXT Context,
+    _In_ PCEVENT_DESCRIPTOR Descriptor,
+    _In_ const SYSTEMTIME*  _Arg0,
+    _In_opt_ PCWSTR  _Arg1,
+    _In_ const signed __int64  _Arg2,
+    _In_opt_ PCWSTR  _Arg3,
+    _In_ const unsigned int  _Arg4,
+    _In_opt_ PCWSTR  _Arg5,
+    _In_ const unsigned int  _Arg6,
+    _In_opt_ PCWSTR  _Arg7,
+    _In_ const unsigned int  _Arg8,
+    _In_ const unsigned int  _Arg9,
+    _In_opt_ PCWSTR  _Arg10,
+    _In_opt_ PCWSTR  _Arg11,
+    _In_opt_ PCWSTR  _Arg12,
+    _In_opt_ PCWSTR  _Arg13,
+    _In_opt_ PCWSTR  _Arg14
+    )
+{
+#define McTemplateU0yzizqzqzqqzzzzz_ARGCOUNT 15
+
+    EVENT_DATA_DESCRIPTOR EventData[McTemplateU0yzizqzqzqqzzzzz_ARGCOUNT + 1];
+
+    EventDataDescCreate(&EventData[1],_Arg0, sizeof(SYSTEMTIME)  );
+
+    EventDataDescCreate(&EventData[2],
+                        (_Arg1 != NULL) ? _Arg1 : L"NULL",
+                        (_Arg1 != NULL) ? (ULONG)((wcslen(_Arg1) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
+
+    EventDataDescCreate(&EventData[3],&_Arg2, sizeof(const signed __int64)  );
+
+    EventDataDescCreate(&EventData[4],
+                        (_Arg3 != NULL) ? _Arg3 : L"NULL",
+                        (_Arg3 != NULL) ? (ULONG)((wcslen(_Arg3) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
+
+    EventDataDescCreate(&EventData[5],&_Arg4, sizeof(const unsigned int)  );
+
+    EventDataDescCreate(&EventData[6],
+                        (_Arg5 != NULL) ? _Arg5 : L"NULL",
+                        (_Arg5 != NULL) ? (ULONG)((wcslen(_Arg5) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
+
+    EventDataDescCreate(&EventData[7],&_Arg6, sizeof(const unsigned int)  );
+
+    EventDataDescCreate(&EventData[8],
+                        (_Arg7 != NULL) ? _Arg7 : L"NULL",
+                        (_Arg7 != NULL) ? (ULONG)((wcslen(_Arg7) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
+
+    EventDataDescCreate(&EventData[9],&_Arg8, sizeof(const unsigned int)  );
+
+    EventDataDescCreate(&EventData[10],&_Arg9, sizeof(const unsigned int)  );
 
     EventDataDescCreate(&EventData[11],
                         (_Arg10 != NULL) ? _Arg10 : L"NULL",
@@ -2882,134 +2572,278 @@ _mcgen_PASTE2(McTemplateK0mzzxxxxxzxzzzzqqq_, MCGEN_EVENTWRITETRANSFER)(
                         (_Arg13 != NULL) ? _Arg13 : L"NULL",
                         (_Arg13 != NULL) ? (ULONG)((wcslen(_Arg13) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
 
-    EventDataDescCreate(&EventData[15],&_Arg14, sizeof(const unsigned int)  );
+    EventDataDescCreate(&EventData[15],
+                        (_Arg14 != NULL) ? _Arg14 : L"NULL",
+                        (_Arg14 != NULL) ? (ULONG)((wcslen(_Arg14) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
 
-    EventDataDescCreate(&EventData[16],&_Arg15, sizeof(const unsigned int)  );
-
-    EventDataDescCreate(&EventData[17],&_Arg16, sizeof(const unsigned int)  );
-
-    return McGenEventWrite(Context, Descriptor, Activity, McTemplateK0mzzxxxxxzxzzzzqqq_ARGCOUNT + 1, EventData);
+    return McGenEventWrite(Context, Descriptor, NULL, McTemplateU0yzizqzqzqqzzzzz_ARGCOUNT + 1, EventData);
 }
-#endif // McTemplateK0mzzxxxxxzxzzzzqqq_def
+#endif // McTemplateU0yzizqzqzqqzzzzz_def
 
 //
-// Function for template "EID1" (and possibly others).
+// Function for template "EID20" (and possibly others).
 // This function is for use by MC-generated code and should not be used directly.
 //
-#ifndef McTemplateK0mzzxxxzqxxzxzq_def
-#define McTemplateK0mzzxxxzqxxzxzq_def
+#ifndef McTemplateU0yzizqzqzzqq_def
+#define McTemplateU0yzizqzqzzqq_def
 ETW_INLINE
 ULONG
-_mcgen_PASTE2(McTemplateK0mzzxxxzqxxzxzq_, MCGEN_EVENTWRITETRANSFER)(
+_mcgen_PASTE2(McTemplateU0yzizqzqzzqq_, MCGEN_EVENTWRITETRANSFER)(
     _In_ PMCGEN_TRACE_CONTEXT Context,
     _In_ PCEVENT_DESCRIPTOR Descriptor,
-    _In_opt_ const GUID* Activity,
-    _In_ const FILETIME*  _Arg0,
+    _In_ const SYSTEMTIME*  _Arg0,
     _In_opt_ PCWSTR  _Arg1,
-    _In_opt_ PCWSTR  _Arg2,
-    _In_ const unsigned __int64  _Arg3,
-    _In_ const unsigned __int64  _Arg4,
-    _In_ const unsigned __int64  _Arg5,
-    _In_opt_ PCWSTR  _Arg6,
-    _In_ const unsigned int  _Arg7,
-    _In_ const unsigned __int64  _Arg8,
-    _In_ const unsigned __int64  _Arg9,
-    _In_opt_ PCWSTR  _Arg10,
-    _In_ const unsigned __int64  _Arg11,
-    _In_opt_ PCWSTR  _Arg12,
-    _In_ const unsigned int  _Arg13
-    )
-{
-#define McTemplateK0mzzxxxzqxxzxzq_ARGCOUNT 14
-
-    EVENT_DATA_DESCRIPTOR EventData[McTemplateK0mzzxxxzqxxzxzq_ARGCOUNT + 1];
-
-    EventDataDescCreate(&EventData[1],_Arg0, sizeof(FILETIME)  );
-
-    EventDataDescCreate(&EventData[2],
-                        (_Arg1 != NULL) ? _Arg1 : L"NULL",
-                        (_Arg1 != NULL) ? (ULONG)((wcslen(_Arg1) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
-
-    EventDataDescCreate(&EventData[3],
-                        (_Arg2 != NULL) ? _Arg2 : L"NULL",
-                        (_Arg2 != NULL) ? (ULONG)((wcslen(_Arg2) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
-
-    EventDataDescCreate(&EventData[4],&_Arg3, sizeof(const unsigned __int64)  );
-
-    EventDataDescCreate(&EventData[5],&_Arg4, sizeof(const unsigned __int64)  );
-
-    EventDataDescCreate(&EventData[6],&_Arg5, sizeof(const unsigned __int64)  );
-
-    EventDataDescCreate(&EventData[7],
-                        (_Arg6 != NULL) ? _Arg6 : L"NULL",
-                        (_Arg6 != NULL) ? (ULONG)((wcslen(_Arg6) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
-
-    EventDataDescCreate(&EventData[8],&_Arg7, sizeof(const unsigned int)  );
-
-    EventDataDescCreate(&EventData[9],&_Arg8, sizeof(const unsigned __int64)  );
-
-    EventDataDescCreate(&EventData[10],&_Arg9, sizeof(const unsigned __int64)  );
-
-    EventDataDescCreate(&EventData[11],
-                        (_Arg10 != NULL) ? _Arg10 : L"NULL",
-                        (_Arg10 != NULL) ? (ULONG)((wcslen(_Arg10) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
-
-    EventDataDescCreate(&EventData[12],&_Arg11, sizeof(const unsigned __int64)  );
-
-    EventDataDescCreate(&EventData[13],
-                        (_Arg12 != NULL) ? _Arg12 : L"NULL",
-                        (_Arg12 != NULL) ? (ULONG)((wcslen(_Arg12) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
-
-    EventDataDescCreate(&EventData[14],&_Arg13, sizeof(const unsigned int)  );
-
-    return McGenEventWrite(Context, Descriptor, Activity, McTemplateK0mzzxxxzqxxzxzq_ARGCOUNT + 1, EventData);
-}
-#endif // McTemplateK0mzzxxxzqxxzxzq_def
-
-//
-// Function for template "EID25" (and possibly others).
-// This function is for use by MC-generated code and should not be used directly.
-//
-#ifndef McTemplateK0mzzzz_def
-#define McTemplateK0mzzzz_def
-ETW_INLINE
-ULONG
-_mcgen_PASTE2(McTemplateK0mzzzz_, MCGEN_EVENTWRITETRANSFER)(
-    _In_ PMCGEN_TRACE_CONTEXT Context,
-    _In_ PCEVENT_DESCRIPTOR Descriptor,
-    _In_opt_ const GUID* Activity,
-    _In_ const FILETIME*  _Arg0,
-    _In_opt_ PCWSTR  _Arg1,
-    _In_opt_ PCWSTR  _Arg2,
+    _In_ const signed __int64  _Arg2,
     _In_opt_ PCWSTR  _Arg3,
-    _In_opt_ PCWSTR  _Arg4
+    _In_ const unsigned int  _Arg4,
+    _In_opt_ PCWSTR  _Arg5,
+    _In_ const unsigned int  _Arg6,
+    _In_opt_ PCWSTR  _Arg7,
+    _In_opt_ PCWSTR  _Arg8,
+    _In_ const unsigned int  _Arg9,
+    _In_ const unsigned int  _Arg10
     )
 {
-#define McTemplateK0mzzzz_ARGCOUNT 5
+#define McTemplateU0yzizqzqzzqq_ARGCOUNT 11
 
-    EVENT_DATA_DESCRIPTOR EventData[McTemplateK0mzzzz_ARGCOUNT + 1];
+    EVENT_DATA_DESCRIPTOR EventData[McTemplateU0yzizqzqzzqq_ARGCOUNT + 1];
 
-    EventDataDescCreate(&EventData[1],_Arg0, sizeof(FILETIME)  );
+    EventDataDescCreate(&EventData[1],_Arg0, sizeof(SYSTEMTIME)  );
 
     EventDataDescCreate(&EventData[2],
                         (_Arg1 != NULL) ? _Arg1 : L"NULL",
                         (_Arg1 != NULL) ? (ULONG)((wcslen(_Arg1) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
 
-    EventDataDescCreate(&EventData[3],
-                        (_Arg2 != NULL) ? _Arg2 : L"NULL",
-                        (_Arg2 != NULL) ? (ULONG)((wcslen(_Arg2) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
+    EventDataDescCreate(&EventData[3],&_Arg2, sizeof(const signed __int64)  );
 
     EventDataDescCreate(&EventData[4],
                         (_Arg3 != NULL) ? _Arg3 : L"NULL",
                         (_Arg3 != NULL) ? (ULONG)((wcslen(_Arg3) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
 
-    EventDataDescCreate(&EventData[5],
-                        (_Arg4 != NULL) ? _Arg4 : L"NULL",
-                        (_Arg4 != NULL) ? (ULONG)((wcslen(_Arg4) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
+    EventDataDescCreate(&EventData[5],&_Arg4, sizeof(const unsigned int)  );
 
-    return McGenEventWrite(Context, Descriptor, Activity, McTemplateK0mzzzz_ARGCOUNT + 1, EventData);
+    EventDataDescCreate(&EventData[6],
+                        (_Arg5 != NULL) ? _Arg5 : L"NULL",
+                        (_Arg5 != NULL) ? (ULONG)((wcslen(_Arg5) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
+
+    EventDataDescCreate(&EventData[7],&_Arg6, sizeof(const unsigned int)  );
+
+    EventDataDescCreate(&EventData[8],
+                        (_Arg7 != NULL) ? _Arg7 : L"NULL",
+                        (_Arg7 != NULL) ? (ULONG)((wcslen(_Arg7) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
+
+    EventDataDescCreate(&EventData[9],
+                        (_Arg8 != NULL) ? _Arg8 : L"NULL",
+                        (_Arg8 != NULL) ? (ULONG)((wcslen(_Arg8) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
+
+    EventDataDescCreate(&EventData[10],&_Arg9, sizeof(const unsigned int)  );
+
+    EventDataDescCreate(&EventData[11],&_Arg10, sizeof(const unsigned int)  );
+
+    return McGenEventWrite(Context, Descriptor, NULL, McTemplateU0yzizqzqzzqq_ARGCOUNT + 1, EventData);
 }
-#endif // McTemplateK0mzzzz_def
+#endif // McTemplateU0yzizqzqzzqq_def
+
+//
+// Function for template "EID22" (and possibly others).
+// This function is for use by MC-generated code and should not be used directly.
+//
+#ifndef McTemplateU0yzizqzqzzuqqbr11z_def
+#define McTemplateU0yzizqzqzzuqqbr11z_def
+ETW_INLINE
+ULONG
+_mcgen_PASTE2(McTemplateU0yzizqzqzzuqqbr11z_, MCGEN_EVENTWRITETRANSFER)(
+    _In_ PMCGEN_TRACE_CONTEXT Context,
+    _In_ PCEVENT_DESCRIPTOR Descriptor,
+    _In_ const SYSTEMTIME*  _Arg0,
+    _In_opt_ PCWSTR  _Arg1,
+    _In_ const signed __int64  _Arg2,
+    _In_opt_ PCWSTR  _Arg3,
+    _In_ const unsigned int  _Arg4,
+    _In_opt_ PCWSTR  _Arg5,
+    _In_ const unsigned int  _Arg6,
+    _In_opt_ PCWSTR  _Arg7,
+    _In_opt_ PCWSTR  _Arg8,
+    _In_ const unsigned char  _Arg9,
+    _In_ const unsigned int  _Arg10,
+    _In_ const unsigned int  _Arg11,
+    _In_reads_(_Arg11) const unsigned char*  _Arg12,
+    _In_opt_ PCWSTR  _Arg13
+    )
+{
+#define McTemplateU0yzizqzqzzuqqbr11z_ARGCOUNT 14
+
+    EVENT_DATA_DESCRIPTOR EventData[McTemplateU0yzizqzqzzuqqbr11z_ARGCOUNT + 1];
+
+    EventDataDescCreate(&EventData[1],_Arg0, sizeof(SYSTEMTIME)  );
+
+    EventDataDescCreate(&EventData[2],
+                        (_Arg1 != NULL) ? _Arg1 : L"NULL",
+                        (_Arg1 != NULL) ? (ULONG)((wcslen(_Arg1) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
+
+    EventDataDescCreate(&EventData[3],&_Arg2, sizeof(const signed __int64)  );
+
+    EventDataDescCreate(&EventData[4],
+                        (_Arg3 != NULL) ? _Arg3 : L"NULL",
+                        (_Arg3 != NULL) ? (ULONG)((wcslen(_Arg3) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
+
+    EventDataDescCreate(&EventData[5],&_Arg4, sizeof(const unsigned int)  );
+
+    EventDataDescCreate(&EventData[6],
+                        (_Arg5 != NULL) ? _Arg5 : L"NULL",
+                        (_Arg5 != NULL) ? (ULONG)((wcslen(_Arg5) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
+
+    EventDataDescCreate(&EventData[7],&_Arg6, sizeof(const unsigned int)  );
+
+    EventDataDescCreate(&EventData[8],
+                        (_Arg7 != NULL) ? _Arg7 : L"NULL",
+                        (_Arg7 != NULL) ? (ULONG)((wcslen(_Arg7) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
+
+    EventDataDescCreate(&EventData[9],
+                        (_Arg8 != NULL) ? _Arg8 : L"NULL",
+                        (_Arg8 != NULL) ? (ULONG)((wcslen(_Arg8) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
+
+    EventDataDescCreate(&EventData[10],&_Arg9, sizeof(const unsigned char)  );
+
+    EventDataDescCreate(&EventData[11],&_Arg10, sizeof(const unsigned int)  );
+
+    EventDataDescCreate(&EventData[12],&_Arg11, sizeof(const unsigned int)  );
+
+    EventDataDescCreate(&EventData[13],_Arg12, (ULONG)sizeof(char)*_Arg11);
+
+    EventDataDescCreate(&EventData[14],
+                        (_Arg13 != NULL) ? _Arg13 : L"NULL",
+                        (_Arg13 != NULL) ? (ULONG)((wcslen(_Arg13) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
+
+    return McGenEventWrite(Context, Descriptor, NULL, McTemplateU0yzizqzqzzuqqbr11z_ARGCOUNT + 1, EventData);
+}
+#endif // McTemplateU0yzizqzqzzuqqbr11z_def
+
+//
+// Function for template "EID17" (and possibly others).
+// This function is for use by MC-generated code and should not be used directly.
+//
+#ifndef McTemplateU0yzizqzqzzzz_def
+#define McTemplateU0yzizqzqzzzz_def
+ETW_INLINE
+ULONG
+_mcgen_PASTE2(McTemplateU0yzizqzqzzzz_, MCGEN_EVENTWRITETRANSFER)(
+    _In_ PMCGEN_TRACE_CONTEXT Context,
+    _In_ PCEVENT_DESCRIPTOR Descriptor,
+    _In_ const SYSTEMTIME*  _Arg0,
+    _In_opt_ PCWSTR  _Arg1,
+    _In_ const signed __int64  _Arg2,
+    _In_opt_ PCWSTR  _Arg3,
+    _In_ const unsigned int  _Arg4,
+    _In_opt_ PCWSTR  _Arg5,
+    _In_ const unsigned int  _Arg6,
+    _In_opt_ PCWSTR  _Arg7,
+    _In_opt_ PCWSTR  _Arg8,
+    _In_opt_ PCWSTR  _Arg9,
+    _In_opt_ PCWSTR  _Arg10
+    )
+{
+#define McTemplateU0yzizqzqzzzz_ARGCOUNT 11
+
+    EVENT_DATA_DESCRIPTOR EventData[McTemplateU0yzizqzqzzzz_ARGCOUNT + 1];
+
+    EventDataDescCreate(&EventData[1],_Arg0, sizeof(SYSTEMTIME)  );
+
+    EventDataDescCreate(&EventData[2],
+                        (_Arg1 != NULL) ? _Arg1 : L"NULL",
+                        (_Arg1 != NULL) ? (ULONG)((wcslen(_Arg1) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
+
+    EventDataDescCreate(&EventData[3],&_Arg2, sizeof(const signed __int64)  );
+
+    EventDataDescCreate(&EventData[4],
+                        (_Arg3 != NULL) ? _Arg3 : L"NULL",
+                        (_Arg3 != NULL) ? (ULONG)((wcslen(_Arg3) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
+
+    EventDataDescCreate(&EventData[5],&_Arg4, sizeof(const unsigned int)  );
+
+    EventDataDescCreate(&EventData[6],
+                        (_Arg5 != NULL) ? _Arg5 : L"NULL",
+                        (_Arg5 != NULL) ? (ULONG)((wcslen(_Arg5) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
+
+    EventDataDescCreate(&EventData[7],&_Arg6, sizeof(const unsigned int)  );
+
+    EventDataDescCreate(&EventData[8],
+                        (_Arg7 != NULL) ? _Arg7 : L"NULL",
+                        (_Arg7 != NULL) ? (ULONG)((wcslen(_Arg7) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
+
+    EventDataDescCreate(&EventData[9],
+                        (_Arg8 != NULL) ? _Arg8 : L"NULL",
+                        (_Arg8 != NULL) ? (ULONG)((wcslen(_Arg8) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
+
+    EventDataDescCreate(&EventData[10],
+                        (_Arg9 != NULL) ? _Arg9 : L"NULL",
+                        (_Arg9 != NULL) ? (ULONG)((wcslen(_Arg9) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
+
+    EventDataDescCreate(&EventData[11],
+                        (_Arg10 != NULL) ? _Arg10 : L"NULL",
+                        (_Arg10 != NULL) ? (ULONG)((wcslen(_Arg10) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
+
+    return McGenEventWrite(Context, Descriptor, NULL, McTemplateU0yzizqzqzzzz_ARGCOUNT + 1, EventData);
+}
+#endif // McTemplateU0yzizqzqzzzz_def
+
+//
+// Function for template "EID27" (and possibly others).
+// This function is for use by MC-generated code and should not be used directly.
+//
+#ifndef McTemplateU0yzqzqzqzz_def
+#define McTemplateU0yzqzqzqzz_def
+ETW_INLINE
+ULONG
+_mcgen_PASTE2(McTemplateU0yzqzqzqzz_, MCGEN_EVENTWRITETRANSFER)(
+    _In_ PMCGEN_TRACE_CONTEXT Context,
+    _In_ PCEVENT_DESCRIPTOR Descriptor,
+    _In_ const SYSTEMTIME*  _Arg0,
+    _In_opt_ PCWSTR  _Arg1,
+    _In_ const unsigned int  _Arg2,
+    _In_opt_ PCWSTR  _Arg3,
+    _In_ const unsigned int  _Arg4,
+    _In_opt_ PCWSTR  _Arg5,
+    _In_ const unsigned int  _Arg6,
+    _In_opt_ PCWSTR  _Arg7,
+    _In_opt_ PCWSTR  _Arg8
+    )
+{
+#define McTemplateU0yzqzqzqzz_ARGCOUNT 9
+
+    EVENT_DATA_DESCRIPTOR EventData[McTemplateU0yzqzqzqzz_ARGCOUNT + 1];
+
+    EventDataDescCreate(&EventData[1],_Arg0, sizeof(SYSTEMTIME)  );
+
+    EventDataDescCreate(&EventData[2],
+                        (_Arg1 != NULL) ? _Arg1 : L"NULL",
+                        (_Arg1 != NULL) ? (ULONG)((wcslen(_Arg1) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
+
+    EventDataDescCreate(&EventData[3],&_Arg2, sizeof(const unsigned int)  );
+
+    EventDataDescCreate(&EventData[4],
+                        (_Arg3 != NULL) ? _Arg3 : L"NULL",
+                        (_Arg3 != NULL) ? (ULONG)((wcslen(_Arg3) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
+
+    EventDataDescCreate(&EventData[5],&_Arg4, sizeof(const unsigned int)  );
+
+    EventDataDescCreate(&EventData[6],
+                        (_Arg5 != NULL) ? _Arg5 : L"NULL",
+                        (_Arg5 != NULL) ? (ULONG)((wcslen(_Arg5) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
+
+    EventDataDescCreate(&EventData[7],&_Arg6, sizeof(const unsigned int)  );
+
+    EventDataDescCreate(&EventData[8],
+                        (_Arg7 != NULL) ? _Arg7 : L"NULL",
+                        (_Arg7 != NULL) ? (ULONG)((wcslen(_Arg7) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
+
+    EventDataDescCreate(&EventData[9],
+                        (_Arg8 != NULL) ? _Arg8 : L"NULL",
+                        (_Arg8 != NULL) ? (ULONG)((wcslen(_Arg8) + 1) * sizeof(WCHAR)) : (ULONG)sizeof(L"NULL"));
+
+    return McGenEventWrite(Context, Descriptor, NULL, McTemplateU0yzqzqzqzz_ARGCOUNT + 1, EventData);
+}
+#endif // McTemplateU0yzqzqzqzz_def
 
 #endif // MCGEN_DISABLE_PROVIDER_CODE_GENERATION
 
@@ -3018,34 +2852,29 @@ _mcgen_PASTE2(McTemplateK0mzzzz_, MCGEN_EVENTWRITETRANSFER)(
 #endif
 
 #define MSG_ProcessCreation_EventMessage     0xB0000001L
-#define MSG_ProcessAccess_EventMessage       0xB0000002L
-#define MSG_ProcessAccessDuplicated_EventMessage 0xB0000003L
+#define MSG_ProcessTerminate_EventMessage    0xB0000002L
+#define MSG_RemoteThreadCreation_EventMessage 0xB0000003L
 #define MSG_ImageLoaded_EventMessage         0xB0000004L
-#define MSG_RegistryCreateKey_EventMessage   0xB0000005L
-#define MSG_RegistryDeleteKey_EventMessage   0xB0000006L
-#define MSG_RegistrySetValue_EventMessage    0xB0000007L
-#define MSG_ProcessReparenting_EventMessage  0xB0000008L
-#define MSG_ProcessTerminate_EventMessage    0xB0000009L
-#define MSG_FileRename_EventMessage          0xB000000AL
-#define MSG_RPCClientCall_EventMessage       0xB000000BL
-#define MSG_RPCServerCall_EventMessage       0xB000000CL
-#define MSG_NetworkConnectionAccepted_EventMessage 0xB000000DL
-#define MSG_RegistrySaveKey_EventMessage     0xB000000EL
-#define MSG_DotNetLoad_EventMessage          0xB000000FL
-#define MSG_AMSI_EventMessage                0xB0000010L
-#define MSG_ImpersonationAction_EventMessage 0xB0000011L
-#define MSG_RemoteThreadCreation_EventMessage 0xB0000012L
-#define MSG_SchedTaskCreation_EventMessage   0xB0000013L
-#define MSG_SchedTaskStarted_EventMessage    0xB0000014L
-#define MSG_FileCreate_EventMessage          0xB0000015L
-#define MSG_FileDelete_EventMessage          0xB0000016L
-#define MSG_NamedPipeCreate_EventMessage     0xB0000017L
-#define MSG_NamedPipeOpen_EventMessage       0xB0000018L
-#define MSG_WMIFilterToConsumerBinding_EventMessage 0xB0000019L
-#define MSG_TIQueueUserAPCEvent_EventMessage 0xB000001AL
-#define MSG_DriverLoad_EventMessage          0xB000001BL
-#define MSG_DPAPI_EventMessage               0xB000001CL
-#define MSG_TIWriteProcessMemory_EventMessage 0xB000001DL
-#define MSG_TIReadProcessMemory_EventMessage 0xB000001EL
-#define MSG_ThreadTokenImpersonation_EventMessage 0xB000001FL
-#define MSG_TIRemoteAllocateVirtualMemory_EventMessage 0xB0000020L
+#define MSG_ProcessAccess_EventMessage       0xB0000005L
+#define MSG_RegistrySaveKey_EventMessage     0xB0000006L
+#define MSG_RegistrySetValueKey_EventMessage 0xB0000008L
+#define MSG_RegistryCreateKey_EventMessage   0xB0000009L
+#define MSG_FileCreation_EventMessage        0xB000000AL
+#define MSG_NamedPipeCreation_EventMessage   0xB000000BL
+#define MSG_NamedPipeConnection_EventMessage 0xB000000CL
+#define MSG_MailslotCreation_EventMessage    0xB000000DL
+#define MSG_MailslotConnection_EventMessage  0xB000000EL
+#define MSG_RemoteFileConnection_EventMessage 0xB000000FL
+#define MSG_DotNetLoad_EventMessage          0xB0000010L
+#define MSG_WMIEventFilter_EventMessage      0xB0000011L
+#define MSG_RPCClient_EventMessage           0xB0000012L
+#define MSG_RPCServer_EventMessage           0xB0000013L
+#define MSG_DPAPIUnprotect_EventMessage      0xB0000014L
+#define MSG_NetworkConnection_EventMessage   0xB0000015L
+#define MSG_AMSI_EventMessage                0xB0000016L
+#define MSG_RemoteReadProcessMemory_EventMessage 0xB0000017L
+#define MSG_RemoteWriteProcessMemory_EventMessage 0xB0000018L
+#define MSG_RemoteVirtualAllocation_EventMessage 0xB0000019L
+#define MSG_RemoteQueueUserAPC_EventMessage  0xB000001AL
+#define MSG_QueryTokenImpersonation_EventMessage 0xB000001BL
+#define MSG_DebugLog102_EventMessage         0xB0000066L

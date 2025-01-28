@@ -28,23 +28,12 @@
     <ClCompile Include="registry.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="token.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="thread.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="minifilter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="process.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <Inf Include="JonMon.inf">
-      <Filter>Driver Files</Filter>
-    </Inf>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="driver.h">
@@ -59,16 +48,10 @@
     <ClInclude Include="shared.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="token.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="registry.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="minifilter.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="thread.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="jtime.h">

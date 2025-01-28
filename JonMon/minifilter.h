@@ -2,6 +2,7 @@
 #define _MINIFILTER_
 #include "shared.h"
 
+
 extern PFLT_FILTER gFilterHandle;
 
 NTSTATUS 

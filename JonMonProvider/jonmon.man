@@ -25,64 +25,34 @@
                 <templates>
                    <template tid="EID1">
                         <data 
-                            name="EventTime:" 
-                            inType="win:FILETIME"
+                            name="EventTime" 
+                            inType="win:SYSTEMTIME"
                             outType="xs:dateTime">
                         </data>
                         <data 
-                            name="NewProcessFilePath" 
-                            inType="win:UnicodeString"
-                            outType="xs:string">
+                            name="CreatorThreadId" 
+                            inType="win:Int64"
+                            outType="win:long">
                         </data>
                         <data 
-                            name="NewProcessCommandLine" 
-                            inType="win:UnicodeString"
-                            outType="xs:string">
-                        </data>
-                        <data 
-                            name="NewProcessId" 
-                            inType="win:UInt64"
-                            outType="win:unsignedLong">
-                        </data>
-                        <data 
-                            name="NewProcessStartKey" 
-                            inType="win:UInt64"
-                            outType="xs:unsignedLong">
-                        </data>
-                        <data 
-                            name="NewProcessStartTime" 
-                            inType="win:UInt64"
-                            outType="win:ETWTIME">
-                        </data>
-                        <data 
-                            name="NewProcessProcessUser" 
-                            inType="win:UnicodeString"
-                            outType="xs:string">
-                        </data>
-                        <data 
-                            name="NewProcessUserLogonId" 
-                             inType="win:UInt32"
-                            outType="xs:unsignedInt">
+                            name="CreatorProcessId" 
+                            inType="win:Int64"
+                            outType="xs:long">
                         </data>
                         <data 
                             name="ParentProcessId" 
-                            inType="win:UInt64"
-                            outType="win:unsignedLong">
+                            inType="win:Int64"
+                            outType="win:long">
                         </data>
                         <data 
-                            name="ParentProcessThreadId" 
-                            inType="win:UInt64"
-                            outType="win:unsignedLong">
+                            name="ParentProcessStartKey" 
+                            inType="win:Int64"
+                            outType="xs:long">
                         </data>
                         <data 
                             name="ParentProcessFilePath" 
                             inType="win:UnicodeString"
                             outType="xs:string">
-                        </data>
-                        <data 
-                            name="CreatorProcessId" 
-                            inType="win:UInt64"
-                            outType="xs:unsignedLong">
                         </data>
                         <data 
                             name="ParentProcessUser" 
@@ -94,531 +64,20 @@
                              inType="win:UInt32"
                             outType="xs:unsignedInt">
                         </data>
-                    </template>
-
-                <template tid="EID2">
                         <data 
-                            name="EventTime:" 
-                            inType="win:FILETIME"
-                            outType="xs:dateTime">
-                        </data>
-                        <data 
-                            name="SourceProcessGrantedAccess" 
-                            inType="win:HexInt32"
-                            outType="win:HexInt32">
-                        </data>
-                        <data 
-                            name="TargetProcessId" 
-                            inType="win:UInt64"
-                            outType="xs:unsignedLong">
-                        </data>
-                        <data 
-                            name="TargetProcessStartKey" 
-                            inType="win:UInt64"
-                            outType="xs:unsignedLong">
-                        </data>
-                        <data 
-                            name="TargetImagePath" 
+                            name="ParentProcessIntegrityLevel" 
                             inType="win:UnicodeString"
                             outType="xs:string">
                         </data>
                         <data 
-                            name="SourceProcessId" 
-                            inType="win:UInt64"
-                            outType="xs:unsignedLong">
-                        </data>
-                        <data 
-                            name="SourceThreadId" 
-                            inType="win:UInt64"
-                            outType="xs:unsignedLong">
-                        </data>
-                        <data 
-                            name="SourceProcessStartKey" 
-                            inType="win:UInt64"
-                            outType="xs:unsignedLong">
-                        </data>
-                        <data 
-                            name="SourceProcessFilePath" 
-                            inType="win:UnicodeString"
-                            outType="xs:string">
-                        </data>
-                        <data 
-                            name="SourceProcessUser" 
-                            inType="win:UnicodeString"
-                            outType="xs:string">
-                        </data>
-                        <data 
-                            name="SourceProcessUserLogonId" 
-                             inType="win:UInt32"
-                            outType="xs:unsignedInt">
-                        </data>
-                    </template>
-                    
-                    <template tid="EID3">
-                        <data 
-                            name="EventTime:" 
-                            inType="win:FILETIME"
-                            outType="xs:dateTime">
-                        </data>
-                        <data 
-                            name="SourceProcessDuplicatedGrantedAccess" 
-                            inType="win:HexInt32"
-                            outType="win:HexInt32">
-                        </data>
-                        <data 
-                            name="TargetProcessId" 
-                            inType="win:UInt64"
-                            outType="xs:unsignedLong">
-                        </data>
-                        <data 
-                            name="TargetProcessStartKey" 
-                            inType="win:UInt64"
-                            outType="xs:unsignedLong">
-                        </data>
-                        <data 
-                            name="TargetImagePath" 
-                            inType="win:UnicodeString"
-                            outType="xs:string">
-                        </data>
-                        <data 
-                            name="SourceProcessId" 
-                            inType="win:UInt64"
-                            outType="xs:unsignedLong">
-                        </data>
-                        <data 
-                            name="SourceThreadId" 
-                            inType="win:UInt64"
-                            outType="xs:unsignedLong">
-                        </data>
-                        <data 
-                            name="SourceProcessStartKey" 
-                            inType="win:UInt64"
-                            outType="xs:unsignedLong">
-                        </data>
-                        <data 
-                            name="SourceProcessFilePath" 
-                            inType="win:UnicodeString"
-                            outType="xs:string">
-                        </data>
-                        <data 
-                            name="SourceProcessUser" 
-                            inType="win:UnicodeString"
-                            outType="xs:string">
-                        </data>
-                        <data 
-                            name="SourceProcessUserLogonId" 
-                             inType="win:UInt32"
-                            outType="xs:unsignedInt">
-                        </data>
-                    </template>
-                    <template tid="EID4">
-                        <data 
-                            name="EventTime:" 
-                            inType="win:FILETIME"
-                            outType="xs:dateTime">
-                        </data>
-                        <data 
-                            name="SourceProcessFilePath" 
-                            inType="win:UnicodeString"
-                            outType="xs:string">
-                        </data>
-                        <data 
-                            name="SourceProcessId" 
-                            inType="win:UInt64"
-                            outType="xs:unsignedLong">
-                        </data>
-                        <data 
-                            name="SourceThreadId" 
-                            inType="win:UInt64"
-                            outType="xs:unsignedLong">
-                        </data>
-                        <data 
-                            name="SourceProcessStartKey" 
-                            inType="win:UInt64"
-                            outType="xs:unsignedLong">
-                        </data>
-                        <data 
-                            name="ModulePath" 
-                            inType="win:UnicodeString"
-                            outType="xs:string">
-                        </data>
-                        <data 
-                            name="SourceProcessUser" 
-                            inType="win:UnicodeString"
-                            outType="xs:string">
-                        </data>
-                        <data 
-                            name="SourceProcessUserLogonId" 
-                             inType="win:UInt32"
-                            outType="xs:unsignedInt">
-                        </data>
-                    </template>
-                    <template tid="EID5">
-                        <data 
-                            name="EventTime:" 
-                            inType="win:FILETIME"
-                            outType="xs:dateTime">
-                        </data>
-                        <data 
-                            name="SourceProcessFilePath" 
-                            inType="win:UnicodeString"
-                            outType="xs:string">
-                        </data>
-                        <data 
-                            name="SourceProcessId" 
-                            inType="win:UInt64"
-                            outType="xs:unsignedLong">
-                        </data>
-                        <data 
-                            name="SourceThreadId" 
-                            inType="win:UInt64"
-                            outType="xs:unsignedLong">
-                        </data>
-                        <data 
-                            name="SourceProcessStartKey" 
-                            inType="win:UInt64"
-                            outType="xs:unsignedLong">
-                        </data>
-                        <data 
-                            name="SourceRegistryKeyPath" 
-                            inType="win:UnicodeString"
-                            outType="xs:string">
-                        </data>
-                        <data 
-                            name="SourceProcessGrantedAccess" 
-                            inType="win:HexInt32"
-                            outType="win:HexInt32">
-                        </data>
-                        <data 
-                            name="SourceProcessUser" 
-                            inType="win:UnicodeString"
-                            outType="xs:string">
-                        </data>
-                        <data 
-                            name="SourceProcessUserLogonId" 
-                             inType="win:UInt32"
-                            outType="xs:unsignedInt">
-                        </data>
-                    </template>
-
-                    <template tid="EID6">
-                        <data 
-                            name="EventTime:" 
-                            inType="win:FILETIME"
-                            outType="xs:dateTime">
-                        </data>
-                        <data 
-                            name="SourceProcessFilePath" 
-                            inType="win:UnicodeString"
-                            outType="xs:string">
-                        </data>
-                        <data 
-                            name="SourceProcessId" 
-                            inType="win:UInt64"
-                            outType="xs:unsignedLong">
-                        </data>
-                        <data 
-                            name="SourceThreadId" 
-                            inType="win:UInt64"
-                            outType="xs:unsignedLong">
-                        </data>
-                        <data 
-                            name="SourceProcessStartKey" 
-                            inType="win:UInt64"
-                            outType="xs:unsignedLong">
-                        </data>
-                        <data 
-                            name="RegistryKeyPath" 
-                            inType="win:UnicodeString"
-                            outType="xs:string">
-                        </data>
-                        <data 
-                            name="SourceProcessUser" 
-                            inType="win:UnicodeString"
-                            outType="xs:string">
-                        </data>
-                        <data 
-                            name="SourceProcessUserLogonId" 
-                             inType="win:UInt32"
-                            outType="xs:unsignedInt">
-                        </data>
-                    </template>
-
-                    <template tid="EID7">
-                        <data 
-                            name="EventTime:" 
-                            inType="win:FILETIME"
-                            outType="xs:dateTime">
-                        </data>
-                        <data 
-                            name="SourceProcessFilePath" 
-                            inType="win:UnicodeString"
-                            outType="xs:string">
-                        </data>
-                        <data 
-                            name="SourceProcessId" 
-                            inType="win:UInt64"
-                            outType="xs:unsignedLong">
-                        </data>
-                        <data 
-                            name="SourceThreadId" 
-                            inType="win:UInt64"
-                            outType="xs:unsignedLong">
-                        </data>
-                        <data 
-                            name="SourceProcessStartKey" 
-                            inType="win:UInt64"
-                            outType="xs:unsignedLong">
-                        </data>
-                        <data 
-                            name="RegistryKeyPath" 
-                            inType="win:UnicodeString"
-                            outType="xs:string">
-                        </data>
-                        <data 
-                            name="RegistryValueName" 
-                            inType="win:UnicodeString"
-                            outType="xs:string">
-                        </data>
-                        <data 
-                            name="RegistryValueData" 
-                            inType="win:UnicodeString"
-                            outType="xs:string">
-                        </data>
-                        <data 
-                            name="RegistryValueDataType" 
-                            inType="win:UnicodeString"
-                            outType="xs:string">
-                        </data>
-                        <data 
-                            name="SourceProcessUser" 
-                            inType="win:UnicodeString"
-                            outType="xs:string">
-                        </data>
-                        <data 
-                            name="SourceProcessUserLogonId" 
-                             inType="win:UInt32"
-                            outType="xs:unsignedInt">
-                        </data>
-                    </template>
-
-                    <template tid="EID8">
-                        <data 
-                            name="EventTime:" 
-                            inType="win:FILETIME"
-                            outType="xs:dateTime">
-                        </data>
-                        <data 
-                            name="NewProcessFilePath" 
-                            inType="win:UnicodeString"
-                            outType="xs:string">
-                        </data>
-                        <data 
-                            name="NewProcessCommandLine" 
-                            inType="win:UnicodeString"
-                            outType="xs:string">
-                        </data>
-                        <data 
-                            name="ParentProcessId" 
-                            inType="win:UInt64"
-                            outType="xs:unsignedLong">
-                        </data>
-                        <data 
-                            name="ParentThreadId" 
-                            inType="win:UInt64"
-                            outType="xs:unsignedLong">
-                        </data>
-                        <data 
-                            name="NewProcessId" 
-                            inType="win:UInt64"
-                            outType="xs:unsignedLong">
-                        </data>
-                        <data 
-                            name="NewProcessStartKey" 
-                            inType="win:UInt64"
-                            outType="xs:unsignedLong">
-                        </data>
-                        <data 
-                            name="NewProcessStartTime" 
-                            inType="win:UInt64"
-                            outType="win:ETWTIME">
-                        </data>
-                        <data 
-                            name="ParentProcessFilePath" 
-                            inType="win:UnicodeString"
-                            outType="xs:string">
-                        </data>
-                        <data 
-                            name="CreatorProcessId" 
-                            inType="win:UInt64"
-                            outType="xs:unsignedLong">
-                        </data>
-                        <data 
-                            name="CreatorProcessFilePath" 
-                            inType="win:UnicodeString"
-                            outType="xs:string">
-                        </data>
-                        <data 
-                            name="CreatorProcessUser" 
-                            inType="win:UnicodeString"
-                            outType="xs:string">
-                        </data>
-                        <data 
-                            name="ParentProcessUser" 
-                            inType="win:UnicodeString"
-                            outType="xs:string">
-                        </data>
-                        <data 
-                            name="NewProcessUser" 
-                            inType="win:UnicodeString"
-                            outType="xs:string">
-                        </data>
-                        <data 
-                            name="ParentProcessLogonId" 
+                            name="ParentProcessSessionId" 
                              inType="win:UInt32"
                             outType="xs:unsignedInt">
                         </data>
                         <data 
-                            name="NewProcessUserLogonId" 
+                            name="ParentProcessTokenType" 
                              inType="win:UInt32"
                             outType="xs:unsignedInt">
-                        </data>
-                        <data 
-                            name="CreatorProcessLogonId" 
-                             inType="win:UInt32"
-                            outType="xs:unsignedInt">
-                        </data>
-                    </template>
-
-                    <template tid="EID9">
-                        <data 
-                            name="EventTime:" 
-                            inType="win:FILETIME"
-                            outType="xs:dateTime">
-                        </data>
-                        <data 
-                            name="SourceProcessFilePath" 
-                            inType="win:UnicodeString"
-                            outType="xs:string">
-                        </data>
-                        <data 
-                            name="SourceProcessId" 
-                            inType="win:UInt64"
-                            outType="xs:unsignedLong">
-                        </data>
-                        <data 
-                            name="SourceThreadId" 
-                            inType="win:UInt64"
-                            outType="xs:unsignedLong">
-                        </data>
-                        <data 
-                            name="TargetProcessFilePath" 
-                            inType="win:UnicodeString"
-                            outType="xs:string">
-                        </data>
-                        <data 
-                            name="TargetProcessId" 
-                            inType="win:UInt64"
-                            outType="xs:unsignedLong">
-                        </data>
-                    </template>
-                    <template tid="EID10">
-                        <data 
-                        name="EventTime:" 
-                        inType="win:FILETIME"
-                        outType="xs:dateTime">
-                        </data>
-                        <data
-                            name="SourceImagePath" 
-                            inType="win:UnicodeString"
-                            outType="xs:string">
-                        </data>
-                        <data
-                            name="SourceProcessId" 
-                            inType="win:UInt64"
-                            outType="xs:unsignedLong">
-                        </data>
-                        <data 
-                            name="SourceProcessStartKey" 
-                            inType="win:UInt64"
-                            outType="xs:unsignedLong">
-                        </data>
-                        <data
-                            name="SourceThreadId" 
-                            inType="win:UInt64"
-                            outType="xs:unsignedLong">
-                        </data>
-                        <data
-                            name="SourceUserName" 
-                            inType="win:UnicodeString"
-                            outType="xs:string">
-                        </data>
-                        <data 
-                            name="SourceUserLogonId" 
-                             inType="win:UInt32"
-                            outType="xs:unsignedInt">
-                        </data>
-                        <data
-                            name="SourceProcessIntegrityLevel" 
-                            inType="win:UnicodeString"
-                            outType="xs:string">
-                        </data>
-                        <data
-                            name="TargetFile" 
-                            inType="win:UnicodeString"
-                            outType="xs:string">
-                        </data>
-                    </template>
-                    <template tid="EID11">
-                        <data 
-                            name="EventTime:" 
-                            inType="win:FILETIME"
-                            outType="xs:dateTime">
-                        </data>
-                        <data 
-                            name="Interface UUID" 
-                            inType="win:UnicodeString"
-                            outType="xs:string">
-                        </data>
-                        <data 
-                            name="ProcNum" 
-                             inType="win:UInt32"
-                            outType="xs:unsignedInt">
-                        </data>
-                        <data 
-                            name="Protocol" 
-                             inType="win:UInt32"
-                            outType="xs:unsignedInt">
-                        </data>
-                        <data 
-                            name="ProcessId" 
-                             inType="win:UInt32"
-                            outType="xs:unsignedInt">
-                        </data>
-                        <data 
-                            name="NetworkAddress" 
-                            inType="win:UnicodeString"
-                            outType="xs:string">
-                        </data>
-                        <data 
-                            name="Endpoint" 
-                            inType="win:UnicodeString"
-                            outType="xs:string">
-                        </data>
-                        <data 
-                            name="InterfaceString" 
-                            inType="win:UnicodeString"
-                            outType="xs:string">
-                        </data>
-                        <data 
-                            name="MethodString" 
-                            inType="win:UnicodeString"
-                            outType="xs:string">
-                        </data>
-                        <data 
-                            name="ProcessUser" 
-                            inType="win:UnicodeString"
-                            outType="xs:string">
                         </data>
                         <data 
                             name="ProcessFilePath" 
@@ -626,243 +85,34 @@
                             outType="xs:string">
                         </data>
                         <data 
-                            name="CallStack" 
-                            inType="win:UnicodeString"
-                            outType="xs:string">
-                        </data>
-                    </template>
-                    <template tid="EID12">
-                        <data 
-                            name="EventTime:" 
-                            inType="win:FILETIME"
-                            outType="xs:dateTime">
-                        </data>
-                        <data 
-                            name="Interface UUID" 
-                            inType="win:UnicodeString"
-                            outType="xs:string">
-                        </data>
-                        <data 
-                            name="ProcNum" 
-                             inType="win:UInt32"
-                            outType="xs:unsignedInt">
-                        </data>
-                        <data 
-                            name="Protocol" 
-                             inType="win:UInt32"
-                            outType="xs:unsignedInt">
-                        </data>
-                        <data 
-                            name="ProcessId" 
-                             inType="win:UInt32"
-                            outType="xs:unsignedInt">
-                        </data>
-                        <data 
-                            name="NetworkAddress" 
-                            inType="win:UnicodeString"
-                            outType="xs:string">
-                        </data>
-                        <data 
-                            name="Endpoint" 
-                            inType="win:UnicodeString"
-                            outType="xs:string">
-                        </data>
-                        <data 
-                            name="InterfaceString" 
-                            inType="win:UnicodeString"
-                            outType="xs:string">
-                        </data>
-                        <data 
-                            name="MethodString" 
-                            inType="win:UnicodeString"
-                            outType="xs:string">
-                        </data>
-                        <data 
-                            name="ProcessUser" 
-                            inType="win:UnicodeString"
-                            outType="xs:string">
-                        </data>
-                        <data 
-                            name="ProcessFilePath" 
-                            inType="win:UnicodeString"
-                            outType="xs:string">
-                        </data>
-                        <data  
-                            name="CallStack" 
-                            inType="win:UnicodeString"
-                            outType="xs:string">
-                        </data>
-                    </template>
-                    <template tid="EID13">
-                        <data 
-                            name="EventTime:" 
-                            inType="win:FILETIME"
-                            outType="xs:dateTime">
-                        </data>
-                        <data 
-                            name="ProcessId" 
-                             inType="win:UInt32"
-                            outType="xs:unsignedInt">
-                        </data>
-                        <data 
-                            name="SrcIpAddressIpv4" 
-                            inType="win:UnicodeString"
-                            outType="win:string">
-                        </data>
-                        <data 
-                            name="DestIpAddressIpv4" 
-                            inType="win:UnicodeString"
-                            outType="win:string">
-                        </data>
-                        <data 
-                            name="SrcPort" 
-                            inType="win:UInt16"
-                            outType="win:Port">
-                        </data>
-                        <data 
-                            name="DestPort" 
-                            inType="win:UInt16"
-                            outType="win:Port">
-                        </data>
-                        <data 
-                            name="Initiated" 
-                            inType="win:UnicodeString"
-                            outType="win:string">
-                        </data>
-                        <data 
-                            name="ProcessUser" 
-                            inType="win:UnicodeString"
-                            outType="xs:string">
-                        </data>
-                        <data 
-                            name="ProcessFilePath" 
-                            inType="win:UnicodeString"
-                            outType="xs:string">
-                        </data>
-                    </template>
-                    <template tid="EID14">
-                        <data 
-                            name="EventTime:" 
-                            inType="win:FILETIME"
-                            outType="xs:dateTime">
-                        </data>
-                        <data 
-                            name="SourceProcessFilePath" 
-                            inType="win:UnicodeString"
-                            outType="xs:string">
-                        </data>
-                        <data 
-                            name="SourceProcessId" 
-                            inType="win:UInt64"
-                            outType="xs:unsignedLong">
-                        </data>
-                        <data
-                            name="SourceThreadId" 
-                            inType="win:UInt64"
-                            outType="xs:unsignedLong">
-                        </data>
-                        <data 
-                            name="SourceProcessStartKey" 
-                            inType="win:UInt64"
-                            outType="xs:unsignedLong">
-                        </data>
-                        <data 
-                            name="RegistryKeyPath" 
-                            inType="win:UnicodeString"
-                            outType="xs:string">
-                        </data>
-                        <data 
-                            name="SourceProcessUser" 
-                            inType="win:UnicodeString"
-                            outType="xs:string">
-                        </data>
-                        <data 
-                            name="SourceProcessUserLogonId" 
-                             inType="win:UInt32"
-                            outType="xs:unsignedInt">
-                        </data>
-                    </template>
-                    <template tid="EID15">
-                        <data 
-                            name="EventTime:" 
-                            inType="win:FILETIME"
-                            outType="xs:dateTime">
-                        </data>
-                        <data 
-                            name="ProcessId" 
-                            inType="win:UInt32"
-                            outType="xs:unsignedInt">
-                        </data>
-                        <data 
-                            name="AssemblyName" 
-                            inType="win:UnicodeString"
-                            outType="xs:string">
-                        </data>
-                        <data 
-                            name="ProcessUser" 
-                            inType="win:UnicodeString"
-                            outType="xs:string">
-                        </data>
-                        <data 
-                            name="ProcessFilePath" 
-                            inType="win:UnicodeString"
-                            outType="xs:string">
-                        </data>
-                        <data 
-                            name="ClrInstanceID" 
-                            inType="win:UInt16"
-                            outType="xs:HexInt16">
-                        </data>
-                    </template>
-
-                    <template tid="EID16">
-                        <data 
-                            name="EventTime:" 
-                            inType="win:FILETIME"
-                            outType="xs:dateTime">
-                        </data>
-                        <data 
-                            name="ProcessId" 
-                             inType="win:UInt32"
-                            outType="xs:unsignedInt">
-                        </data>
-                        <data 
-                            name="AppName" 
-                            inType="win:UnicodeString"
-                            outType="xs:string">
-                        </data>
-                        <data 
-                            name="ScanResults" 
-                             inType="win:UInt32"
-                            outType="xs:unsignedInt">
-                        </data>
-                        <data 
-                            name="ContentSize" 
-                            inType="win:UInt32"
-                            outType="xs:unsignedInt">
-                        </data>
-                    </template>
-
-                    <template tid="EID17">
-                        <data 
-                            name="EventTime:" 
-                            inType="win:FILETIME"
-                            outType="xs:dateTime">
-                        </data>
-                        <data 
-                            name="ProcessName" 
+                            name="ProcessCommandLine" 
                             inType="win:UnicodeString"
                             outType="xs:string">
                         </data>
                         <data 
                             name="ProcessId" 
-                            inType="win:UInt64"
-                            outType="xs:unsignedLong">
+                            inType="win:Int64"
+                            outType="win:long">
                         </data>
                         <data 
                             name="ProcessStartKey" 
-                            inType="win:UInt64"
-                            outType="xs:unsignedLong">
+                            inType="win:Int64"
+                            outType="xs:long">
+                        </data>
+                        <data 
+                            name="ProcessUser" 
+                            inType="win:UnicodeString"
+                            outType="xs:string">
+                        </data>
+                        <data 
+                            name="ProcessUserLogonId" 
+                             inType="win:UInt32"
+                            outType="xs:unsignedInt">
+                        </data>
+                        <data 
+                            name="ProcessUserLinkedLogonId" 
+                             inType="win:UInt32"
+                            outType="xs:unsignedInt">
                         </data>
                         <data 
                             name="ProcessIntegrityLevel" 
@@ -870,621 +120,1665 @@
                             outType="xs:string">
                         </data>
                         <data 
-                            name="ProcessUserName" 
-                            inType="win:UnicodeString"
-                            outType="xs:string">
+                            name="ProcessSessionId" 
+                             inType="win:UInt32"
+                            outType="xs:unsignedInt">
                         </data>
                         <data 
-                            name="ThreadId" 
-                            inType="win:UInt64"
-                            outType="xs:unsignedLong">
+                            name="ProcessTokenType" 
+                             inType="win:UInt32"
+                            outType="xs:unsignedInt">
                         </data>
                         <data 
-                            name="ImpersonationLevel" 
-                            inType="win:Int32"
-                            outType="xs:int">
-                        </data>
-                        <data 
-                            name="ImpersonationLevelName" 
-                            inType="win:UnicodeString"
-                            outType="xs:string">
-                        </data>
-                        <data 
-                            name="ImpersonatedUserName" 
-                            inType="win:UnicodeString"
-                            outType="xs:string">
-                        </data>
-                        <data 
-                            name="ThreadIntegrityLevel" 
-                            inType="win:UnicodeString"
-                            outType="xs:string">
-                        </data>
-                        <data 
-                            name="OperationType" 
-                            inType="win:UnicodeString"
-                            outType="xs:string">
+                            name="ProcessReparented" 
+                             inType="win:Boolean"
+                            outType="xs:boolean">
                         </data>
                     </template>
 
-                <template tid="EID18">
+                <template tid="EID2">
                     <data 
-                        name="EventTime:" 
-                        inType="win:FILETIME"
+                        name="EventTime" 
+                        inType="win:SYSTEMTIME"
                         outType="xs:dateTime">
                     </data>
-                    <data
-                        name="SourceImagePath" 
-                        inType="win:UnicodeString"
-                        outType="xs:string">
-                    </data>
-                     <data
+                    <data 
                         name="SourceProcessId" 
-                        inType="win:UInt64"
-                        outType="xs:unsignedLong">
-                    </data>
-                    <data
-                        name="SourceThreadId" 
-                        inType="win:UInt64"
-                        outType="xs:unsignedLong">
+                        inType="win:Int64"
+                        outType="win:long">
                     </data>
                     <data 
                         name="SourceProcessStartKey" 
-                        inType="win:UInt64"
-                        outType="xs:unsignedLong">
+                        inType="win:Int64"
+                        outType="xs:long">
                     </data>
-                    <data
-                        name="SourceUserName" 
+                    <data 
+                        name="TargetProcessFilePath" 
                         inType="win:UnicodeString"
                         outType="xs:string">
                     </data>
                     <data 
-                        name="SourceUserLogonId" 
-                        inType="win:UInt32"
-                        outType="win:HexInt32">
+                        name="TargetProcessId" 
+                        inType="win:Int64"
+                        outType="win:long">
                     </data>
-                    <data
+                </template>
+                    
+                <template tid="EID3">
+                    <data 
+                        name="EventTime" 
+                        inType="win:SYSTEMTIME"
+                        outType="xs:dateTime">
+                    </data>
+                    <data 
+                        name="SourceProcessId" 
+                        inType="win:Int64"
+                        outType="win:long">
+                    </data>
+                    <data 
+                        name="SourceProcessStartKey" 
+                        inType="win:Int64"
+                        outType="xs:long">
+                    </data>
+                    <data 
+                        name="SourceThreadId" 
+                        inType="win:Int64"
+                        outType="win:long">
+                    </data>
+                    <data 
+                        name="SourceProcessFilePath" 
+                        inType="win:UnicodeString"
+                        outType="xs:string">
+                    </data>
+                    <data 
+                        name="SourceProcessUser" 
+                        inType="win:UnicodeString"
+                        outType="xs:string">
+                    </data>
+                    <data 
+                        name="SourceProcessUserLogonId" 
+                        inType="win:UInt32"
+                        outType="xs:unsignedInt">
+                    </data>
+                    <data 
                         name="SourceProcessIntegrityLevel" 
                         inType="win:UnicodeString"
                         outType="xs:string">
                     </data>
-                    <data
-                        name="TargetImagePath" 
+                    <data 
+                        name="SourceProcessSessionId" 
+                        inType="win:UInt32"
+                        outType="xs:unsignedInt">
+                    </data>
+                    <data 
+                        name="SourceProcessTokenType" 
+                        inType="win:UInt32"
+                        outType="xs:unsignedInt">
+                    </data>
+                    <data 
+                        name="TargetProcessFilePath" 
                         inType="win:UnicodeString"
                         outType="xs:string">
                     </data>
-                     <data
+                    <data 
                         name="TargetProcessId" 
-                        inType="win:UInt64"
-                        outType="xs:unsignedLong">
+                        inType="win:Int64"
+                        outType="win:long">
                     </data>
                     <data 
                         name="TargetProcessStartKey" 
-                        inType="win:UInt64"
-                        outType="xs:unsignedLong">
+                        inType="win:Int64"
+                        outType="xs:long">
                     </data>
-                    <data
+                    <data 
                         name="TargetThreadId" 
-                        inType="win:UInt64"
-                        outType="xs:unsignedLong">
+                        inType="win:Int64"
+                        outType="win:long">
                     </data>
-                    <data
-                        name="TargetUserName" 
+                    <data 
+                        name="TargetProcessUser" 
                         inType="win:UnicodeString"
                         outType="xs:string">
                     </data>
                     <data 
-                        name="TargetUserLogonId" 
+                        name="TargetProcessUserLogonId" 
                         inType="win:UInt32"
-                        outType="win:HexInt32">
+                        outType="xs:unsignedInt">
                     </data>
-                    <data
+                    <data 
+                        name="TargetProcessUserLinkedLogonId" 
+                            inType="win:UInt32"
+                        outType="xs:unsignedInt">
+                    </data>
+                    <data 
                         name="TargetProcessIntegrityLevel" 
+                        inType="win:UnicodeString"
+                        outType="xs:string">
+                    </data>
+                    <data 
+                        name="TargetProcessSessionId" 
+                            inType="win:UInt32"
+                        outType="xs:unsignedInt">
+                    </data>
+                </template>
+
+                <template tid="EID4">
+                    <data 
+                        name="EventTime" 
+                        inType="win:SYSTEMTIME"
+                        outType="xs:dateTime">
+                    </data>
+                    <data 
+                        name="ProcessFilePath" 
+                        inType="win:UnicodeString"
+                        outType="xs:string">
+                    </data>
+                    <data 
+                        name="ProcessId" 
+                        inType="win:Int64"
+                        outType="win:long">
+                    </data>
+                    <data 
+                        name="ProcessThreadId" 
+                        inType="win:Int64"
+                        outType="win:long">
+                    </data>
+                    <data 
+                        name="ProcessStartKey" 
+                        inType="win:Int64"
+                        outType="xs:long">
+                    </data>
+                    <data 
+                        name="ProcessUser" 
+                        inType="win:UnicodeString"
+                        outType="xs:string">
+                    </data>
+                    <data 
+                        name="ProcessUserLogonId" 
+                            inType="win:UInt32"
+                        outType="xs:unsignedInt">
+                    </data>
+                    <data 
+                        name="ProcessUserLinkedLogonId" 
+                            inType="win:UInt32"
+                        outType="xs:unsignedInt">
+                    </data>
+                    <data 
+                        name="ProcessIntegrityLevel" 
+                        inType="win:UnicodeString"
+                        outType="xs:string">
+                    </data>
+                    <data 
+                        name="ProcessSessionId" 
+                            inType="win:UInt32"
+                        outType="xs:unsignedInt">
+                    </data>
+                    <data 
+                        name="ProcessTokenType" 
+                            inType="win:UInt32"
+                        outType="xs:unsignedInt">
+                    </data>
+                    <data 
+                        name="ModulePath" 
+                        inType="win:UnicodeString"
+                        outType="xs:string">
+                    </data>
+                    <data 
+                        name="SystemModeImage" 
+                        inType="win:Int64"
+                        outType="xs:long">
+                    </data>
+                </template>
+
+                <template tid="EID5">
+                    <data 
+                        name="EventTime" 
+                        inType="win:SYSTEMTIME"
+                        outType="xs:dateTime">
+                    </data>
+                    <data 
+                        name="SourceProcessId" 
+                        inType="win:Int64"
+                        outType="win:long">
+                    </data>
+                    <data 
+                        name="SourceThreadId" 
+                        inType="win:Int64"
+                        outType="win:long">
+                    </data>
+                    <data 
+                        name="SourceProcessStartKey" 
+                        inType="win:Int64"
+                        outType="xs:long">
+                    </data>
+                    <data 
+                        name="SourceProcessFilePath" 
+                        inType="win:UnicodeString"
+                        outType="xs:string">
+                    </data>
+                    <data 
+                        name="SourceProcessUser" 
+                        inType="win:UnicodeString"
+                        outType="xs:string">
+                    </data>
+                    <data 
+                        name="SourceProcessUserLogonId" 
+                         inType="win:UInt32"
+                        outType="xs:unsignedInt">
+                    </data>
+                    <data 
+                        name="SourceProcessIntegrityLevel" 
+                        inType="win:UnicodeString"
+                        outType="xs:string">
+                    </data>
+                    <data 
+                        name="SourceProcessSessionId" 
+                         inType="win:UInt32"
+                        outType="xs:unsignedInt">
+                    </data>
+                    <data 
+                        name="SourceProcessTokenType" 
+                         inType="win:UInt32"
+                        outType="xs:unsignedInt">
+                    </data>
+                    <data 
+                        name="ProcessId" 
+                        inType="win:Int64"
+                        outType="win:long">
+                    </data>
+                    <data 
+                        name="ProcessStartKey" 
+                        inType="win:Int64"
+                        outType="xs:long">
+                    </data>
+                    <data 
+                        name="ProcessFilePath" 
+                        inType="win:UnicodeString"
+                        outType="xs:string">
+                    </data>
+                    <data 
+                        name="ProcessUser" 
+                        inType="win:UnicodeString"
+                        outType="xs:string">
+                    </data>
+                    <data 
+                        name="ProcessUserLogonId" 
+                         inType="win:UInt32"
+                        outType="xs:unsignedInt">
+                    </data>
+                    <data 
+                        name="ProcessUserLinkedLogonId" 
+                         inType="win:UInt32"
+                        outType="xs:unsignedInt">
+                    </data>
+                    <data 
+                        name="ProcessIntegrityLevel" 
+                        inType="win:UnicodeString"
+                        outType="xs:string">
+                    </data>
+                    <data 
+                        name="ProcessSessionId" 
+                         inType="win:UInt32"
+                        outType="xs:unsignedInt">
+                    </data>
+                    <data 
+                        name="ProcessTokenType" 
+                         inType="win:UInt32"
+                        outType="xs:unsignedInt">
+                    </data>
+                    <data 
+                        name="DesiredAccess" 
+                         inType="win:Int32"
+                        outType="xs:int">
+                    </data>
+                    <data 
+                        name="OperationType" 
+                         inType="win:Int32"
+                        outType="xs:int">
+                    </data>
+                </template>
+
+                <template tid="EID6">
+                    <data 
+                        name="EventTime" 
+                        inType="win:SYSTEMTIME"
+                        outType="xs:dateTime">
+                    </data>
+                    <data 
+                        name="ProcessFilePath" 
+                        inType="win:UnicodeString"
+                        outType="xs:string">
+                    </data>
+                    <data 
+                        name="ProcessId" 
+                        inType="win:Int64"
+                        outType="win:long">
+                    </data>
+                    <data 
+                        name="ProcessThreadId" 
+                        inType="win:Int64"
+                        outType="win:long">
+                    </data>
+                    <data 
+                        name="ProcessStartKey" 
+                        inType="win:Int64"
+                        outType="xs:long">
+                    </data>
+                    <data 
+                        name="ProcessUser" 
+                        inType="win:UnicodeString"
+                        outType="xs:string">
+                    </data>
+                    <data 
+                        name="ProcessUserLogonId" 
+                            inType="win:UInt32"
+                        outType="xs:unsignedInt">
+                    </data>
+                    <data 
+                        name="ProcessIntegrityLevel" 
+                        inType="win:UnicodeString"
+                        outType="xs:string">
+                    </data>
+                    <data 
+                        name="ProcessSessionId" 
+                            inType="win:UInt32"
+                        outType="xs:unsignedInt">
+                    </data>
+                    <data 
+                        name="RegKeyPath" 
+                        inType="win:UnicodeString"
+                        outType="xs:string">
+                    </data>
+                </template>
+
+                <template tid="EID8">
+                    <data 
+                        name="EventTime" 
+                        inType="win:SYSTEMTIME"
+                        outType="xs:dateTime">
+                    </data>
+                    <data 
+                        name="ProcessFilePath" 
+                        inType="win:UnicodeString"
+                        outType="xs:string">
+                    </data>
+                    <data 
+                        name="ProcessId" 
+                        inType="win:Int64"
+                        outType="win:long">
+                    </data>
+                    <data 
+                        name="ProcessThreadId" 
+                        inType="win:Int64"
+                        outType="win:long">
+                    </data>
+                    <data 
+                        name="ProcessStartKey" 
+                        inType="win:Int64"
+                        outType="xs:long">
+                    </data>
+                    <data 
+                        name="ProcessUser" 
+                        inType="win:UnicodeString"
+                        outType="xs:string">
+                    </data>
+                    <data 
+                        name="ProcessUserLogonId" 
+                            inType="win:UInt32"
+                        outType="xs:unsignedInt">
+                    </data>
+                    <data 
+                        name="ProcessIntegrityLevel" 
+                        inType="win:UnicodeString"
+                        outType="xs:string">
+                    </data>
+                    <data 
+                        name="ProcessSessionId" 
+                            inType="win:UInt32"
+                        outType="xs:unsignedInt">
+                    </data>
+                    <data 
+                        name="RegKeyPath" 
+                        inType="win:UnicodeString"
+                        outType="xs:string">
+                    </data>
+                    <data 
+                        name="DataType" 
+                            inType="win:Int32"
+                        outType="xs:int">
+                    </data>
+                    <data 
+                        name="Data" 
+                        inType="win:UnicodeString"
+                        outType="xs:string">
+                    </data>
+                    <data 
+                        name="ValueName" 
+                        inType="win:UnicodeString"
+                        outType="xs:string">
+                    </data>
+                </template>
+
+                <template tid="EID9">
+                    <data 
+                        name="EventTime" 
+                        inType="win:SYSTEMTIME"
+                        outType="xs:dateTime">
+                    </data>
+                    <data 
+                        name="ProcessFilePath" 
+                        inType="win:UnicodeString"
+                        outType="xs:string">
+                    </data>
+                    <data 
+                        name="ProcessId" 
+                        inType="win:Int64"
+                        outType="win:long">
+                    </data>
+                    <data 
+                        name="ProcessThreadId" 
+                        inType="win:Int64"
+                        outType="win:long">
+                    </data>
+                    <data 
+                        name="ProcessStartKey" 
+                        inType="win:Int64"
+                        outType="xs:long">
+                    </data>
+                    <data 
+                        name="ProcessUser" 
+                        inType="win:UnicodeString"
+                        outType="xs:string">
+                    </data>
+                    <data 
+                        name="ProcessUserLogonId" 
+                            inType="win:UInt32"
+                        outType="xs:unsignedInt">
+                    </data>
+                    <data 
+                        name="ProcessIntegrityLevel" 
+                        inType="win:UnicodeString"
+                        outType="xs:string">
+                    </data>
+                    <data 
+                        name="ProcessSessionId" 
+                            inType="win:UInt32"
+                        outType="xs:unsignedInt">
+                    </data>
+                    <data 
+                        name="RegKeyPath" 
+                        inType="win:UnicodeString"
+                        outType="xs:string">
+                    </data>
+                </template>
+
+                <template tid="EID10">
+                    <data 
+                        name="EventTime" 
+                        inType="win:SYSTEMTIME"
+                        outType="xs:dateTime">
+                    </data>
+                    <data 
+                        name="ProcessFilePath" 
+                        inType="win:UnicodeString"
+                        outType="xs:string">
+                    </data>
+                    <data 
+                        name="ProcessId" 
+                        inType="win:Int64"
+                        outType="win:long">
+                    </data>
+                    <data 
+                        name="ProcessThreadId" 
+                        inType="win:Int64"
+                        outType="win:long">
+                    </data>
+                    <data 
+                        name="ProcessStartKey" 
+                        inType="win:Int64"
+                        outType="xs:long">
+                    </data>
+                    <data 
+                        name="ProcessUser" 
+                        inType="win:UnicodeString"
+                        outType="xs:string">
+                    </data>
+                    <data 
+                        name="ProcessUserLogonId" 
+                            inType="win:UInt32"
+                        outType="xs:unsignedInt">
+                    </data>
+                    <data 
+                        name="ProcessIntegrityLevel" 
+                        inType="win:UnicodeString"
+                        outType="xs:string">
+                    </data>
+                    <data 
+                        name="ProcessSessionId" 
+                            inType="win:UInt32"
+                        outType="xs:unsignedInt">
+                    </data>
+                    <data 
+                        name="FileName" 
+                        inType="win:UnicodeString"
+                        outType="xs:string">
+                    </data>
+                </template>
+
+                <template tid="EID11">
+                    <data 
+                        name="EventTime" 
+                        inType="win:SYSTEMTIME"
+                        outType="xs:dateTime">
+                    </data>
+                    <data 
+                        name="ProcessFilePath" 
+                        inType="win:UnicodeString"
+                        outType="xs:string">
+                    </data>
+                    <data 
+                        name="ProcessId" 
+                        inType="win:Int64"
+                        outType="win:long">
+                    </data>
+                    <data 
+                        name="ProcessThreadId" 
+                        inType="win:Int64"
+                        outType="win:long">
+                    </data>
+                    <data 
+                        name="ProcessStartKey" 
+                        inType="win:Int64"
+                        outType="xs:long">
+                    </data>
+                    <data 
+                        name="ProcessUser" 
+                        inType="win:UnicodeString"
+                        outType="xs:string">
+                    </data>
+                    <data 
+                        name="ProcessUserLogonId" 
+                            inType="win:UInt32"
+                        outType="xs:unsignedInt">
+                    </data>
+                    <data 
+                        name="ProcessIntegrityLevel" 
+                        inType="win:UnicodeString"
+                        outType="xs:string">
+                    </data>
+                    <data 
+                        name="ProcessSessionId" 
+                            inType="win:UInt32"
+                        outType="xs:unsignedInt">
+                    </data>
+                    <data 
+                        name="FileName" 
+                        inType="win:UnicodeString"
+                        outType="xs:string">
+                    </data>
+                    <data 
+                        name="RequestedRights" 
+                        inType="win:Int32"
+                        outType="xs:int">
+                    </data>
+                </template>
+
+                <template tid="EID12">
+                    <data 
+                        name="EventTime" 
+                        inType="win:SYSTEMTIME"
+                        outType="xs:dateTime">
+                    </data>
+                    <data 
+                        name="ProcessFilePath" 
+                        inType="win:UnicodeString"
+                        outType="xs:string">
+                    </data>
+                    <data 
+                        name="ProcessId" 
+                        inType="win:Int64"
+                        outType="win:long">
+                    </data>
+                    <data 
+                        name="ProcessThreadId" 
+                        inType="win:Int64"
+                        outType="win:long">
+                    </data>
+                    <data 
+                        name="ProcessStartKey" 
+                        inType="win:Int64"
+                        outType="xs:long">
+                    </data>
+                    <data 
+                        name="ProcessUser" 
+                        inType="win:UnicodeString"
+                        outType="xs:string">
+                    </data>
+                    <data 
+                        name="ProcessUserLogonId" 
+                            inType="win:UInt32"
+                        outType="xs:unsignedInt">
+                    </data>
+                    <data 
+                        name="ProcessIntegrityLevel" 
+                        inType="win:UnicodeString"
+                        outType="xs:string">
+                    </data>
+                    <data 
+                        name="ProcessSessionId" 
+                            inType="win:UInt32"
+                        outType="xs:unsignedInt">
+                    </data>
+                    <data 
+                        name="FileName" 
+                        inType="win:UnicodeString"
+                        outType="xs:string">
+                    </data>
+                    <data 
+                        name="RequestedRights" 
+                        inType="win:Int32"
+                        outType="xs:int">
+                    </data>
+                </template>
+
+                <template tid="EID13">
+                    <data 
+                        name="EventTime" 
+                        inType="win:SYSTEMTIME"
+                        outType="xs:dateTime">
+                    </data>
+                    <data 
+                        name="ProcessFilePath" 
+                        inType="win:UnicodeString"
+                        outType="xs:string">
+                    </data>
+                    <data 
+                        name="ProcessId" 
+                        inType="win:Int64"
+                        outType="win:long">
+                    </data>
+                    <data 
+                        name="ProcessThreadId" 
+                        inType="win:Int64"
+                        outType="win:long">
+                    </data>
+                    <data 
+                        name="ProcessStartKey" 
+                        inType="win:Int64"
+                        outType="xs:long">
+                    </data>
+                    <data 
+                        name="ProcessUser" 
+                        inType="win:UnicodeString"
+                        outType="xs:string">
+                    </data>
+                    <data 
+                        name="ProcessUserLogonId" 
+                            inType="win:UInt32"
+                        outType="xs:unsignedInt">
+                    </data>
+                    <data 
+                        name="ProcessIntegrityLevel" 
+                        inType="win:UnicodeString"
+                        outType="xs:string">
+                    </data>
+                    <data 
+                        name="ProcessSessionId" 
+                            inType="win:UInt32"
+                        outType="xs:unsignedInt">
+                    </data>
+                    <data 
+                        name="FileName" 
+                        inType="win:UnicodeString"
+                        outType="xs:string">
+                    </data>
+                    <data 
+                        name="RequestedRights" 
+                        inType="win:Int32"
+                        outType="xs:int">
+                    </data>
+                </template>
+
+                <template tid="EID14">
+                    <data 
+                        name="EventTime" 
+                        inType="win:SYSTEMTIME"
+                        outType="xs:dateTime">
+                    </data>
+                    <data 
+                        name="ProcessFilePath" 
+                        inType="win:UnicodeString"
+                        outType="xs:string">
+                    </data>
+                    <data 
+                        name="ProcessId" 
+                        inType="win:Int64"
+                        outType="win:long">
+                    </data>
+                    <data 
+                        name="ProcessThreadId" 
+                        inType="win:Int64"
+                        outType="win:long">
+                    </data>
+                    <data 
+                        name="ProcessStartKey" 
+                        inType="win:Int64"
+                        outType="xs:long">
+                    </data>
+                    <data 
+                        name="ProcessUser" 
+                        inType="win:UnicodeString"
+                        outType="xs:string">
+                    </data>
+                    <data 
+                        name="ProcessUserLogonId" 
+                            inType="win:UInt32"
+                        outType="xs:unsignedInt">
+                    </data>
+                    <data 
+                        name="ProcessIntegrityLevel" 
+                        inType="win:UnicodeString"
+                        outType="xs:string">
+                    </data>
+                    <data 
+                        name="ProcessSessionId" 
+                            inType="win:UInt32"
+                        outType="xs:unsignedInt">
+                    </data>
+                    <data 
+                        name="FileName" 
+                        inType="win:UnicodeString"
+                        outType="xs:string">
+                    </data>
+                    <data 
+                        name="RequestedRights" 
+                        inType="win:Int32"
+                        outType="xs:int">
+                    </data>
+                </template>
+
+                <template tid="EID15">
+                    <data 
+                        name="EventTime" 
+                        inType="win:SYSTEMTIME"
+                        outType="xs:dateTime">
+                    </data>
+                    <data 
+                        name="ProcessFilePath" 
+                        inType="win:UnicodeString"
+                        outType="xs:string">
+                    </data>
+                    <data 
+                        name="ProcessId" 
+                        inType="win:Int64"
+                        outType="win:long">
+                    </data>
+                    <data 
+                        name="ProcessThreadId" 
+                        inType="win:Int64"
+                        outType="win:long">
+                    </data>
+                    <data 
+                        name="ProcessStartKey" 
+                        inType="win:Int64"
+                        outType="xs:long">
+                    </data>
+                    <data 
+                        name="ProcessUser" 
+                        inType="win:UnicodeString"
+                        outType="xs:string">
+                    </data>
+                    <data 
+                        name="ProcessUserLogonId" 
+                            inType="win:UInt32"
+                        outType="xs:unsignedInt">
+                    </data>
+                    <data 
+                        name="ProcessIntegrityLevel" 
+                        inType="win:UnicodeString"
+                        outType="xs:string">
+                    </data>
+                    <data 
+                        name="ProcessSessionId" 
+                            inType="win:UInt32"
+                        outType="xs:unsignedInt">
+                    </data>
+                    <data 
+                        name="FileName" 
+                        inType="win:UnicodeString"
+                        outType="xs:string">
+                    </data>
+                </template>
+
+                <template tid="EID16">
+                    <data 
+                        name="EventTime" 
+                        inType="win:SYSTEMTIME"
+                        outType="xs:dateTime">
+                    </data>
+                    <data 
+                        name="ProcessFilePath" 
+                        inType="win:UnicodeString"
+                        outType="xs:string">
+                    </data>
+                    <data 
+                        name="ProcessId" 
+                        inType="win:Int64"
+                        outType="win:long">
+                    </data>
+                    <data 
+                        name="ProcessUser" 
+                        inType="win:UnicodeString"
+                        outType="xs:string">
+                    </data>
+                    <data 
+                        name="ProcessUserLogonId" 
+                            inType="win:UInt32"
+                        outType="xs:unsignedInt">
+                    </data>
+                    <data 
+                        name="ProcessIntegrityLevel" 
+                        inType="win:UnicodeString"
+                        outType="xs:string">
+                    </data>
+                    <data 
+                        name="ProcessSessionId" 
+                            inType="win:UInt32"
+                        outType="xs:unsignedInt">
+                    </data>
+                    <data 
+                        name="AssemblyName" 
+                        inType="win:UnicodeString"
+                        outType="xs:string">
+                    </data>
+                    <data 
+                        name="ClrInstanceID" 
+                        inType="win:UInt16"
+                        outType="xs:HexInt16">
+                    </data>
+                </template>
+
+                <template tid="EID17">
+                    <data 
+                        name="EventTime" 
+                        inType="win:SYSTEMTIME"
+                        outType="xs:dateTime">
+                    </data>
+                    <data 
+                        name="ProcessFilePath" 
+                        inType="win:UnicodeString"
+                        outType="xs:string">
+                    </data>
+                    <data 
+                        name="ProcessId" 
+                        inType="win:Int64"
+                        outType="win:long">
+                    </data>
+                    <data 
+                        name="ProcessUser" 
+                        inType="win:UnicodeString"
+                        outType="xs:string">
+                    </data>
+                    <data 
+                        name="ProcessUserLogonId" 
+                            inType="win:UInt32"
+                        outType="xs:unsignedInt">
+                    </data>
+                    <data 
+                        name="ProcessIntegrityLevel" 
+                        inType="win:UnicodeString"
+                        outType="xs:string">
+                    </data>
+                    <data 
+                        name="ProcessSessionId" 
+                            inType="win:UInt32"
+                        outType="xs:unsignedInt">
+                    </data>
+                    <data 
+                        name="Namespace" 
+                        inType="win:UnicodeString"
+                        outType="xs:string">
+                    </data>
+                    <data 
+                        name="ESS" 
+                        inType="win:UnicodeString"
+                        outType="xs:string">
+                    </data>
+                    <data 
+                        name="Consumer" 
+                        inType="win:UnicodeString"
+                        outType="xs:string">
+                    </data>
+                    <data 
+                        name="PossibleCause" 
+                        inType="win:UnicodeString"
+                        outType="xs:string">
+                    </data>
+                </template>
+
+                <template tid="EID18">
+                    <data 
+                        name="EventTime" 
+                        inType="win:SYSTEMTIME"
+                        outType="xs:dateTime">
+                    </data>
+                    <data 
+                        name="ProcessFilePath" 
+                        inType="win:UnicodeString"
+                        outType="xs:string">
+                    </data>
+                    <data 
+                        name="ProcessId" 
+                        inType="win:Int64"
+                        outType="win:long">
+                    </data>
+                    <data 
+                        name="ProcessUser" 
+                        inType="win:UnicodeString"
+                        outType="xs:string">
+                    </data>
+                    <data 
+                        name="ProcessUserLogonId" 
+                            inType="win:UInt32"
+                        outType="xs:unsignedInt">
+                    </data>
+                    <data 
+                        name="ProcessIntegrityLevel" 
+                        inType="win:UnicodeString"
+                        outType="xs:string">
+                    </data>
+                    <data 
+                        name="ProcessSessionId" 
+                            inType="win:UInt32"
+                        outType="xs:unsignedInt">
+                    </data>
+                    <data 
+                        name="InterfaceUUID" 
+                        inType="win:UnicodeString"
+                        outType="xs:string">
+                    </data>
+                    <data 
+                        name="ProcNum" 
+                         inType="win:UInt32"
+                        outType="xs:unsignedInt">
+                    </data>
+                    <data 
+                        name="Protocol" 
+                         inType="win:UInt32"
+                        outType="xs:unsignedInt">
+                    </data>
+                    <data 
+                        name="NetworkAddress" 
+                        inType="win:UnicodeString"
+                        outType="xs:string">
+                    </data>
+                    <data 
+                        name="Endpoint" 
+                        inType="win:UnicodeString"
+                        outType="xs:string">
+                    </data>
+                    <data 
+                        name="InterfaceString" 
+                        inType="win:UnicodeString"
+                        outType="xs:string">
+                    </data>
+                    <data 
+                        name="MethodString" 
+                        inType="win:UnicodeString"
+                        outType="xs:string">
+                    </data>
+                    <data  
+                        name="CallStack" 
                         inType="win:UnicodeString"
                         outType="xs:string">
                     </data>
                 </template>
 
                 <template tid="EID19">
-                        <data 
-                            name="EventTime:" 
-                            inType="win:FILETIME"
-                            outType="xs:dateTime">
-                        </data>
-                        <data 
-                            name="TaskName" 
-                            inType="win:UnicodeString"
-                            outType="xs:string">
-                        </data>
-                        <data 
-                            name="UserName" 
-                            inType="win:UnicodeString"
-                            outType="xs:string">
-                        </data>
-                        <data 
-                            name="SourceProcessId" 
-                             inType="win:UInt32"
-                            outType="xs:unsignedInt">
-                        </data>
+                    <data 
+                        name="EventTime" 
+                        inType="win:SYSTEMTIME"
+                        outType="xs:dateTime">
+                    </data>
+                    <data 
+                        name="ProcessFilePath" 
+                        inType="win:UnicodeString"
+                        outType="xs:string">
+                    </data>
+                    <data 
+                        name="ProcessId" 
+                        inType="win:Int64"
+                        outType="win:long">
+                    </data>
+                    <data 
+                        name="ProcessUser" 
+                        inType="win:UnicodeString"
+                        outType="xs:string">
+                    </data>
+                    <data 
+                        name="ProcessUserLogonId" 
+                            inType="win:UInt32"
+                        outType="xs:unsignedInt">
+                    </data>
+                    <data 
+                        name="ProcessIntegrityLevel" 
+                        inType="win:UnicodeString"
+                        outType="xs:string">
+                    </data>
+                    <data 
+                        name="ProcessSessionId" 
+                            inType="win:UInt32"
+                        outType="xs:unsignedInt">
+                    </data>
+                    <data 
+                        name="InterfaceUUID" 
+                        inType="win:UnicodeString"
+                        outType="xs:string">
+                    </data>
+                    <data 
+                        name="ProcNum" 
+                         inType="win:UInt32"
+                        outType="xs:unsignedInt">
+                    </data>
+                    <data 
+                        name="Protocol" 
+                         inType="win:UInt32"
+                        outType="xs:unsignedInt">
+                    </data>
+                    <data 
+                        name="NetworkAddress" 
+                        inType="win:UnicodeString"
+                        outType="xs:string">
+                    </data>
+                    <data 
+                        name="Endpoint" 
+                        inType="win:UnicodeString"
+                        outType="xs:string">
+                    </data>
+                    <data 
+                        name="InterfaceString" 
+                        inType="win:UnicodeString"
+                        outType="xs:string">
+                    </data>
+                    <data 
+                        name="MethodString" 
+                        inType="win:UnicodeString"
+                        outType="xs:string">
+                    </data>
+                    <data  
+                        name="CallStack" 
+                        inType="win:UnicodeString"
+                        outType="xs:string">
+                    </data>
                 </template>
-
                 <template tid="EID20">
-                        <data 
-                            name="EventTime:" 
-                            inType="win:FILETIME"
-                            outType="xs:dateTime">
-                        </data>
-                        <data 
-                            name="TaskName" 
-                            inType="win:UnicodeString"
-                            outType="xs:string">
-                        </data>
-                        <data 
-                            name="ImagePath" 
-                            inType="win:UnicodeString"
-                            outType="xs:string">
-                        </data>
-                        <data 
-                            name="SourceProcessId" 
-                             inType="win:UInt32"
-                            outType="xs:unsignedInt">
-                        </data>
+                    <data 
+                        name="EventTime" 
+                        inType="win:SYSTEMTIME"
+                        outType="xs:dateTime">
+                    </data>
+                    <data 
+                        name="ProcessFilePath" 
+                        inType="win:UnicodeString"
+                        outType="xs:string">
+                    </data>
+                    <data 
+                        name="ProcessId" 
+                        inType="win:Int64"
+                        outType="win:long">
+                    </data>
+                    <data 
+                        name="ProcessUser" 
+                        inType="win:UnicodeString"
+                        outType="xs:string">
+                    </data>
+                    <data 
+                        name="ProcessUserLogonId" 
+                        inType="win:UInt32"
+                        outType="xs:unsignedInt">
+                    </data>
+                    <data 
+                        name="ProcessIntegrityLevel" 
+                        inType="win:UnicodeString"
+                        outType="xs:string">
+                    </data>
+                    <data 
+                        name="ProcessSessionId" 
+                        inType="win:UInt32"
+                        outType="xs:unsignedInt">
+                    </data>
+                    <data 
+                        name="OperationType" 
+                        inType="win:UnicodeString"
+                        outType="xs:string">
+                    </data>
+                    <data 
+                        name="DataDescription" 
+                        inType="win:UnicodeString"
+                        outType="xs:string">
+                    </data>
+                    <data 
+                        name="Flags" 
+                        inType="win:UInt32"
+                        outType="xs:unsignedInt">
+                    </data>
+                    <data 
+                        name="ProtectionFlags" 
+                        inType="win:UInt32"
+                        outType="xs:unsignedInt">
+                    </data>
                 </template>
-
                 <template tid="EID21">
                     <data 
-                        name="EventTime:" 
-                        inType="win:FILETIME"
+                        name="EventTime" 
+                        inType="win:SYSTEMTIME"
                         outType="xs:dateTime">
                     </data>
-                    <data
-                        name="SourceImagePath" 
-                        inType="win:UnicodeString"
-                        outType="xs:string">
-                    </data>
-                    <data
-                        name="SourceProcessId" 
-                        inType="win:UInt64"
-                        outType="xs:unsignedLong">
+                    <data 
+                        name="ProcessId" 
+                            inType="win:UInt32"
+                        outType="xs:unsignedInt">
                     </data>
                     <data 
-                        name="SourceProcessStartKey" 
-                        inType="win:UInt64"
-                        outType="xs:unsignedLong">
-                    </data>
-                    <data
-                        name="SourceThreadId" 
-                        inType="win:UInt64"
-                        outType="xs:unsignedLong">
-                    </data>
-                    <data
-                        name="SourceUserName" 
+                        name="ProcessFilePath" 
                         inType="win:UnicodeString"
                         outType="xs:string">
                     </data>
                     <data 
-                        name="SourceUserLogonId" 
-                        inType="win:UInt32"
-                        outType="win:HexInt32">
-                    </data>
-                    <data
-                        name="SourceProcessIntegrityLevel" 
+                        name="SrcIpAddressIpv4" 
                         inType="win:UnicodeString"
-                        outType="xs:string">
-                    </data>
-                    <data
-                        name="TargetFile" 
-                        inType="win:UnicodeString"
-                        outType="xs:string">
-                    </data>
-                </template>
-
-                <template tid="EID22">
-                    <data 
-                        name="EventTime:" 
-                        inType="win:FILETIME"
-                        outType="xs:dateTime">
-                    </data>
-                    <data
-                        name="SourceImagePath" 
-                        inType="win:UnicodeString"
-                        outType="xs:string">
-                    </data>
-                    <data
-                        name="SourceProcessId" 
-                        inType="win:UInt64"
-                        outType="xs:unsignedLong">
+                        outType="win:string">
                     </data>
                     <data 
-                        name="SourceProcessStartKey" 
-                        inType="win:UInt64"
-                        outType="xs:unsignedLong">
-                    </data>
-                    <data
-                        name="SourceThreadId" 
-                        inType="win:UInt64"
-                        outType="xs:unsignedLong">
-                    </data>
-                    <data
-                        name="SourceUserName" 
+                        name="DestIpAddressIpv4" 
                         inType="win:UnicodeString"
-                        outType="xs:string">
+                        outType="win:string">
                     </data>
                     <data 
-                        name="SourceUserLogonId" 
-                        inType="win:UInt32"
-                        outType="win:HexInt32">
-                    </data>
-                    <data
-                        name="SourceProcessIntegrityLevel" 
-                        inType="win:UnicodeString"
-                        outType="xs:string">
-                    </data>
-                    <data
-                        name="TargetFile" 
-                        inType="win:UnicodeString"
-                        outType="xs:string">
-                    </data>
-                </template>
-
-                <template tid="EID23">
-                    <data 
-                        name="EventTime:" 
-                        inType="win:FILETIME"
-                        outType="xs:dateTime">
-                    </data>
-                    <data
-                        name="SourceImagePath" 
-                        inType="win:UnicodeString"
-                        outType="xs:string">
-                    </data>
-                    <data
-                        name="SourceProcessId" 
-                        inType="win:UInt64"
-                        outType="xs:unsignedLong">
+                        name="SrcPort" 
+                        inType="win:UInt16"
+                        outType="win:Port">
                     </data>
                     <data 
-                        name="SourceProcessStartKey" 
-                        inType="win:UInt64"
-                        outType="xs:unsignedLong">
-                    </data>
-                    <data
-                        name="SourceThreadId" 
-                        inType="win:UInt64"
-                        outType="xs:unsignedLong">
-                    </data>
-                    <data
-                        name="SourceUserName" 
-                        inType="win:UnicodeString"
-                        outType="xs:string">
+                        name="DestPort" 
+                        inType="win:UInt16"
+                        outType="win:Port">
                     </data>
                     <data 
-                        name="SourceUserLogonId" 
-                        inType="win:UInt32"
-                        outType="win:HexInt32">
-                    </data>
-                    <data
-                        name="SourceProcessIntegrityLevel" 
-                        inType="win:UnicodeString"
-                        outType="xs:string">
-                    </data>
-                    <data
-                        name="PipeName" 
-                        inType="win:UnicodeString"
-                        outType="xs:string">
-                    </data>
-                    <data
-                        name="RemoteCreation" 
+                        name="Initiated" 
                         inType="win:Boolean"
                         outType="xs:boolean">
                     </data>
                     <data 
-                        name="PipeCreationAccess" 
-                        inType="win:HexInt32"
-                        outType="win:HexInt32">
+                        name="ProcessUser" 
+                        inType="win:UnicodeString"
+                        outType="xs:string">
+                    </data>
+                    <data 
+                        name="ProcessUserLogonId" 
+                            inType="win:UInt32"
+                        outType="xs:unsignedInt">
+                    </data>
+                    <data 
+                        name="ProcessIntegrityLevel" 
+                        inType="win:UnicodeString"
+                        outType="xs:string">
+                    </data>
+                    <data 
+                        name="ProcessSessionId" 
+                            inType="win:UInt32"
+                        outType="xs:unsignedInt">
                     </data>
                 </template>
-
-                <template tid="EID24">
+                <template tid="EID22">
                     <data 
-                        name="EventTime:" 
-                        inType="win:FILETIME"
+                        name="EventTime" 
+                        inType="win:SYSTEMTIME"
                         outType="xs:dateTime">
                     </data>
-                    <data
-                        name="SourceImagePath" 
-                        inType="win:UnicodeString"
-                        outType="xs:string">
-                    </data>
-                    <data
-                        name="SourceProcessId" 
-                        inType="win:UInt64"
-                        outType="xs:unsignedLong">
-                    </data>
                     <data 
-                        name="SourceProcessStartKey" 
-                        inType="win:UInt64"
-                        outType="xs:unsignedLong">
-                    </data>
-                    <data
-                        name="SourceThreadId" 
-                        inType="win:UInt64"
-                        outType="xs:unsignedLong">
-                    </data>
-                    <data
-                        name="SourceUserName" 
+                        name="ProcessFilePath" 
                         inType="win:UnicodeString"
                         outType="xs:string">
                     </data>
                     <data 
-                        name="SourceUserLogonId" 
+                        name="ProcessId" 
+                        inType="win:Int64"
+                        outType="win:long">
+                    </data>
+                    <data 
+                        name="ProcessUser" 
+                        inType="win:UnicodeString"
+                        outType="xs:string">
+                    </data>
+                    <data 
+                        name="ProcessUserLogonId" 
+                            inType="win:UInt32"
+                        outType="xs:unsignedInt">
+                    </data>
+                    <data 
+                        name="ProcessIntegrityLevel" 
+                        inType="win:UnicodeString"
+                        outType="xs:string">
+                    </data>
+                    <data 
+                        name="ProcessSessionId" 
+                            inType="win:UInt32"
+                        outType="xs:unsignedInt">
+                    </data>
+                    <data 
+                        name="AppName" 
+                        inType="win:UnicodeString"
+                        outType="xs:string">
+                    </data>
+                    <data 
+                        name="ContentName" 
+                        inType="win:UnicodeString"
+                        outType="xs:string">
+                    </data>
+                    <data 
+                        name="ScanStatus" 
+                        inType="win:UInt8"
+                        outType="xs:string">
+                    </data>
+                    <data 
+                        name="ScanResult" 
                         inType="win:UInt32"
-                        outType="win:HexInt32">
+                        outType="xs:unsignedInt">
                     </data>
+                    <data 
+                        name="ContentSize" 
+                        inType="win:UInt32"
+                        outType="xs:unsignedInt">
+                    </data>
+                    <data 
+                        name="Content" 
+                        inType="win:Binary"
+                        length="ContentSize"
+                        outType="xs:hexBinary">
+                    </data>
+                    <data 
+                        name="DecodedContent" 
+                        inType="win:UnicodeString"
+                        outType="xs:string">
+                    </data>
+                </template>
+                <template tid="EID102">
                     <data
+                        name="EventId" 
+                        inType="win:Int32"
+                        outType="xs:int">
+                    </data>
+                    <data 
+                        name="ProtectionLevel"
+                        inType="win:Boolean"
+                        outType="xs:boolean">
+                    </data>
+                
+                </template>
+                <template tid="EID23">
+                        <data 
+                            name="EventTime:" 
+                            inType="win:SYSTEMTIME"
+                            outType="xs:dateTime">
+                        </data>
+                        <data 
+                            name="SourceProcessFilePath" 
+                            inType="win:UnicodeString"
+                            outType="xs:string">
+                        </data>
+                        <data 
+                            name="SourceProcessId" 
+                            inType="win:Int64"
+                            outType="win:long">
+                        </data>
+                        <data 
+                            name="SourceProcessUser" 
+                            inType="win:UnicodeString"
+                            outType="xs:string">
+                        </data>
+                        <data 
+                            name="SourceProcessUserLogonId" 
+                                inType="win:UInt32"
+                            outType="xs:unsignedInt">
+                        </data>
+                        <data 
+                            name="SourceProcessIntegrityLevel" 
+                            inType="win:UnicodeString"
+                            outType="xs:string">
+                        </data>
+                        <data 
+                            name="SourceProcessSessionId" 
+                                inType="win:UInt32"
+                            outType="xs:unsignedInt">
+                        </data>
+                        <data 
+                            name="SourceThreadId" 
+                             inType="win:UInt32"
+                            outType="xs:unsignedInt">
+                        </data>
+                        <data 
+                            name="TargetProcessFilePath" 
+                            inType="win:UnicodeString"
+                            outType="xs:string">
+                        </data>
+                        <data 
+                            name="TargetProcessId" 
+                            inType="win:Int64"
+                            outType="win:long">
+                        </data>
+                        <data 
+                            name="TargetProcessUser" 
+                            inType="win:UnicodeString"
+                            outType="xs:string">
+                        </data>
+                        <data 
+                            name="TargetProcessUserLogonId" 
+                                inType="win:UInt32"
+                            outType="xs:unsignedInt">
+                        </data>
+                        <data 
+                            name="TargetProcessIntegrityLevel" 
+                            inType="win:UnicodeString"
+                            outType="xs:string">
+                        </data>
+                        <data 
+                            name="TargetProcessSessionId" 
+                                inType="win:UInt32"
+                            outType="xs:unsignedInt">
+                        </data>
+                        <data 
+                            name="SourceProcessStartKey" 
+                            inType="win:UInt64"
+                            outType="xs:unsignedLong">
+                        </data> 
+                        <data 
+                            name="TargetProcessStartKey" 
+                            inType="win:UInt64"
+                            outType="xs:unsignedLong">
+                        </data> 
+                    </template>
+                    <template tid="EID24">
+                        <data 
+                            name="EventTime:" 
+                            inType="win:SYSTEMTIME"
+                            outType="xs:dateTime">
+                        </data>
+                        <data 
+                            name="SourceProcessFilePath" 
+                            inType="win:UnicodeString"
+                            outType="xs:string">
+                        </data>
+                        <data 
+                            name="SourceProcessId" 
+                            inType="win:Int64"
+                            outType="win:long">
+                        </data>
+                        <data 
+                            name="SourceProcessUser" 
+                            inType="win:UnicodeString"
+                            outType="xs:string">
+                        </data>
+                        <data 
+                            name="SourceProcessUserLogonId" 
+                                inType="win:UInt32"
+                            outType="xs:unsignedInt">
+                        </data>
+                        <data 
+                            name="SourceProcessIntegrityLevel" 
+                            inType="win:UnicodeString"
+                            outType="xs:string">
+                        </data>
+                        <data 
+                            name="SourceProcessSessionId" 
+                                inType="win:UInt32"
+                            outType="xs:unsignedInt">
+                        </data>
+                        <data 
+                            name="SourceThreadId" 
+                             inType="win:UInt32"
+                            outType="xs:unsignedInt">
+                        </data>
+                        <data 
+                            name="TargetProcessFilePath" 
+                            inType="win:UnicodeString"
+                            outType="xs:string">
+                        </data>
+                        <data 
+                            name="TargetProcessId" 
+                            inType="win:Int64"
+                            outType="win:long">
+                        </data>
+                        <data 
+                            name="TargetProcessUser" 
+                            inType="win:UnicodeString"
+                            outType="xs:string">
+                        </data>
+                        <data 
+                            name="TargetProcessUserLogonId" 
+                                inType="win:UInt32"
+                            outType="xs:unsignedInt">
+                        </data>
+                        <data 
+                            name="TargetProcessIntegrityLevel" 
+                            inType="win:UnicodeString"
+                            outType="xs:string">
+                        </data>
+                        <data 
+                            name="TargetProcessSessionId" 
+                                inType="win:UInt32"
+                            outType="xs:unsignedInt">
+                        </data>
+                        <data 
+                            name="SourceProcessStartKey" 
+                            inType="win:UInt64"
+                            outType="xs:unsignedLong">
+                        </data> 
+                        <data 
+                            name="TargetProcessStartKey" 
+                            inType="win:UInt64"
+                            outType="xs:unsignedLong">
+                        </data> 
+                </template>
+                <template tid="EID25">
+                    <data 
+                        name="EventTime:" 
+                        inType="win:SYSTEMTIME"
+                        outType="xs:dateTime">
+                    </data>
+                    <data 
+                        name="SourceProcessFilePath" 
+                        inType="win:UnicodeString"
+                        outType="xs:string">
+                    </data>
+                    <data 
+                        name="SourceProcessId" 
+                        inType="win:Int64"
+                        outType="win:long">
+                    </data>
+                    <data 
+                        name="SourceProcessUser" 
+                        inType="win:UnicodeString"
+                        outType="xs:string">
+                    </data>
+                    <data 
+                        name="SourceProcessUserLogonId" 
+                            inType="win:UInt32"
+                        outType="xs:unsignedInt">
+                    </data>
+                    <data 
                         name="SourceProcessIntegrityLevel" 
                         inType="win:UnicodeString"
                         outType="xs:string">
                     </data>
-                    <data
-                        name="PipeName" 
+                    <data 
+                        name="SourceProcessSessionId" 
+                            inType="win:UInt32"
+                        outType="xs:unsignedInt">
+                    </data>
+                    <data 
+                        name="SourceThreadId" 
+                            inType="win:UInt32"
+                        outType="xs:unsignedInt">
+                    </data>
+                    <data 
+                        name="TargetProcessFilePath" 
                         inType="win:UnicodeString"
                         outType="xs:string">
                     </data>
                     <data 
-                        name="PipeRequestedAccess" 
-                        inType="win:HexInt32"
-                        outType="win:HexInt32">
-                        </data>
-                    <data 
-                        name="PipeGrantedAccess" 
-                        inType="win:HexInt32"
-                        outType="win:HexInt32">
+                        name="TargetProcessId" 
+                        inType="win:Int64"
+                        outType="win:long">
                     </data>
+                    <data 
+                        name="TargetProcessUser" 
+                        inType="win:UnicodeString"
+                        outType="xs:string">
+                    </data>
+                    <data 
+                        name="TargetProcessUserLogonId" 
+                            inType="win:UInt32"
+                        outType="xs:unsignedInt">
+                    </data>
+                    <data 
+                        name="TargetProcessIntegrityLevel" 
+                        inType="win:UnicodeString"
+                        outType="xs:string">
+                    </data>
+                    <data 
+                        name="TargetProcessSessionId" 
+                            inType="win:UInt32"
+                        outType="xs:unsignedInt">
+                    </data>
+                    <data 
+                        name="SourceProcessStartKey" 
+                        inType="win:UInt64"
+                        outType="win:HexInt64">
+                    </data> 
+                    <data 
+                        name="TargetProcessStartKey" 
+                        inType="win:UInt64"
+                        outType="win:HexInt64">
+                    </data>
+                    <data 
+                        name="BaseAddress" 
+                        inType="win:UInt64"
+                        outType="win:HexInt64">
+                    </data>  
                 </template>
-
-                <template tid="EID25">
-                        <data 
-                            name="EventTime:" 
-                            inType="win:FILETIME"
-                            outType="xs:dateTime">
-                        </data>
-                        <data 
-                            name="Namespace" 
-                            inType="win:UnicodeString"
-                            outType="xs:string">
-                        </data>
-                        <data 
-                            name="ESS" 
-                            inType="win:UnicodeString"
-                            outType="xs:string">
-                        </data>
-                        <data 
-                            name="Consumer" 
-                            inType="win:UnicodeString"
-                            outType="xs:string">
-                        </data>
-                        <data 
-                            name="PossibleCause" 
-                            inType="win:UnicodeString"
-                            outType="xs:string">
-                        </data>
-                </template>
-
                 <template tid="EID26">
                         <data 
                             name="EventTime:" 
-                            inType="win:FILETIME"
+                            inType="win:SYSTEMTIME"
                             outType="xs:dateTime">
                         </data>
-                        <data 
-                            name="SourceThreadId" 
-                            inType="win:UInt32"
-                            outType="xs:unsignedInt">
-                        </data>
-                        <data 
-                            name="SourceProcessId" 
-                            inType="win:UInt32"
-                            outType="xs:unsignedInt">
-                        </data> 
-                        <data 
-                            name="TargetProcessId" 
-                            inType="win:UInt32"
-                            outType="xs:unsignedInt">
-                        </data>
-                        <data 
-                            name="TargetThreadId" 
-                            inType="win:UInt32"
-                            outType="xs:unsignedInt">
-                        </data>
-                        <data 
-                            name="SourceProcessStartKey" 
-                            inType="win:UInt64"
-                            outType="win:HexInt64">
-                        </data> 
-                        <data 
-                            name="TargetProcessStartKey" 
-                            inType="win:UInt64"
-                            outType="win:HexInt64">
-                        </data>
-                        <data 
-                            name="OriginalProcessId" 
-                            inType="win:UInt32"
-                            outType="xs:unsignedInt">
-                        </data>   
-                        <data 
-                            name="APCRoutine" 
-                            inType="win:Pointer"
-                            outType="win:HexInt64">
-                        </data> 
-                        <data 
-                            name="APCArgument" 
-                            inType="win:Pointer"
-                            outType="win:HexInt64">
-                        </data>  
                         <data 
                             name="SourceProcessFilePath" 
                             inType="win:UnicodeString"
                             outType="xs:string">
                         </data>
                         <data 
+                            name="SourceProcessId" 
+                            inType="win:Int64"
+                            outType="win:long">
+                        </data>
+                        <data 
+                            name="SourceProcessUser" 
+                            inType="win:UnicodeString"
+                            outType="xs:string">
+                        </data>
+                        <data 
+                            name="SourceProcessUserLogonId" 
+                                inType="win:UInt32"
+                            outType="xs:unsignedInt">
+                        </data>
+                        <data 
+                            name="SourceProcessIntegrityLevel" 
+                            inType="win:UnicodeString"
+                            outType="xs:string">
+                        </data>
+                        <data 
+                            name="SourceProcessSessionId" 
+                                inType="win:UInt32"
+                            outType="xs:unsignedInt">
+                        </data>
+                        <data 
+                            name="SourceThreadId" 
+                             inType="win:UInt32"
+                            outType="xs:unsignedInt">
+                        </data>
+                        <data 
                             name="TargetProcessFilePath" 
                             inType="win:UnicodeString"
                             outType="xs:string">
                         </data>
-                        <data  
-                            name="CallStack" 
+                        <data 
+                            name="TargetProcessId" 
+                            inType="win:Int64"
+                            outType="win:long">
+                        </data>
+                        <data 
+                            name="TargetProcessUser" 
                             inType="win:UnicodeString"
                             outType="xs:string">
-                        </data>   
+                        </data>
+                        <data 
+                            name="TargetProcessUserLogonId" 
+                                inType="win:UInt32"
+                            outType="xs:unsignedInt">
+                        </data>
+                        <data 
+                            name="TargetProcessIntegrityLevel" 
+                            inType="win:UnicodeString"
+                            outType="xs:string">
+                        </data>
+                        <data 
+                            name="TargetProcessSessionId" 
+                                inType="win:UInt32"
+                            outType="xs:unsignedInt">
+                        </data>
+                        <data 
+                            name="SourceProcessStartKey" 
+                            inType="win:UInt64"
+                            outType="xs:unsignedLong">
+                        </data> 
+                        <data 
+                            name="TargetProcessStartKey" 
+                            inType="win:UInt64"
+                            outType="xs:unsignedLong">
+                        </data> 
+                        <data 
+                            name="ApcRoutine" 
+                            inType="win:UInt64"
+                            outType="xs:unsignedLong">
+                        </data> 
+                        <data 
+                            name="ApcArgument1" 
+                            inType="win:UInt64"
+                            outType="xs:unsignedLong">
+                        </data> 
+                        <data 
+                            name="ApcArgument2" 
+                            inType="win:UInt64"
+                            outType="xs:unsignedLong">
+                        </data> 
+                        <data 
+                            name="ApcArgument3" 
+                            inType="win:UInt64"
+                            outType="xs:unsignedLong">
+                        </data> 
                 </template>
-
                 <template tid="EID27">
                         <data 
                             name="EventTime:" 
-                            inType="win:FILETIME"
+                            inType="win:SYSTEMTIME"
                             outType="xs:dateTime">
                         </data>
                         <data 
-                            name="ModulePath" 
+                            name="ProcessFilePath" 
                             inType="win:UnicodeString"
                             outType="xs:string">
-                        </data>
-                    </template>
-
-                <template tid="EID28">
-                        <data 
-                            name="EventTime:" 
-                            inType="win:FILETIME"
-                            outType="xs:dateTime">
-                        </data>
-                        <data 
-                            name="Operation" 
-                            inType="win:UnicodeString"
-                            outType="xs:string">
-                        </data>
-                        <data 
-                            name="DataDescription" 
-                            inType="win:UnicodeString"
-                            outType="xs:string">
-                        </data>
-                        <data 
-                            name="SourceProcessId" 
-                             inType="win:UInt32"
-                            outType="xs:unsignedInt">
-                        </data>
-                        <data 
-                            name="Flags" 
-                             inType="win:UInt32"
-                            outType="xs:unsignedInt">
-                        </data>
-                        <data 
-                            name="ProtectionFlags" 
-                             inType="win:UInt32"
-                            outType="xs:unsignedInt">
-                        </data>
-                </template>
-
-                <template tid="EID29">
-                        <data 
-                            name="EventTime:" 
-                            inType="win:FILETIME"
-                            outType="xs:dateTime">
-                        </data>
-                        <data 
-                            name="SourceProcessId" 
-                             inType="win:UInt32"
-                            outType="xs:unsignedInt">
-                        </data>
-                        <data 
-                            name="SourceThreadId" 
-                             inType="win:UInt32"
-                            outType="xs:unsignedInt">
-                        </data>
-                        <data 
-                            name="SourceProcessFilePath" 
-                            inType="win:UnicodeString"
-                            outType="xs:string">
-                        </data>
-                        <data 
-                            name="TargetProcessId" 
-                             inType="win:UInt32"
-                            outType="xs:unsignedInt">
-                        </data>
-                        <data 
-                            name="TargetProcessFilePath" 
-                            inType="win:UnicodeString"
-                            outType="xs:string">
-                        </data>
-                        <data 
-                            name="SourceProcessStartKey" 
-                            inType="win:UInt64"
-                            outType="xs:unsignedLong">
-                        </data> 
-                        <data 
-                            name="TargetProcessStartKey" 
-                            inType="win:UInt64"
-                            outType="xs:unsignedLong">
-                        </data> 
-                        <data  
-                            name="CallStack" 
-                            inType="win:UnicodeString"
-                            outType="xs:string">
-                        </data>
-                </template>
-
-                <template tid="EID30">
-                        <data 
-                            name="EventTime:" 
-                            inType="win:FILETIME"
-                            outType="xs:dateTime">
-                        </data>
-                        <data 
-                            name="SourceProcessId" 
-                             inType="win:UInt32"
-                            outType="xs:unsignedInt">
-                        </data>
-                        <data 
-                            name="SourceThreadId" 
-                             inType="win:UInt32"
-                            outType="xs:unsignedInt">
-                        </data>
-                        <data 
-                            name="SourceProcessFilePath" 
-                            inType="win:UnicodeString"
-                            outType="xs:string">
-                        </data>
-                        <data 
-                            name="TargetProcessId" 
-                             inType="win:UInt32"
-                            outType="xs:unsignedInt">
-                        </data>
-                        <data 
-                            name="TargetProcessFilePath" 
-                            inType="win:UnicodeString"
-                            outType="xs:string">
-                        </data>
-                        <data 
-                            name="SourceProcessStartKey" 
-                            inType="win:UInt64"
-                            outType="xs:unsignedLong">
-                        </data> 
-                        <data 
-                            name="TargetProcessStartKey" 
-                            inType="win:UInt64"
-                            outType="xs:unsignedLong">
-                        </data> 
-                        <data  
-                            name="CallStack" 
-                            inType="win:UnicodeString"
-                            outType="xs:string">
-                        </data>
-                    </template>
-
-                    <template tid="EID31">
-                        <data 
-                            name="EventTime:" 
-                            inType="win:FILETIME"
-                            outType="xs:dateTime">
                         </data>
                         <data 
                             name="ProcessId" 
@@ -1492,88 +1786,37 @@
                             outType="xs:unsignedInt">
                         </data>
                         <data 
-                            name="ImpersonatedThreadId" 
-                             inType="win:UInt32"
-                            outType="xs:unsignedInt">
-                        </data>
-                        <data 
-                            name="ThreadUserName" 
-                            inType="win:UnicodeString"
-                            outType="xs:string">
-                        </data>
-                        <data 
-                            name="ThreadIntegrityLevel" 
-                            inType="win:UnicodeString"
-                            outType="xs:string">
-                        </data>
-                        <data 
                             name="ProcessUserName" 
                             inType="win:UnicodeString"
                             outType="xs:string">
+                        </data>
+                        <data 
+                            name="ProcessUserLogonId" 
+                                inType="win:UInt32"
+                            outType="xs:unsignedInt">
                         </data>
                         <data 
                             name="ProcessIntegrityLevel" 
                             inType="win:UnicodeString"
                             outType="xs:string">
                         </data>
+                        <data 
+                            name="TargetThreadId" 
+                             inType="win:UInt32"
+                            outType="xs:unsignedInt">
+                        </data>
+                        <data 
+                            name="TargetThreadIntegrityLevel" 
+                            inType="win:UnicodeString"
+                            outType="xs:string">
+                        </data>
+                        <data 
+                            name="TargetThreadUserName" 
+                            inType="win:UnicodeString"
+                            outType="xs:string">
+                        </data> 
                     </template>
-                    <template tid="EID32">
-                        <data 
-                            name="EventTime:" 
-                            inType="win:FILETIME"
-                            outType="xs:dateTime">
-                        </data>
-                        <data 
-                            name="SourceThreadId" 
-                            inType="win:UInt32"
-                            outType="xs:unsignedInt">
-                        </data>
-                        <data 
-                            name="SourceProcessId" 
-                            inType="win:UInt32"
-                            outType="xs:unsignedInt">
-                        </data> 
-                        <data 
-                            name="TargetProcessId" 
-                            inType="win:UInt32"
-                            outType="xs:unsignedInt">
-                        </data>
-                        <data 
-                            name="SourceProcessStartKey" 
-                            inType="win:UInt64"
-                            outType="win:HexInt64">
-                        </data> 
-                        <data 
-                            name="TargetProcessStartKey" 
-                            inType="win:UInt64"
-                            outType="win:HexInt64">
-                        </data>
-                        <data 
-                            name="OriginalProcessId" 
-                            inType="win:UInt32"
-                            outType="xs:unsignedInt">
-                        </data>   
-                        <data 
-                            name="BaseAddress" 
-                            inType="win:Pointer"
-                            outType="win:HexInt64">
-                        </data> 
-                        <data 
-                            name="SourceProcessFilePath" 
-                            inType="win:UnicodeString"
-                            outType="xs:string">
-                        </data>
-                        <data 
-                            name="TargetProcessFilePath" 
-                            inType="win:UnicodeString"
-                            outType="xs:string">
-                        </data>
-                        <data  
-                            name="CallStack" 
-                            inType="win:UnicodeString"
-                            outType="xs:string">
-                        </data>   
-                </template>
+
                 </templates>
                 <events>
                     <event value="1" 
@@ -1588,15 +1831,15 @@
                         level="win:Informational" 
                         template="EID2" 
 						opcode="win:Info"
-                        symbol="ProcessAccess"
-                        message ="$(string.ProcessAccess.EventMessage)"/>
+                        symbol="ProcessTerminate"
+                        message ="$(string.ProcessTerminate.EventMessage)"/>
                     <event value="3" 
                         channel="JonMon"
                         level="win:Informational" 
                         template="EID3" 
 						opcode="win:Info"
-                        symbol="ProcessAccessDuplicated"
-                        message ="$(string.ProcessAccessDuplicated.EventMessage)"/>
+                        symbol="RemoteThreadCreation"
+                        message ="$(string.RemoteThreadCreation.EventMessage)"/>
                     <event value="4" 
                         channel="JonMon"
                         level="win:Informational" 
@@ -1609,197 +1852,162 @@
                         level="win:Informational" 
                         template="EID5" 
 						opcode="win:Info"
-                        symbol="RegistryCreateKey"
-                        message ="$(string.RegistryCreateKey.EventMessage)"/>
+                        symbol="ProcessAccess"
+                        message ="$(string.ProcessAccess.EventMessage)"/>
                     <event value="6" 
                         channel="JonMon"
                         level="win:Informational" 
                         template="EID6" 
 						opcode="win:Info"
-                        symbol="RegistryDeleteKey"
-                        message ="$(string.RegistryDeleteKey.EventMessage)"/>
-                    <event value="7" 
-                        channel="JonMon"
-                        level="win:Informational" 
-                        template="EID7" 
-						opcode="win:Info"
-                        symbol="RegistrySetValue"
-                        message ="$(string.RegistrySetValue.EventMessage)"/>
+                        symbol="RegistrySaveKey"
+                        message ="$(string.RegistrySaveKey.EventMessage)"/>
                     <event value="8" 
                         channel="JonMon"
                         level="win:Informational" 
                         template="EID8" 
 						opcode="win:Info"
-                        symbol="ProcessReparenting"
-                        message ="$(string.ProcessReparenting.EventMessage)"/>
+                        symbol="RegistrySetValueKey"
+                        message ="$(string.RegistrySetValueKey.EventMessage)"/>
                     <event value="9" 
                         channel="JonMon"
                         level="win:Informational" 
                         template="EID9" 
 						opcode="win:Info"
-                        symbol="ProcessTerminate"
-                        message ="$(string.ProcessTerminate.EventMessage)"/>
+                        symbol="RegistryCreateKey"
+                        message ="$(string.RegistryCreateKey.EventMessage)"/>
                     <event value="10" 
                         channel="JonMon"
                         level="win:Informational" 
                         template="EID10" 
 						opcode="win:Info"
-                        symbol="FileRename"
-                        message ="$(string.FileRename.EventMessage)"/>
+                        symbol="FileCreation"
+                        message ="$(string.FileCreation.EventMessage)"/>
                     <event value="11" 
                         channel="JonMon"
                         level="win:Informational" 
                         template="EID11" 
 						opcode="win:Info"
-                        symbol="RPCClientCall"
-                        message ="$(string.RPCClientCall.EventMessage)"/>
+                        symbol="NamedPipeCreation"
+                        message ="$(string.NamedPipeCreation.EventMessage)"/>
                     <event value="12" 
-                        channel="JonMon"
-                        level="win:Informational" 
-                        template="EID12" 
-						opcode="win:Info"
-                        symbol="RPCServerCall"
-                        message ="$(string.RPCServerCall.EventMessage)"/>
-                    <event value="13" 
                         channel="JonMon"
                         level="win:Informational" 
                         template="EID13" 
 						opcode="win:Info"
-                        symbol="NetworkConnectionAccepted"
-                        message ="$(string.NetworkConnectionAccepted.EventMessage)"/>
+                        symbol="NamedPipeConnection"
+                        message ="$(string.NamedPipeConnection.EventMessage)"/>
+                    <event value="13" 
+                        channel="JonMon"
+                        level="win:Informational" 
+                        template="EID12" 
+						opcode="win:Info"
+                        symbol="MailslotCreation"
+                        message ="$(string.MailslotCreation.EventMessage)"/>
                     <event value="14" 
                         channel="JonMon"
                         level="win:Informational" 
                         template="EID14" 
 						opcode="win:Info"
-                        symbol="RegistrySaveKey"
-                        message ="$(string.RegistrySaveKey.EventMessage)"/>
+                        symbol="MailslotConnection"
+                        message ="$(string.MailslotConnection.EventMessage)"/>
                     <event value="15" 
                         channel="JonMon"
                         level="win:Informational" 
                         template="EID15" 
 						opcode="win:Info"
-                        symbol="DotNetLoad"
-                        message ="$(string.DotNetLoad.EventMessage)"/>
+                        symbol="RemoteFileConnection"
+                        message ="$(string.RemoteFileConnection.EventMessage)"/>
                     <event value="16" 
                         channel="JonMon"
                         level="win:Informational" 
                         template="EID16" 
 						opcode="win:Info"
-                        symbol="AMSI"
-                        message ="$(string.AMSI.EventMessage)"/>
+                        symbol="DotNetLoad"
+                        message ="$(string.DotNetLoad.EventMessage)"/>
                     <event value="17" 
                         channel="JonMon"
                         level="win:Informational" 
                         template="EID17" 
 						opcode="win:Info"
-                        symbol="ImpersonationAction"
-                        message ="$(string.ImpersonationAction.EventMessage)"/>
+                        symbol="WMIEventFilter"
+                        message ="$(string.WMIEventFilter.EventMessage)"/>
                     <event value="18" 
                         channel="JonMon"
                         level="win:Informational" 
                         template="EID18" 
 						opcode="win:Info"
-                        symbol="RemoteThreadCreation"
-                        message ="$(string.RemoteThreadCreation.EventMessage)"/>
+                        symbol="RPCClient"
+                        message ="$(string.RPCClient.EventMessage)"/>
                     <event value="19" 
                         channel="JonMon"
                         level="win:Informational" 
                         template="EID19" 
 						opcode="win:Info"
-                        symbol="SchedTaskCreation"
-                        message ="$(string.SchedTaskCreation.EventMessage)"/>
+                        symbol="RPCServer"
+                        message ="$(string.RPCServer.EventMessage)"/>
                     <event value="20" 
                         channel="JonMon"
                         level="win:Informational" 
                         template="EID20" 
 						opcode="win:Info"
-                        symbol="SchedTaskStarted"
-                        message ="$(string.SchedTaskStarted.EventMessage)"/>
+                        symbol="DPAPIUnprotect"
+                        message ="$(string.DPAPIUnprotect.EventMessage)"/>
                     <event value="21" 
                         channel="JonMon"
                         level="win:Informational" 
                         template="EID21" 
 						opcode="win:Info"
-                        symbol="FileCreate"
-                        message ="$(string.FileCreate.EventMessage)"/>
+                        symbol="NetworkConnection"
+                        message ="$(string.NetworkConnection.EventMessage)"/>
                     <event value="22" 
                         channel="JonMon"
                         level="win:Informational" 
                         template="EID22" 
 						opcode="win:Info"
-                        symbol="FileDelete"
-                        message ="$(string.FileDelete.EventMessage)"/>
+                        symbol="AMSI"
+                        message ="$(string.AMSI.EventMessage)"/>
                     <event value="23" 
                         channel="JonMon"
                         level="win:Informational" 
                         template="EID23" 
 						opcode="win:Info"
-                        symbol="NamedPipeCreate"
-                        message ="$(string.NamedPipeCreate.EventMessage)"/>
+                        symbol="RemoteReadProcessMemory"
+                        message ="$(string.RemoteReadProcessMemory.EventMessage)"/>
                     <event value="24" 
                         channel="JonMon"
                         level="win:Informational" 
                         template="EID24" 
 						opcode="win:Info"
-                        symbol="NamedPipeOpen"
-                        message ="$(string.NamedPipeOpen.EventMessage)"/>
+                        symbol="RemoteWriteProcessMemory"
+                        message ="$(string.RemoteWriteProcessMemory.EventMessage)"/>
                     <event value="25" 
                         channel="JonMon"
                         level="win:Informational" 
                         template="EID25" 
 						opcode="win:Info"
-                        symbol="WMIFilterToConsumerBinding"
-                        message ="$(string.WMIFilterToConsumerBinding.EventMessage)"/>
+                        symbol="RemoteVirtualAllocation"
+                        message ="$(string.RemoteVirtualAllocation.EventMessage)"/>
                     <event value="26" 
                         channel="JonMon"
                         level="win:Informational" 
                         template="EID26" 
 						opcode="win:Info"
-                        symbol="TIQueueUserAPCEvent"
-                        message ="$(string.TIQueueUserAPCEvent.EventMessage)"/>
+                        symbol="RemoteQueueUserAPC"
+                        message ="$(string.RemoteQueueUserAPC.EventMessage)"/>
                     <event value="27" 
                         channel="JonMon"
                         level="win:Informational" 
                         template="EID27" 
 						opcode="win:Info"
-                        symbol="DriverLoad"
-                        message ="$(string.DriverLoad.EventMessage)"/>
-                    <event value="28" 
+                        symbol="QueryTokenImpersonation"
+                        message ="$(string.QueryTokenImpersonation.EventMessage)"/>
+                    <event value="102" 
                         channel="JonMon"
                         level="win:Informational" 
-                        template="EID28" 
+                        template="EID102" 
 						opcode="win:Info"
-                        symbol="DPAPI"
-                        message ="$(string.DPAPI.EventMessage)"/>
-                    <event value="29" 
-                        channel="JonMon"
-                        level="win:Informational" 
-                        template="EID29" 
-						opcode="win:Info"
-                        symbol="TIWriteProcessMemory"
-                        message ="$(string.TIWriteProcessMemory.EventMessage)"/>
-                    <event value="30" 
-                        channel="JonMon"
-                        level="win:Informational" 
-                        template="EID30" 
-                        opcode="win:Info"
-                        symbol="TIReadProcessMemory"
-                        message ="$(string.TIReadProcessMemory.EventMessage)"/>
-                    <event value="31" 
-                        channel="JonMon"
-                        level="win:Informational" 
-                        template="EID31" 
-                        opcode="win:Info"
-                        symbol="ThreadTokenImpersonation"
-                        message ="$(string.ThreadTokenImpersonation.EventMessage)"/>
-                    <event value="32" 
-                        channel="JonMon"
-                        level="win:Informational" 
-                        template="EID32" 
-                        opcode="win:Info"
-                        symbol="TIRemoteAllocateVirtualMemory"
-                        message ="$(string.TIRemoteAllocateVirtualMemory.EventMessage)"/>
+                        symbol="DebugLog102"
+                        message ="$(string.DebugLog102.EventMessage)"/>
                 </events>
             </provider>
         </events>
@@ -1807,38 +2015,33 @@
     <localization xmlns="http://schemas.microsoft.com/win/2004/08/events">
         <resources culture="en-US">
             <stringTable>
-                <string id="ProcessCreation.EventMessage" value="Process Creation Event %n%n EventTime: %1 %n NewProcessFilePath: %2 %n NewProcessCommandLine: %3 %n NewProcessId: %4 %n NewProcessStartKey: %5 %n NewProcessStartTime: %6 %n NewProcessUser: %7 %n NewProcessUserLogonId: %8 %n ParentProcessId: %9 %n ParentThreadId: %10 %n ParentProcessFilePath: %11 %n CreatorProcessId: %12 %n ParentProcessUser: %13 %n ParentProcessUserLogonId: %14 %n"/>
-                <string id="ProcessAccess.EventMessage" value="Process Access Event %n%n EventTime: %1 %n SourceProcessGrantedAccess: %2 %n TargetProcessId: %3 %n TargetProcessStartKey: %4 %n TargetImagePath: %5 %n SourceProcessId: %6 %n SourceThreadId: %7 %n SourceProcessStartKey: %8 %n SourceProcessFilePath: %9 %n SourceProcessUser: %10 %n SourceProcessUserLogonId: %11 %n"/>
-                <string id="ProcessAccessDuplicated.EventMessage" value="Process Handle Duplication Event %n%n EventTime: %1 %n SourceProcessDuplicatedGrantedAccess: %2 %n TargetProcessId: %3 %n TargetProcessStartKey: %4 %n TargetImagePath: %5 %n SourceProcessId: %6 %n SourceThreadId: %7 %n SourceProcessStartKey: %8 %n SourceProcessFilePath: %9 %n SourceProcessUser: %10 %n SourceProcessUserLogonId: %11 %n"/>
-                <string id="ImageLoaded.EventMessage" value="Image Load Event %n%n EventTime: %1 %n SourceProcessFilePath: %2 %n SourceProcessId: %3 %n SourceThreadId: %4 %n SourceProcessStartKey: %5 %n ModulePath: %6 %n SourceProcessUser: %7 %n SourceProcessUserLogonId: %8 %n"/>
-                <string id="RegistryCreateKey.EventMessage" value="Registry Key Creation Event %n%n EventTime: %1 %n SourceProcessFilePath: %2 %n SourceProcessId: %3 %n SourceThreadId: %4 %n SourceProcessStartKey: %5 %n SourceRegistryKeyPath: %6 %n SourceProcessGrantedAccess: %7 %n SourceProcessUser: %8 %n SourceProcessUserLogonId: %9 %n"/>
-                <string id="RegistryDeleteKey.EventMessage" value="Registry Key Deletion Event %n%n EventTime: %1 %n SourceProcessFilePath: %2 %n SourceProcessId: %3 %n SourceThreadId: %4 %n SourceProcessStartKey: %5 %n RegistryKeyPath: %6 %n SourceProcessUser: %7 %n SourceProcessUserLogonId: %8 %n"/>
-                <string id="RegistrySetValue.EventMessage" value="Registry Set Value Event %n%n EventTime: %1 %n SourceProcessFilePath: %2 %n SourceProcessId: %3 %n SourceThreadId: %4 %n SourceProcessStartKey: %5 %n RegistryKeyPath: %6 %n RegistryValueName: %7 %n RegistryValueData: %8 %n RegistryValueDataType: %9 %n SourceProcessUser: %10 %n SourceProcessUserLogonId: %11 %n"/> 
-                <string id="ProcessReparenting.EventMessage" value="Process Reparenting Event %n%n EventTime: %1 %n NewProcessFilePath: %2 %n NewProcessCommandLine: %3 %n ParentProcessId: %4 %n ParentThreadId: %5 %n NewProcessId: %6 %n NewProcessStartKey: %7 %n NewProcessStartTime: %8 %n ParentProcessFilePath: %9 %n CreatorProcessId: %10 %n CreatorProcessFilePath %11 %n CreatorProcessUser: %12 %n ParentProcessUser: %13 %n ProcessUser: %14 %n ParentProcessLogonId: %15 %n ProcessUserLogonId: %16 %n CreatorProcessLogonId: %17 %n"/>
-                <string id="ProcessTerminate.EventMessage" value="Process Termination Event %n%n EventTime: %1 %n SourceProcessFilePath: %2 %n SourceProcessId: %3 %n SourceThreadId: %4 %n TargetProcessFilePath: %5 %n TargetProcessId: %6 %n"/>
-                <string id="FileRename.EventMessage" value="File Rename Event %n%n EventTime: %1 %n SourceImagePath: %2 %n SourceProcessStartKey: %3 %n SourceThreadId: %4 %n SourceUserName: %5 %n SourceUserNameLogonId: %6 %n SourceProcessIntegrityLevel: %7 %n TargetFile: %8 %n"/>
-                <string id="RPCClientCall.EventMessage" value="RPCClientCall Event %n%n EventTime: %1 %n InterfaceUUID: %2 %n ProcNum: %3 %n Protocol: %4 %n ProcessId: %5 %n NetworkAddress: %6 %n Endpoint: %7 %n InterfaceString: %8 %n MethodString: %9 %n ProcessUser: %10 %n ProcessFilePath: %11 %n CallStack: %12 %n"/>
-                <string id="RPCServerCall.EventMessage" value="RPCServerCall Event %n%n EventTime: %1 %n InterfaceUUID %2 %n ProcNum %3 %n Protocol %4 %n ProcessId %5 %n NetworkAddress %6 %n Endpoint %7 %n InterfaceString %8 %n MethodString %9 %n ProcessUser %10 %n ProcessFilePath %11 %n CallStack %12 %n"/>
-                <string id="NetworkConnectionAccepted.EventMessage" value="NetworkConnectionAccepted Event %n%n EventTime: %1 %n ProcessId: %2 %n SrcIpAddressIpv4: %3 %n DestIpAddressIpv4: %4 %n SrcPort: %5 %n DestPort: %6 %n Initiated: %7 %n ProcessUser: %8 %n ProcessFilePath: %9 %n"/>
-                <string id="RegistrySaveKey.EventMessage" value="RegistrySaveKey Event %n%n EventTime: %1 SourceProcessFilePath: %2 %n SourceProcessId: %3 %n SourceProcessStartKey: %4 %n RegistryKeyPath: %5 %n SourceProcessUser: %6 %n SourceProcessUserLogonId: %7 %n"/>
-                <string id="DotNetLoad.EventMessage" value="DotNetLoad Event %n%n EventTime: %1 %n ProcessId: %2 %n AssemblyName: %3 %n ProcessUser: %4 %n ProcessFilePath: %5 %n ClrInstanceID: %6 %n"/>
-                <string id="AMSI.EventMessage" value="AMSI Event %n%n EventTime: %1 %n ProcessId: %2 %n AppName: %3 %n ScanResults: %4 %n ContentSize: %5 %n"/>
-                <string id="ImpersonationAction.EventMessage" value="ImpersonationAction Event %n%n EventTime: %1 %n ProcessName: %2 %n ProcessId: %3 %n ProcessStartKey: %4 %n ProcessIntegrityLevel: %5 %n ProcessUserName: %6 %n ThreadId: %7 %n ImpersontionLevel: %8 %n ImpersonationLevelName: %9 %n ImpersonateUserName: %10 %n ThreadIntegrityLevel: %11 %n OperationType: %12 %n"/>
-                <string id="RemoteThreadCreation.EventMessage" value="RemoteThreadCreation Event %n%n EventTime: %1 %n SourceImagePath: %2 %n SourceProcessId %3 %n SourceProcessStartKey: %4 %n SourceUserName: %5 %n SourceUserLogonId: %6 %n SourceProcessIntegrityLevel: %7 %n TargetImagePath: %8 %n TargetProcessId: %9 %n TargetProcessStartKey: %10 %n TargetThreadId: %11 %n TargetUserName: %12 %n TargetUserLogonId: %13 %n TargetProcessIntegrityLevel: %14 %n"/>
-                <string id="SchedTaskCreation.EventMessage" value="SchedTaskCreation Event %n%n EventTime: %1 %n TaskName: %2 %n SourceUserName: %3 %n SourceProcessId: %4 %n"/>
-                <string id="SchedTaskStarted.EventMessage" value="SchedTaskStarted Event %n%n EventTime: %1 %n TakeName: %2 %n ImagePath: %3 %n SourceProcessId: %4 %n"/>
-                <string id="FileCreate.EventMessage" value="FileCreate Event %n%n EventTime: %1 %n SourceImagePath: %2 %n SourceProcessId: %3 %n SourceProcessStartKey: %4 %n SourceThreadId: %5 %n SourceUserName: %6 %n SourceUserLogonId: %7 %n SourceProcessIntegrityLevel: %8 %n TargetFile: %9 %n"/>
-                <string id="FileDelete.EventMessage" value="FileDelete Event %n%n EventTime: %1 %n SourceImagePath: %2 %n SourceProcessId: %3 %n SourceProcessStartKey: %4 %n SourceThreadId: %5 %n SourceUserName: %6 %n SourceUserLogonId: %7 %n SourceProcessIntegrityLevel: %8 %n TargetFile: %9 %n"/>
-                <string id="NamedPipeCreate.EventMessage" value="NamedPipeCreate Event %n%n EventTime: %1 %n SourceImagePath: %2 %n SourceProcessId: %3 %n SourceProcessStartKey: %4 %n SourceThreadId: %5 %n SourceUserName: %6 %n SourceUserLogonId: %7 %n SourceProcessIntegrityLevel: %8 %n PipeName: %9 %n RemoteCreation: %10 %n PipeCreationAccess: %11 %n"/>
-                <string id="NamedPipeOpen.EventMessage" value="NamedPipeOpen/Connection Event %n%n EventTime: %1 %n SourceImagePath: %2 %n SourceProcessId: %3 %n SourceProcessStartKey: %4 %n SourceThreadId: %5 %n SourceUserName: %6 %n SourceUserLogonId: %7 %n SourceProcessIntegrityLevel: %8 %n PipeName: %9 %n PipeRequestedAccess: %10 %n PipeGrantedAccess: %11 %n"/>
-                <string id="WMIFilterToConsumerBinding.EventMessage" value="WMIFilterToConsumerBinding Event %n%n EventTime: %1 %n Namespace: %2 %n ESS: %3 %n Consumer: %4 %n PossibleCause: %5 %n"/>
-                <string id="TIQueueUserAPCEvent.EventMessage" value="QueueUserAPC Event %n%n EventTime: %1 %n SourceThreadId: %2 %n SourceProcessId: %3 %n TargetProcessId: %4 %n TargetThreadId: %5 %n SourceProcessStartKey: %6 %n TargetProcessStartKey: %7 %n OriginalProcessId: %8 %n APCRoutine: %9 %n APCArgument: %9 %n SourceProcessFilePath: %11 %n TargetProcessFilePath: %12 %n CallStack: %13 %n"/>
-                <string id="DriverLoad.EventMessage" value="DriverLoad Event %n%n EventTime: %1 %n ModulePath: %2"/>
-                <string id="DPAPI.EventMessage" value="DPAPI Event: %n%n EventTime:: %1 %n OperationType: %2 %n DataDescription: %3 %n ProcessId: %4 %n Flags: %5 %n ProtectionFlags: %6 %n"/>
-                <string id="TIWriteProcessMemory.EventMessage" value="WriteProcessMemory Event %n%n EventTime: %1 %n SourceProcessId: %2 %n SourceThreadId: %3 %n SourceProcessFilePath: %4 %n TargetProcessId: %5 %n TargetProcessFilePath: %6 %n SourceProcessStartKey: %7 %n TargetProcessStartKey: %8 %n Callstack: %9 %n"/>
-                <string id="TIReadProcessMemory.EventMessage" value="ReadProcessMemory Event %n%n EventTime: %1 %n SourceProcessId: %2 %n SourceThreadId: %3 %n SourceProcessFilePath: %4 %n TargetProcessId: %5 %n TargetProcessFilePath: %6 %n SourceProcessStartKey: %7 %n TargetProcessStartKey: %8 %n Callstack: %9 %n"/>
-                <string id="ThreadTokenImpersonation.EventMessage" value="ThreadTokenImpersonation Event %n%n EventTime: %1 %n ProcessId: %2 %n ImpersonatedThreadId: %3 %n ThreadUserName: %4 %n ThreadIntegrityLevel: %5 %n ProcessUserName: %6 %n ProcessIntegrityLevel: %7 %n"/>
-                <string id="TIRemoteAllocateVirtualMemory.EventMessage" value="RemoteAllocateVirtualMemory Event %n%n EventTime: %1 %n SourceThreadId: %2 %n SourceProcessId: %3 %n TargetProcessId: %4 %n SourceProcessStartKey: %5 %n TargetProcessStartKey: %6 %n OriginalProcessId: %7 %n BaseAddress: %8 %n SourceProcessFilePath: %9 %n TargetProcessFilePath: %10 %n CallStack: %11 %n"/>            
+                <string id="ProcessCreation.EventMessage" value="Process Creation Event %n%n Click on Details or XML view to see event information"/>
+                <string id="ProcessTerminate.EventMessage" value="Process Terminate Event %n%n Click on Details or XML view to see event information"/>
+                <string id="RemoteThreadCreation.EventMessage" value="Remote Thread Creation Event %n%n Click on Details or XML view to see event information"/>
+                <string id="ImageLoaded.EventMessage" value="Image Load Event %n%n Click on Details or XML view to see event information"/>
+                <string id="ProcessAccess.EventMessage" value="Process Access Event %n%n Click on Details or XML view to see event information"/>
+                <string id="RegistrySaveKey.EventMessage" value="Registry Save Key Event %n%n Click on Details or XML view to see event information"/>
+                <string id="RegistrySetValueKey.EventMessage" value="Registry Set Value Key Event %n%n Click on Details or XML view to see event information"/>
+                <string id="RegistryCreateKey.EventMessage" value="Registry Create Key Event %n%n Click on Details or XML view to see event information"/>
+                <string id="FileCreation.EventMessage" value="File Creation Event %n%n Click on Details or XML view to see event information"/>
+                <string id="NamedPipeCreation.EventMessage" value="Named Pipe Creation Event %n%n Click on Details or XML view to see event information"/>
+                <string id="NamedPipeConnection.EventMessage" value="Named Pipe Connection Event %n%n Click on Details or XML view to see event information"/>
+                <string id="MailslotCreation.EventMessage" value="Mailslot Creation Event %n%n Click on Details or XML view to see event information"/>
+                <string id="MailslotConnection.EventMessage" value="Mailslot Connection Event %n%n Click on Details or XML view to see event information"/>
+                <string id="RemoteFileConnection.EventMessage" value="Remote File Connection Event %n%n Click on Details or XML view to see event information"/>
+                <string id="DotNetLoad.EventMessage" value="Dot Net Load Event %n%n Click on Details or XML view to see event information"/>
+                <string id="WMIEventFilter.EventMessage" value="WMI Event Filter Event %n%n Click on Details or XML view to see event information"/>
+                <string id="RPCClient.EventMessage" value="RPC Client Event %n%n Click on Details or XML view to see event information"/>
+                <string id="RPCServer.EventMessage" value="RPC Server Event %n%n Click on Details or XML view to see event information"/>
+                <string id="DPAPIUnprotect.EventMessage" value="DPAPI Unprotect Event %n%n Click on Details or XML view to see event information"/>
+                <string id="NetworkConnection.EventMessage" value="Network Connection Event %n%n Click on Details or XML view to see event information"/>
+                <string id="AMSI.EventMessage" value="AMSI Event %n%n Click on Details or XML view to see event information"/>
+                <string id="RemoteReadProcessMemory.EventMessage" value="RemoteReadProcessMemory Event %n%n Click on Details or XML view to see event information"/>
+                <string id="RemoteWriteProcessMemory.EventMessage" value="RemoteWriteProcessMemory Event %n%n Click on Details or XML view to see event information"/>
+                <string id="RemoteVirtualAllocation.EventMessage" value="RemoteVirtualAllocation Event %n%n Click on Details or XML view to see event information"/>
+                <string id="RemoteQueueUserAPC.EventMessage" value="RemoteQueueUserAPC Event %n%n Click on Details or XML view to see event information"/>
+                <string id="QueryTokenImpersonation.EventMessage" value="QueryTokenImpersonation Event %n%n Click on Details or XML view to see event information"/>
+                <string id="DebugLog102.EventMessage" value="Debug Log 102 %n%n Click on Details or XML view to see event information"/>
             </stringTable>
         </resources>
     </localization>
